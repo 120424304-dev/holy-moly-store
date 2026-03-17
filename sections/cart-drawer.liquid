@@ -212,7 +212,17 @@ window.openCartDrawer = openCartDrawer;
 window.addToCart = addToCart;
 window.updateAllCartBadges = updateAllCartBadges;
 
-// 初始化 - 强制为空购物车（不自动恢复旧数据）
+// 全局打开购物车函数（所有页面可用）
+function openCart() {
+    if (typeof openCartDrawer === 'function') {
+        openCartDrawer();
+    } else {
+        alert('🛒 购物车加载中...');
+    }
+}
+window.openCart = openCart;
+
+// 初始化 - 强制为空购物车
 cartData = [];
 updateCartUI();
 </script>
