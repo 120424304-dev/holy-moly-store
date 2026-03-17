@@ -54,12 +54,32 @@
             <button class="chip" onclick="filterProducts('magnet', this)">MAGNETS</button>
             <button class="chip" onclick="filterProducts('diy', this)">DIY KITS</button>
         </div>
-        <div class="pixel-select">
-            <select id="sortSelect" onchange="sortProducts()">
-                <option value="newest">🆕 NEWEST</option>
-                <option value="price-low">💰 PRICE: LOW TO HIGH</option>
-                <option value="price-high">💎 PRICE: HIGH TO LOW</option>
-            </select>
+        
+        <!-- 像素风格自定义下拉菜单 -->
+        <div class="pixel-dropdown" id="sortDropdown">
+            <button class="pixel-dropdown-btn" onclick="toggleDropdown()">
+                <span class="dropdown-icon">🆕</span>
+                <span class="dropdown-text" id="sortText">NEWEST</span>
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            <div class="pixel-dropdown-menu" id="dropdownMenu">
+                <div class="dropdown-item active" onclick="selectSort('newest', '🆕', 'NEWEST')">
+                    <span class="item-icon">🆕</span>
+                    <span class="item-text">NEWEST</span>
+                </div>
+                <div class="dropdown-item" onclick="selectSort('price-low', '💰', 'PRICE: LOW TO HIGH')">
+                    <span class="item-icon">💰</span>
+                    <span class="item-text">PRICE: LOW TO HIGH</span>
+                </div>
+                <div class="dropdown-item" onclick="selectSort('price-high', '💎', 'PRICE: HIGH TO LOW')">
+                    <span class="item-icon">💎</span>
+                    <span class="item-text">PRICE: HIGH TO LOW</span>
+                </div>
+                <div class="dropdown-item" onclick="selectSort('popular', '🔥', 'MOST POPULAR')">
+                    <span class="item-icon">🔥</span>
+                    <span class="item-text">MOST POPULAR</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -118,12 +138,94 @@
 </div>
 
 <script>
+// 移动端菜单
 function toggleMobileMenu() {
     var menu = document.getElementById('mobileMenu');
     var hamburger = document.getElementById('hamburger');
     if (menu && hamburger) {
         menu.classList.toggle('active');
         hamburger.classList.toggle('active');
+    }
+}
+
+// 下拉菜单控制
+function toggleDropdown() {
+    const dropdown = document.getElementById('sortDropdown');
+    dropdown.classList.toggle('open');
+    
+    if (dropdown.classList.contains('open')) {
+        setTimeout(() => {
+            document.addEventListener('click', closeDropdownOutside);
+        }, 10);
+    }
+}
+
+function closeDropdownOutside(e) {
+    const dropdown = document.getElementById('sortDropdown');
+    if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        document.removeEventListener('click', closeDropdownOutside);
+    }
+}
+
+function selectSort(value, icon, text) {
+    document.getElementById('sortText').textContent = text;
+    document.querySelector('.dropdown-icon').textContent = icon;
+    
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    event.currentTarget.classList.add('active');
+    
+    document.getElementById('sortDropdown').classList.remove('open');
+    document.removeEventListener('click', closeDropdownOutside);
+    
+    const container = document.getElementById('productsContainer');
+    const cards = Array.from(container.children);
+    
+    cards.sort((a, b) => {
+        const priceA = parseFloat(a.dataset.price);
+        const priceB = parseFloat(b.dataset.price);
+        if (value === 'price-low') return priceA - priceB;
+        if (value === 'price-high') return priceB - priceA;
+        return 0;
+    });
+    
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            container.appendChild(card);
+            card.style.transition = 'all 0.4s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 50);
+    });
+    
+    createPixelBurst(event.currentTarget);
+}
+
+// 像素粒子爆炸
+function createPixelBurst(element) {
+    const rect = element.getBoundingClientRect();
+    const colors = ['#FFE600', '#FF2D7D', '#00D9FF', '#9D4EDD'];
+    
+    for (let i = 0; i < 6; i++) {
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: ${colors[Math.floor(Math.random() * colors.length)]};
+            left: ${rect.left + rect.width / 2}px;
+            top: ${rect.top + rect.height / 2}px;
+            pointer-events: none;
+            z-index: 9999;
+        `;
+        particle.style.setProperty('--angle', (i * 60) + 'deg');
+        particle.style.animation = 'particlePop 0.5s ease forwards';
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 500);
     }
 }
 
@@ -150,22 +252,6 @@ function searchProducts() {
             card.style.display = 'none';
         }
     });
-}
-
-function sortProducts() {
-    const sortType = document.getElementById('sortSelect').value;
-    const container = document.getElementById('productsContainer');
-    const cards = Array.from(container.children);
-    
-    cards.sort((a, b) => {
-        const priceA = parseFloat(a.dataset.price);
-        const priceB = parseFloat(b.dataset.price);
-        if (sortType === 'price-low') return priceA - priceB;
-        if (sortType === 'price-high') return priceB - priceA;
-        return 0;
-    });
-    
-    cards.forEach(card => container.appendChild(card));
 }
 
 function toggleWishlist(btn, e) {
@@ -254,6 +340,7 @@ document.querySelectorAll('.product-pixel-card').forEach(card => {
     display: flex;
     align-items: center;
     gap: 10px;
+    transition: all 0.3s;
 }
 
 .navbar-logo:hover {
@@ -276,6 +363,8 @@ document.querySelectorAll('.product-pixel-card').forEach(card => {
     align-items: center;
     gap: 8px;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .navbar-link {
@@ -286,6 +375,9 @@ document.querySelectorAll('.product-pixel-card').forEach(card => {
     padding: 12px 16px;
     position: relative;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .navbar-link::before {
@@ -401,15 +493,490 @@ document.querySelectorAll('.product-pixel-card').forEach(card => {
     padding: 20px;
 }
 
-.shop-page {
-    padding-top: 120px !important;
+/* 像素下拉菜单 */
+.pixel-dropdown {
+    position: relative;
+    z-index: 100;
 }
 
+.pixel-dropdown-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    padding: 14px 20px;
+    background: #FF2D7D;
+    border: 4px solid #000;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 4px 4px 0 #000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    transition: all 0.2s;
+}
+
+.pixel-dropdown-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+    background: #ff4d8f;
+}
+
+.pixel-dropdown-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 #000;
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s;
+    font-size: 10px;
+    margin-left: auto;
+}
+
+.pixel-dropdown.open .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.pixel-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    border: 4px solid #FFE600;
+    border-radius: 12px;
+    box-shadow: 6px 6px 0 #000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
+}
+
+.pixel-dropdown.open .pixel-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 2px solid rgba(255,230,0,0.1);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #FFE600;
+    color: #000;
+    padding-left: 28px;
+}
+
+.dropdown-item.active {
+    background: rgba(255,230,0,0.2);
+    color: #FFE600;
+}
+
+.dropdown-item.active:hover {
+    background: #FFE600;
+    color: #000;
+}
+
+.item-icon {
+    font-size: 14px;
+}
+
+.dropdown-item.active::after {
+    content: '✓';
+    margin-left: auto;
+    font-size: 12px;
+    color: #00D9FF;
+}
+
+.dropdown-item.active:hover::after {
+    color: #000;
+}
+
+.pixel-dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 12px solid #FFE600;
+}
+
+/* 页面内容 */
+.shop-page {
+    background: #0a0a0f;
+    min-height: 100vh;
+    padding: 140px 40px 80px;
+}
+
+.shop-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.shop-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: clamp(32px, 6vw, 56px);
+    color: #FFE600;
+    text-shadow: 4px 4px 0 #FF2D7D, 8px 8px 0 #00D9FF;
+    margin-bottom: 16px;
+}
+
+.shop-subtitle {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+}
+
+.control-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: rgba(255,255,255,0.03);
+    border: 3px solid rgba(255,230,0,0.2);
+    border-radius: 20px;
+}
+
+.pixel-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #1a1a2e;
+    border: 4px solid #FFE600;
+    border-radius: 12px;
+    padding: 12px 16px;
+    min-width: 280px;
+}
+
+.pixel-search .search-icon {
+    font-size: 18px;
+    margin-right: 12px;
+}
+
+.pixel-search input {
+    background: transparent;
+    border: none;
+    color: #FFE600;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    outline: none;
+    width: 100%;
+    text-transform: uppercase;
+}
+
+.pixel-search input::placeholder {
+    color: rgba(255,230,0,0.4);
+}
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chip {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    padding: 12px 20px;
+    background: transparent;
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+.chip:hover, .chip.active {
+    background: #FFE600;
+    border-color: #000;
+    color: #000;
+    box-shadow: 4px 4px 0 #000;
+    transform: translate(-2px, -2px);
+}
+
+.products-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.product-pixel-card {
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.3s;
+}
+
+.card-inner {
+    background: #1a1a2e;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s;
+}
+
+.product-pixel-card:hover .card-inner {
+    border-color: #FFE600;
+    box-shadow: 0 20px 60px rgba(255,230,0,0.2);
+}
+
+.pixel-corners .corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 3px solid #FFE600;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+.product-pixel-card:hover .corner {
+    opacity: 1;
+}
+
+.wishlist-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    background: rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.wishlist-btn:hover, .wishlist-btn.active {
+    background: #FF2D7D;
+    border-color: #000;
+    box-shadow: 3px 3px 0 #000;
+}
+
+.quick-actions {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    z-index: 5;
+    transition: opacity 0.3s;
+}
+
+.product-pixel-card:hover .quick-actions {
+    opacity: 1;
+}
+
+.quick-btn {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    padding: 14px 24px;
+    border: 3px solid #000;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    box-shadow: 4px 4px 0 #000;
+}
+
+.quick-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+}
+
+.quick-view {
+    background: #FFE600;
+    color: #000;
+}
+
+.add-cart {
+    background: #00D9FF;
+    color: #000;
+}
+
+.card-image-wrapper {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.card-image img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    transition: all 0.4s;
+}
+
+.pixel-placeholder {
+    font-size: 80px;
+}
+
+.card-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 9px;
+    padding: 8px 14px;
+    border: 3px solid #000;
+    border-radius: 6px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+}
+
+.card-badge.sale {
+    background: #FF2D7D;
+    color: white;
+}
+
+.card-badge.new {
+    background: #00D9FF;
+    color: #000;
+}
+
+.card-info {
+    padding: 24px;
+    background: white;
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.card-type {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    color: #9D4EDD;
+}
+
+.card-stock {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+}
+
+.card-stock.in {
+    color: #00D9FF;
+}
+
+.card-stock.out {
+    color: #FF2D7D;
+}
+
+.card-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    color: #000;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    min-height: 40px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.current-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FF2D7D;
+}
+
+.card-rating {
+    font-size: 14px;
+    color: #FFB800;
+}
+
+.load-more-container {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.load-more-btn {
+    position: relative;
+    background: #FFE600;
+    color: #000;
+    border: 5px solid #000;
+    padding: 24px 48px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 8px 8px 0 #000;
+    transition: all 0.2s;
+}
+
+.load-more-btn:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 4px 4px 0 #000;
+}
+
+/* 动画 */
 @keyframes popIn {
     0% { transform: scale(0.8); opacity: 0; }
     100% { transform: scale(1); opacity: 1; }
 }
 
+@keyframes particlePop {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(40px) scale(0);
+        opacity: 0;
+    }
+}
+
+/* 响应式 */
 @media (max-width: 768px) {
     .navbar-menu {
         display: none;
@@ -427,7 +994,36 @@ document.querySelectorAll('.product-pixel-card').forEach(card => {
         padding: 12px 20px;
     }
     .shop-page {
-        padding-top: 100px !important;
+        padding: 100px 20px 60px;
+    }
+    .control-panel {
+        flex-direction: column;
+        padding: 20px;
+    }
+    .pixel-search {
+        min-width: 100%;
+    }
+    .pixel-dropdown-btn {
+        width: 100%;
+    }
+    .products-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    .card-image-wrapper {
+        height: 200px;
+    }
+    .quick-actions {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-container {
+        grid-template-columns: 1fr;
+    }
+    .shop-title {
+        font-size: 24px;
     }
 }
 </style>
