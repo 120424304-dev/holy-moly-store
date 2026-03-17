@@ -1,0 +1,180 @@
+{{ 'shop-grid.css' | asset_url | stylesheet_tag }}
+
+<div class="shop-page">
+  <div class="shop-header">
+    <div class="shop-title">THE LOOT BOX</div>
+    <div class="shop-subtitle">← Scroll to explore →</div>
+  </div>
+
+  <div class="control-panel">
+    <div class="pixel-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="SEARCH ITEMS..." onkeyup="searchProducts()">
+    </div>
+    <div class="filter-chips">
+      <button class="chip active" onclick="filterProducts('all', this)">ALL</button>
+      <button class="chip" onclick="filterProducts('keychain', this)">KEYCHAINS</button>
+      <button class="chip" onclick="filterProducts('magnet', this)">MAGNETS</button>
+      <button class="chip" onclick="filterProducts('diy', this)">DIY KITS</button>
+    </div>
+    <div class="pixel-select">
+      <select id="sortSelect" onchange="sortProducts()">
+        <option value="newest">🆕 NEWEST</option>
+        <option value="price-low">💰 PRICE: LOW TO HIGH</option>
+        <option value="price-high">💎 PRICE: HIGH TO LOW</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="products-container" id="productsContainer">
+    {% for product in collections.all.products limit: 12 %}
+      <div class="product-pixel-card" 
+           data-category="{{ product.type | handleize | default: 'keychain' }}" 
+           data-price="{{ product.price | divided_by: 100 }}" 
+           data-name="{{ product.title | downcase }}"
+           onclick="goToProduct('{{ product.url }}')">
+        <div class="card-inner">
+          <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
+          <div class="quick-actions" onclick="event.stopPropagation()">
+            <button class="quick-btn quick-view" onclick="quickView('{{ product.title }}', event)">👁️ QUICK VIEW</button>
+            <button class="quick-btn add-cart" onclick="addToCart(event)">🛒 ADD TO CART</button>
+          </div>
+          <div class="card-image-wrapper">
+            <div class="card-image" style="background: linear-gradient(145deg, #FFE600, #FFB800);">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title }}" class="product-img">
+              {% else %}
+                <div class="pixel-placeholder">🎮</div>
+              {% endif %}
+            </div>
+            {% if product.compare_at_price > product.price %}
+              <span class="card-badge sale">-{{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}%</span>
+            {% elsif product.tags contains 'new' %}
+              <span class="card-badge new">NEW</span>
+            {% elsif product.tags contains 'bestseller' %}
+              <span class="card-badge hot">HOT</span>
+            {% endif %}
+          </div>
+          <div class="card-info">
+            <div class="card-meta">
+              <span class="card-type">{{ product.type | upcase | default: 'ITEM' }}</span>
+              <span class="card-stock {% if product.available %}in{% else %}out{% endif %}">
+                {% if product.available %}● IN STOCK{% else %}○ SOLD OUT{% endif %}
+              </span>
+            </div>
+            <h3 class="card-title">{{ product.title }}</h3>
+            <div class="card-footer">
+              <span class="current-price">${{ product.price | money_without_currency }}</span>
+              <span class="card-rating">⭐ 4.8</span>
+            </div>
+          </div>
+        </div>
+        <div class="pixel-corners">
+          <span class="corner tl"></span><span class="corner tr"></span>
+          <span class="corner bl"></span><span class="corner br"></span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="load-more-container">
+    <button class="load-more-btn" onclick="loadMore(this)">📦 LOAD MORE LOOT</button>
+  </div>
+</div>
+
+<script>
+function filterProducts(category, btn) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  
+  document.querySelectorAll('.product-pixel-card').forEach(card => {
+    if (category === 'all' || card.dataset.category === category) {
+      card.style.display = 'block';
+      card.style.animation = 'popIn 0.4s ease';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function searchProducts() {
+  const term = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.product-pixel-card').forEach(card => {
+    const name = card.dataset.name;
+    if (name.includes(term)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function sortProducts() {
+  const sortType = document.getElementById('sortSelect').value;
+  const container = document.getElementById('productsContainer');
+  const cards = Array.from(container.children);
+  
+  cards.sort((a, b) => {
+    const priceA = parseFloat(a.dataset.price);
+    const priceB = parseFloat(b.dataset.price);
+    if (sortType === 'price-low') return priceA - priceB;
+    if (sortType === 'price-high') return priceB - priceA;
+    return 0;
+  });
+  
+  cards.forEach(card => container.appendChild(card));
+}
+
+function toggleWishlist(btn, e) {
+  e.stopPropagation();
+  btn.classList.toggle('active');
+  btn.innerHTML = btn.classList.contains('active') ? '♥' : '♡';
+}
+
+function quickView(title, e) {
+  e.stopPropagation();
+  alert('Quick view: ' + title + '\n\nFull product page coming soon!');
+}
+
+function addToCart(e) {
+  e.stopPropagation();
+  const btn = e.target;
+  btn.innerHTML = '✓ ADDED!';
+  btn.style.background = '#00FF00';
+  setTimeout(() => {
+    btn.innerHTML = '🛒 ADD TO CART';
+    btn.style.background = '#00D9FF';
+  }, 1500);
+}
+
+function goToProduct(url) {
+  window.location.href = url;
+}
+
+function loadMore(btn) {
+  btn.innerHTML = '📦 NO MORE LOOT';
+  btn.disabled = true;
+}
+
+// 3D tilt effect
+document.querySelectorAll('.product-pixel-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = (y - centerY) / 20;
+    const rotateY = (centerX - x) / 20;
+    card.style.transform = `perspective(1000px) rotateX(${-rotateX}deg) rotateY(${-rotateY}deg)`;
+  });
+  card.addEventListener('mouseleave', () => card.style.transform = '');
+});
+</script>
+
+<style>
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+</style>
