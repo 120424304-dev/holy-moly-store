@@ -1,12 +1,17 @@
-‹!doctype html>
-shtml lang="IE request. locale.iso_code H}">
-shead>
-«meta charset="utf-8">
-smeta http-equiv="x-UA-Compat ible" content="IE=edge">
-‹meta name-"viewport" content="width=device-width,initial-scale=1"> ‹meta name="theme-color' content="">
-<link rel="canonical" href="{{ canonical_url }}">
-«title>ff page_title }}</titles
-§{ content_for_header }} </head>
-{ section 'cart-drawer’
-sbody=
-§{ content_for_layout }} </body> </html>
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <title>{{ page_title }}</title>
+  {{ content_for_header }}
+</head>
+<body>
+  {{ content_for_layout }}
+  
+  {% section 'cart-drawer' %}
+</body>
+</html>
