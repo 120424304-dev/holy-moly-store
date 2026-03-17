@@ -117,7 +117,13 @@
 .modal-desc { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.8; margin-bottom: 30px; }
 .modal-add-btn { font-family: 'Press Start 2P'; font-size: 14px; padding: 20px 40px; background: #FFE600; border: 4px solid #000; border-radius: 12px; cursor: pointer; box-shadow: 6px 6px 0 #000; }
 .modal-add-btn:hover { transform: translate(3px,3px); box-shadow: 3px 3px 0 #000; background: #00D9FF; }
-
+@keyframes cartShake {
+    0%, 100% { transform: translateX(0) rotate(0deg); }
+    20% { transform: translateX(-5px) rotate(-10deg); }
+    40% { transform: translateX(5px) rotate(10deg); }
+    60% { transform: translateX(-3px) rotate(-5deg); }
+    80% { transform: translateX(3px) rotate(5deg); }
+}
 @media (max-width: 768px) {
     .shop-page { padding: 80px 12px 40px; }
     .shop-title { font-size: 24px; text-shadow: 2px 2px 0 #FF2D7D, 4px 4px 0 #00D9FF; margin-bottom: 8px; }
@@ -566,7 +572,7 @@ function closeQuickView() {
     document.body.style.overflow = '';
 }
 
-// ========== 修复：添加到购物车功能 ==========
+// ========== 修复：添加到购物车功能（不弹出抽屉，只抖动图标） ==========
 function addProductToCart(id, name, price, emoji) {
     event.stopPropagation();
     const btn = event.target;
@@ -576,13 +582,14 @@ function addProductToCart(id, name, price, emoji) {
     btn.style.background = '#00FF00';
     btn.style.transform = 'scale(1.05)';
     
-    // 调用购物车抽屉的添加函数
+    // 调用购物车功能，但不自动打开抽屉
     if (typeof window.addToCart === 'function') {
         window.addToCart({ id: id, name: name, price: price, emoji: emoji, variant: 'Color: Default' });
     } else {
-        // 备用：直接更新计数
+        // 备用逻辑
         cartCount++;
         updateCartBadge();
+        animateCartIcon();
     }
     
     setTimeout(() => {
@@ -609,9 +616,20 @@ function openCart() {
 }
 
 function updateCartBadge() {
-    document.querySelectorAll('.cart-badge').forEach(badge => {
+    const badges = document.querySelectorAll('.cart-badge, #cartBadge, #cartBadgeMobile');
+    badges.forEach(badge => {
         badge.textContent = cartCount;
         badge.classList.remove('hidden');
+    });
+}
+
+// 购物车图标抖动动画
+function animateCartIcon() {
+    const cartIcons = document.querySelectorAll('.navbar-cart');
+    cartIcons.forEach(icon => {
+        icon.style.animation = 'none';
+        icon.offsetHeight; // 触发重绘
+        icon.style.animation = 'cartShake 0.5s ease';
     });
 }
 
