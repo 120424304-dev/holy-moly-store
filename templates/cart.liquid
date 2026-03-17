@@ -466,11 +466,9 @@
               <span class="summary-value total-value">{{ cart.total_price | money }}</span>
             </div>
 
-            <form action="/cart" method="post" novalidate>
-              <button type="submit" name="checkout" class="checkout-btn">
-                ▶ PROCEED TO CHECKOUT
-              </button>
-            </form>
+           <a href="/checkout" class="checkout-btn" style="display: block; text-align: center; text-decoration: none;">
+  ▶ PROCEED TO CHECKOUT
+</a>
 
             <div class="continue-shopping">
               <a href="/pages/shop" class="continue-link">← CONTINUE SHOPPING</a>
