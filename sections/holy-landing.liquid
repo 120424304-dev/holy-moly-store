@@ -125,7 +125,7 @@
     </div>
   </section>
 
-  <!-- PRODUCTS - 横向滑动版本 -->
+  <!-- PRODUCTS - 横向滑动版本（支持鼠标拖拽） -->
   <section class="products" id="products">
     <div class="section-header">
       <span class="section-label" style="color: #FFE600;">🔥 HOT ITEMS</span>
@@ -136,7 +136,7 @@
     <div class="carousel-container">
       <button class="carousel-nav prev" onclick="moveCarousel(-1)">◀</button>
       
-      <div class="carousel-wrapper">
+      <div class="carousel-wrapper" id="carouselWrapper">
         <div class="carousel-track" id="carouselTrack">
           
           <!-- 产品1 -->
@@ -327,7 +327,7 @@
 </div>
 
 <style>
-/* ===== 滑动展示区域样式 ===== */
+/* ===== 滑动展示区域样式（支持鼠标拖拽） ===== */
 .carousel-container {
   position: relative;
   max-width: 1400px;
@@ -342,12 +342,20 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+  cursor: grab;  /* 拖拽手型 */
+  user-select: none;  /* 防止选中文字 */
+}
+
+.carousel-wrapper:active {
+  cursor: grabbing;  /* 拖拽中 */
 }
 
 .carousel-track {
   display: flex;
   gap: 24px;
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  touch-action: pan-y;  /* 允许垂直滚动，水平拖拽 */
 }
 
 /* 滑动卡片 */
@@ -398,12 +406,14 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+  pointer-events: none;  /* 防止图片干扰拖拽 */
 }
 
 .carousel-emoji {
   font-size: 80px;
   animation: floatEmoji 3s ease-in-out infinite;
   filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+  pointer-events: none;
 }
 
 @keyframes floatEmoji {
@@ -628,7 +638,6 @@ setTimeout(function() {
     setTimeout(function() {
       if (intro) intro.classList.remove('active');
       if (mainSite) mainSite.classList.add('active');
-      // 初始化滑动组件
       initCarousel();
     }, 800);
   }, 500);
@@ -763,7 +772,6 @@ function addCarouselToCart(id, name, price, emoji) {
     badgeMobile.classList.remove('hidden');
   }
   
-  // 调用购物车抽屉（如果存在）
   if (typeof window.addToCart === 'function') {
     window.addToCart({
       id: id,
@@ -812,46 +820,119 @@ function openCart() {
   }
 }
 
-// ===== 滑动展示功能 =====
+// ===== 滑动展示功能（支持鼠标拖拽 + 触摸滑动）=====
 var currentSlide = 0;
 var totalSlides = 6;
 var visibleSlides = 4;
+var isDragging = false;
+var startPos = 0;
+var currentTranslate = 0;
+var prevTranslate = 0;
+var animationID;
 
 function initCarousel() {
   visibleSlides = window.innerWidth <= 768 ? 2 : window.innerWidth <= 1024 ? 3 : 4;
   createDots();
   
-  // 触摸滑动支持
+  var wrapper = document.getElementById('carouselWrapper');
   var track = document.getElementById('carouselTrack');
-  if (track) {
-    var touchStartX = 0;
-    track.addEventListener('touchstart', function(e) {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-    track.addEventListener('touchend', function(e) {
-      var touchEndX = e.changedTouches[0].screenX;
-      var diff = touchStartX - touchEndX;
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) moveCarousel(1);
-        else moveCarousel(-1);
-      }
-    });
-  }
+  if (!wrapper || !track) return;
+  
+  // 鼠标事件
+  wrapper.addEventListener('mousedown', dragStart);
+  wrapper.addEventListener('mousemove', dragMove);
+  wrapper.addEventListener('mouseup', dragEnd);
+  wrapper.addEventListener('mouseleave', dragEnd);
+  
+  // 触摸事件
+  wrapper.addEventListener('touchstart', dragStart, {passive: true});
+  wrapper.addEventListener('touchmove', dragMove, {passive: true});
+  wrapper.addEventListener('touchend', dragEnd);
+  
+  // 防止拖拽时选中文字
+  wrapper.addEventListener('selectstart', function(e) {
+    e.preventDefault();
+  });
 }
 
-function moveCarousel(direction) {
+function dragStart(e) {
+  isDragging = true;
+  startPos = getPositionX(e);
+  animationID = requestAnimationFrame(animation);
+  
+  var wrapper = document.getElementById('carouselWrapper');
+  wrapper.style.cursor = 'grabbing';
+  
+  var track = document.getElementById('carouselTrack');
+  track.style.transition = 'none';
+}
+
+function dragMove(e) {
+  if (!isDragging) return;
+  var currentPosition = getPositionX(e);
+  var diff = currentPosition - startPos;
+  currentTranslate = prevTranslate + diff;
+  
+  var track = document.getElementById('carouselTrack');
+  track.style.transform = 'translateX(' + currentTranslate + 'px)';
+}
+
+function dragEnd(e) {
+  if (!isDragging) return;
+  isDragging = false;
+  cancelAnimationFrame(animationID);
+  
+  var wrapper = document.getElementById('carouselWrapper');
+  var track = document.getElementById('carouselTrack');
+  
+  wrapper.style.cursor = 'grab';
+  track.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+  
+  var movedBy = currentTranslate - prevTranslate;
+  var cardWidth = track.children[0].offsetWidth + 24;
+  var maxSlide = totalSlides - visibleSlides;
+  
+  // 滑动超过 100px 就切换
+  if (movedBy < -100 && currentSlide < maxSlide) {
+    currentSlide += 1;
+  } else if (movedBy > 100 && currentSlide > 0) {
+    currentSlide -= 1;
+  }
+  
+  // 边界限制
+  if (currentSlide < 0) currentSlide = 0;
+  if (currentSlide > maxSlide) currentSlide = maxSlide;
+  
+  moveToSlide(currentSlide);
+}
+
+function getPositionX(e) {
+  return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+}
+
+function animation() {
+  if (isDragging) requestAnimationFrame(animation);
+}
+
+function moveToSlide(index) {
   var track = document.getElementById('carouselTrack');
   if (!track) return;
   
   var cardWidth = track.children[0].offsetWidth + 24;
-  var maxSlide = totalSlides - visibleSlides;
+  currentTranslate = -(index * cardWidth);
+  prevTranslate = currentTranslate;
   
+  track.style.transform = 'translateX(' + currentTranslate + 'px)';
+  updateDots();
+}
+
+// 按钮点击切换
+function moveCarousel(direction) {
+  var maxSlide = totalSlides - visibleSlides;
   currentSlide += direction;
   if (currentSlide < 0) currentSlide = 0;
   if (currentSlide > maxSlide) currentSlide = maxSlide;
-  
-  track.style.transform = 'translateX(-' + (currentSlide * cardWidth) + 'px)';
-  updateDots();
+  moveToSlide(currentSlide);
 }
 
 function updateDots() {
@@ -873,7 +954,7 @@ function createDots() {
     dot.onclick = (function(index) {
       return function() {
         currentSlide = index;
-        moveCarousel(0);
+        moveToSlide(currentSlide);
       };
     })(i);
     container.appendChild(dot);
@@ -886,7 +967,7 @@ window.addEventListener('resize', function() {
   if (newVisible !== visibleSlides) {
     visibleSlides = newVisible;
     currentSlide = 0;
-    moveCarousel(0);
+    moveToSlide(0);
     createDots();
   }
 });
