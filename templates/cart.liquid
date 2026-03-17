@@ -510,4 +510,9 @@ function updateQty(line, change) {
   // 刷新页面更新数量
   window.location.href = '/cart/change?line=' + line + '&quantity=' + newQty;
 }
+// 强制绑定结算按钮
+document.querySelector('.checkout-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  window.location.href = '/checkout';
+});
 </script>
