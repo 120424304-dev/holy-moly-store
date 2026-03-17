@@ -807,26 +807,193 @@
     background: #00D9FF;
 }
 
-/* 响应式 */
+/* ========== 手机端优化 ========== */
 @media (max-width: 768px) {
-    .navbar-menu, .navbar-cart { display: none; }
-    .hamburger { display: flex; }
-    .shop-navbar { padding: 12px 20px; }
-    .shop-page { padding: 100px 15px 60px; }
-    .control-panel { flex-direction: column; padding: 20px; }
-    .pixel-search { min-width: 100%; }
-    .products-container { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-    .card-image-wrapper { height: 180px; }
-    .quick-actions { display: none; }
-    .product-img-placeholder { font-size: 60px; }
-    .card-title { font-size: 10px; }
-    .current-price { font-size: 18px; }
+    /* 页面整体 */
+    .shop-page {
+        padding: 80px 12px 40px;
+    }
+    
+    /* 标题缩小 */
+    .shop-title {
+        font-size: 24px;
+        text-shadow: 2px 2px 0 #FF2D7D, 4px 4px 0 #00D9FF;
+        margin-bottom: 8px;
+    }
+    
+    .shop-subtitle {
+        font-size: 10px;
+    }
+    
+    /* 控制面板紧凑 */
+    .control-panel {
+        padding: 16px;
+        gap: 12px;
+    }
+    
+    /* 搜索框缩小 */
+    .pixel-search {
+        min-width: 100%;
+        padding: 10px 12px;
+    }
+    
+    .pixel-search input {
+        font-size: 9px;
+    }
+    
+    /* 筛选按钮一行显示，缩小 */
+    .filter-chips {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        width: 100%;
+    }
+    
+    .chip {
+        padding: 8px 4px;
+        font-size: 8px;
+        text-align: center;
+    }
+    
+    /* 下拉菜单缩小 */
+    .pixel-dropdown-btn {
+        min-width: 100%;
+        padding: 12px 16px;
+        font-size: 8px;
+    }
+    
+    /* 产品网格 - 手机端一行2个 */
+    .products-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    /* 产品卡片缩小 */
+    .card-image-wrapper {
+        height: 140px;
+    }
+    
+    .product-img-placeholder {
+        font-size: 50px;
+    }
+    
+    .product-pixel-card:hover {
+        transform: none;
+    }
+    
+    .card-info {
+        padding: 12px;
+    }
+    
+    .card-title {
+        font-size: 9px;
+        min-height: 28px;
+        margin-bottom: 8px;
+    }
+    
+    .card-type, .card-stock {
+        font-size: 7px;
+    }
+    
+    .current-price {
+        font-size: 14px;
+    }
+    
+    .card-rating {
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+    
+    /* 徽章缩小 */
+    .card-badge {
+        font-size: 7px;
+        padding: 4px 8px;
+    }
+    
+    /* 快速操作按钮隐藏 */
+    .quick-actions {
+        display: none;
+    }
+    
+    /* 收藏按钮缩小 */
+    .wishlist-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+    
+    /* 加载更多按钮 */
+    .load-more-btn {
+        padding: 16px 32px;
+        font-size: 11px;
+        box-shadow: 4px 4px 0 #000;
+    }
+    
+    /* 导航栏适配 */
+    .shop-navbar {
+        padding: 12px 16px;
+    }
+    
+    .navbar-logo {
+        font-size: 14px;
+    }
+    
+    .navbar-logo-icon {
+        font-size: 18px;
+    }
+    
+    .navbar-cart {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    /* 模态框适配 */
+    .modal-content {
+        max-width: 90%;
+        border-width: 4px;
+    }
+    
+    .modal-body {
+        padding: 24px;
+    }
+    
+    .modal-image {
+        font-size: 80px;
+    }
+    
+    .modal-title {
+        font-size: 12px;
+    }
+    
+    .modal-price {
+        font-size: 20px;
+    }
+    
+    .modal-add-btn {
+        padding: 16px 32px;
+        font-size: 12px;
+    }
 }
 
-@media (max-width: 480px) {
-    .products-container { grid-template-columns: 1fr; }
-    .shop-title { font-size: 24px; }
-    .modal-image { font-size: 80px; }
+/* 超小屏幕优化 */
+@media (max-width: 375px) {
+    .products-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .card-image-wrapper {
+        height: 120px;
+    }
+    
+    .card-title {
+        font-size: 8px;
+    }
+    
+    .current-price {
+        font-size: 12px;
+    }
 }
 </style>
 
@@ -911,7 +1078,7 @@
 
     <div class="products-container" id="productsContainer">
         
-        <!-- ====== 产品1：替换图片URL、名称、类型、价格、库存、徽章 ====== -->
+        <!-- 产品1 -->
         <div class="product-pixel-card" data-category="keychain" data-price="18" data-name="mario mushroom keychain" data-id="1">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -921,7 +1088,6 @@
                 </div>
                 <div class="card-image-wrapper">
                     <div class="card-image" style="background: linear-gradient(145deg, #FFE600, #FFB800);">
-                        <!-- 替换：把🍄换成真实图片 <img src="图片链接" class="product-img"> -->
                         <div class="product-img-placeholder">🍄</div>
                     </div>
                     <span class="card-badge hot">HOT</span>
@@ -931,10 +1097,8 @@
                         <span class="card-type">KEYCHAIN</span>
                         <span class="card-stock in">● IN STOCK</span>
                     </div>
-                    <!-- 替换：产品名称 -->
                     <h3 class="card-title">Mario Mushroom Keychain</h3>
                     <div class="card-footer">
-                        <!-- 替换：价格 -->
                         <span class="current-price">$18.00</span>
                         <span class="card-rating">⭐ 4.9</span>
                     </div>
@@ -946,7 +1110,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品2 ====== -->
+        <!-- 产品2 -->
         <div class="product-pixel-card" data-category="keychain" data-price="22" data-name="pikachu sprite keychain" data-id="2">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -978,7 +1142,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品3 ====== -->
+        <!-- 产品3 -->
         <div class="product-pixel-card" data-category="magnet" data-price="28" data-name="retro controller magnet" data-id="3">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1011,7 +1175,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品4 ====== -->
+        <!-- 产品4 -->
         <div class="product-pixel-card" data-category="keychain" data-price="15" data-name="star power keychain" data-id="4">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1043,7 +1207,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品5 ====== -->
+        <!-- 产品5 -->
         <div class="product-pixel-card" data-category="diy" data-price="45" data-name="pixel art starter kit" data-id="5">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1075,7 +1239,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品6 ====== -->
+        <!-- 产品6 -->
         <div class="product-pixel-card" data-category="keychain" data-price="20" data-name="link sword keychain" data-id="6">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1106,7 +1270,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品7 ====== -->
+        <!-- 产品7 -->
         <div class="product-pixel-card" data-category="magnet" data-price="25" data-name="pacman ghost magnet set" data-id="7">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1138,7 +1302,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品8 ====== -->
+        <!-- 产品8 -->
         <div class="product-pixel-card" data-category="keychain" data-price="19" data-name="pokeball keychain" data-id="8">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1169,7 +1333,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品9 ====== -->
+        <!-- 产品9 -->
         <div class="product-pixel-card" data-category="diy" data-price="38" data-name="space invaders bead kit" data-id="9">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1202,7 +1366,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品10 ====== -->
+        <!-- 产品10 -->
         <div class="product-pixel-card" data-category="magnet" data-price="32" data-name="tetris block magnets" data-id="10">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1233,7 +1397,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品11 ====== -->
+        <!-- 产品11 -->
         <div class="product-pixel-card" data-category="keychain" data-price="24" data-name="sonic ring keychain" data-id="11">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1265,7 +1429,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品12 ====== -->
+        <!-- 产品12 -->
         <div class="product-pixel-card" data-category="keychain" data-price="16" data-name="heart container keychain" data-id="12">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1296,7 +1460,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品13 ====== -->
+        <!-- 产品13 -->
         <div class="product-pixel-card" data-category="magnet" data-price="30" data-name="8bit character magnets" data-id="13">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1328,7 +1492,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品14 ====== -->
+        <!-- 产品14 -->
         <div class="product-pixel-card" data-category="diy" data-price="55" data-name="custom portrait kit" data-id="14">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1361,7 +1525,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品15 ====== -->
+        <!-- 产品15 -->
         <div class="product-pixel-card" data-category="keychain" data-price="21" data-name="diamond pickaxe keychain" data-id="15">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1393,7 +1557,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品16 ====== -->
+        <!-- 产品16 -->
         <div class="product-pixel-card" data-category="magnet" data-price="27" data-name="pixel food magnet set" data-id="16">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1424,7 +1588,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品17 ====== -->
+        <!-- 产品17 -->
         <div class="product-pixel-card" data-category="keychain" data-price="23" data-name="yoshi egg keychain" data-id="17">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1455,7 +1619,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品18 ====== -->
+        <!-- 产品18 -->
         <div class="product-pixel-card" data-category="diy" data-price="42" data-name="retro game cartridge kit" data-id="18">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1487,7 +1651,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品19 ====== -->
+        <!-- 产品19 -->
         <div class="product-pixel-card" data-category="keychain" data-price="17" data-name="coin block keychain" data-id="19">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1520,7 +1684,7 @@
             </div>
         </div>
 
-        <!-- ====== 产品20 ====== -->
+        <!-- 产品20 -->
         <div class="product-pixel-card" data-category="magnet" data-price="35" data-name="pixel pet magnets" data-id="20">
             <div class="card-inner">
                 <button class="wishlist-btn" onclick="toggleWishlist(this, event)">♡</button>
@@ -1767,7 +1931,11 @@ function updateCartBadge() {
 }
 
 function openCartDrawer() {
-    alert(cartCount === 0 ? '购物车是空的！快去选购吧 👾' : `购物车里有 ${cartCount} 个宝贝！`);
+    if (typeof window.openCartDrawer === 'function') {
+        window.openCartDrawer();
+    } else {
+        alert(cartCount === 0 ? '购物车是空的！快去选购吧 👾' : `购物车里有 ${cartCount} 个宝贝！`);
+    }
 }
 
 function loadMore(btn) {
@@ -1777,7 +1945,6 @@ function loadMore(btn) {
 
 // 3D 倾斜效果 + 滚动动画
 document.querySelectorAll('.product-pixel-card').forEach(card => {
-    // 3D倾斜
     card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
