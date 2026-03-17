@@ -1,31 +1,194 @@
-// 找到产品卡片中的 ADD 按钮，改成这样：
-<button class="quick-btn add-cart" onclick="addToCartFromProduct(this, 1, 'Mario Mushroom Keychain', 18, '🍄')">🛒 ADD</button>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-// 对应的JS函数：
-function addToCartFromProduct(btn, id, name, price, emoji) {
-    event.stopPropagation();
+.cart-drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: all 0.3s; }
+.cart-drawer-overlay.active { opacity: 1; visibility: visible; }
+
+.cart-drawer { position: fixed; top: 0; right: 0; width: 100%; max-width: 480px; height: 100vh; background: #1a1a2e; border-left: 5px solid #FFE600; z-index: 9999; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); display: flex; flex-direction: column; box-shadow: -10px 0 40px rgba(0,0,0,0.5); }
+.cart-drawer.active { transform: translateX(0); }
+
+.cart-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 4px solid rgba(255,230,0,0.2); background: linear-gradient(135deg, #1a1a2e, #252542); }
+.cart-drawer-title { font-family: 'Press Start 2P', cursive; font-size: 14px; color: #FFE600; display: flex; align-items: center; gap: 12px; }
+.cart-item-count { font-size: 10px; color: rgba(255,255,255,0.6); background: rgba(255,45,125,0.2); padding: 4px 8px; border-radius: 4px; border: 2px solid #FF2D7D; }
+.cart-drawer-close { width: 44px; height: 44px; background: #FF2D7D; border: 4px solid #000; border-radius: 12px; font-family: 'Press Start 2P'; font-size: 16px; color: white; cursor: pointer; box-shadow: 4px 4px 0 #000; display: flex; align-items: center; justify-content: center; }
+.cart-drawer-close:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+
+.cart-drawer-content { flex: 1; overflow-y: auto; padding: 20px; }
+.cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 40px; }
+.cart-empty-icon { font-size: 80px; margin-bottom: 24px; opacity: 0.5; animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.cart-empty-text { font-family: 'Press Start 2P'; font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 32px; line-height: 1.8; }
+.cart-empty-btn { font-family: 'Press Start 2P'; font-size: 10px; padding: 20px 32px; background: #FFE600; border: 4px solid #000; border-radius: 12px; color: #000; cursor: pointer; box-shadow: 6px 6px 0 #000; text-decoration: none; display: inline-block; }
+.cart-empty-btn:hover { transform: translate(3px,3px); box-shadow: 3px 3px 0 #000; background: #00D9FF; }
+
+.cart-items { display: flex; flex-direction: column; gap: 16px; }
+.cart-item { display: flex; gap: 16px; padding: 16px; background: rgba(255,255,255,0.03); border: 3px solid rgba(255,255,255,0.1); border-radius: 16px; position: relative; }
+.cart-item-image { width: 80px; height: 80px; border-radius: 12px; border: 3px solid #000; flex-shrink: 0; background: linear-gradient(135deg, #FFE600, #FF6B9D); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+.cart-item-details { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.cart-item-title { font-family: 'Press Start 2P'; font-size: 10px; color: #fff; line-height: 1.6; margin-bottom: 4px; }
+.cart-item-variant { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+.cart-item-bottom { display: flex; align-items: center; justify-content: space-between; }
+.quantity-selector { display: flex; border: 3px solid #000; border-radius: 8px; overflow: hidden; box-shadow: 3px 3px 0 #000; }
+.quantity-btn { width: 32px; height: 32px; background: #FFE600; border: none; font-family: 'Press Start 2P'; font-size: 12px; cursor: pointer; }
+.quantity-btn:hover { background: #FF2D7D; color: white; }
+.quantity-input { width: 40px; height: 32px; background: #fff; border: none; font-family: 'Press Start 2P'; font-size: 10px; text-align: center; }
+.cart-item-price { font-family: 'Press Start 2P'; font-size: 12px; color: #FF2D7D; }
+.cart-item-remove { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; background: rgba(255,45,125,0.2); border: 2px solid rgba(255,45,125,0.5); border-radius: 6px; color: #FF2D7D; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.2s; }
+.cart-item:hover .cart-item-remove { opacity: 1; }
+.cart-item-remove:hover { background: #FF2D7D; color: white; }
+
+.cart-drawer-footer { padding: 24px; border-top: 4px solid rgba(255,230,0,0.2); background: linear-gradient(135deg, #252542, #1a1a2e); }
+.cart-free-shipping { margin-bottom: 20px; }
+.free-shipping-text { font-family: 'Press Start 2P'; font-size: 9px; color: rgba(255,255,255,0.6); margin-bottom: 12px; text-align: center; }
+.free-shipping-bar { height: 16px; background: rgba(255,255,255,0.1); border: 3px solid #000; border-radius: 8px; overflow: hidden; box-shadow: 3px 3px 0 #000; }
+.free-shipping-progress { height: 100%; background: linear-gradient(90deg, #FFE600, #FF2D7D); border-radius: 4px; transition: width 0.5s; }
+.cart-subtotal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.cart-subtotal-label { font-family: 'Press Start 2P'; font-size: 10px; color: rgba(255,255,255,0.6); }
+.cart-subtotal-price { font-family: 'Press Start 2P'; font-size: 14px; color: #FFE600; }
+.cart-shipping { font-size: 11px; color: rgba(255,255,255,0.4); text-align: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+.cart-checkout-btn { width: 100%; padding: 24px; background: #00D9FF; border: 5px solid #000; border-radius: 16px; font-family: 'Press Start 2P'; font-size: 14px; color: #000; cursor: pointer; box-shadow: 8px 8px 0 #000; margin-bottom: 16px; }
+.cart-checkout-btn:hover { transform: translate(4px,4px); box-shadow: 4px 4px 0 #000; background: #FFE600; }
+.cart-continue-btn { width: 100%; padding: 16px; background: transparent; border: 3px solid rgba(255,255,255,0.3); border-radius: 12px; font-family: 'Press Start 2P'; font-size: 10px; color: rgba(255,255,255,0.6); cursor: pointer; }
+.cart-continue-btn:hover { border-color: #FFE600; color: #FFE600; background: rgba(255,230,0,0.1); }
+
+@media (max-width: 480px) { .cart-drawer { max-width: 100%; } .cart-item-image { width: 64px; height: 64px; } }
+</style>
+
+<div class="cart-drawer-overlay" id="cartOverlay" onclick="closeCartDrawer()"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer-header">
+        <div class="cart-drawer-title">YOUR CART <span class="cart-item-count" id="cartItemCount">0 ITEMS</span></div>
+        <button class="cart-drawer-close" onclick="closeCartDrawer()">×</button>
+    </div>
+    <div class="cart-drawer-content" id="cartContent">
+        <div class="cart-empty" id="emptyCart">
+            <div class="cart-empty-icon">📦</div>
+            <div class="cart-empty-text">YOUR LOOT BOX<br>IS EMPTY!</div>
+            <button class="cart-empty-btn" onclick="closeCartDrawer()">🎮 START SHOPPING</button>
+        </div>
+        <div class="cart-items" id="cartItems" style="display:none"></div>
+    </div>
+    <div class="cart-drawer-footer" id="cartFooter" style="display:none">
+        <div class="cart-free-shipping">
+            <div class="free-shipping-text" id="freeShippingText">🚚 Add $72.00 more for FREE shipping!</div>
+            <div class="free-shipping-bar"><div class="free-shipping-progress" id="freeShippingProgress" style="width:0%"></div></div>
+        </div>
+        <div class="cart-subtotal">
+            <span class="cart-subtotal-label">SUBTOTAL</span>
+            <span class="cart-subtotal-price" id="cartSubtotal">$0.00</span>
+        </div>
+        <div class="cart-shipping">Shipping & taxes calculated at checkout</div>
+        <button class="cart-checkout-btn" onclick="checkout()">💳 CHECKOUT</button>
+        <button class="cart-continue-btn" onclick="closeCartDrawer()">← CONTINUE SHOPPING</button>
+    </div>
+</div>
+
+<script>
+let cartData = [];
+
+function openCartDrawer() {
+    document.getElementById('cartOverlay').classList.add('active');
+    document.getElementById('cartDrawer').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeCartDrawer() {
+    document.getElementById('cartOverlay').classList.remove('active');
+    document.getElementById('cartDrawer').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function addToCart(product) {
+    const existing = cartData.find(item => item.id === product.id);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cartData.push({...product, quantity: 1});
+    }
+    updateCartUI();
+    openCartDrawer();
+}
+
+function updateCartUI() {
+    const itemsContainer = document.getElementById('cartItems');
+    const emptyCart = document.getElementById('emptyCart');
+    const footer = document.getElementById('cartFooter');
+    const countEl = document.getElementById('cartItemCount');
+    const subtotalEl = document.getElementById('cartSubtotal');
     
-    // 按钮动画
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '✓ ADDED!';
-    btn.style.background = '#00FF00';
-    btn.style.transform = 'scale(1.05)';
+    const totalItems = cartData.reduce((sum, item) => sum + item.quantity, 0);
+    const totalPrice = cartData.reduce((sum, item) => sum + item.price * item.quantity, 0);
     
-    // 添加到购物车
-    if (typeof window.addToCart === 'function') {
-        window.addToCart({
-            id: id,
-            name: name,
-            price: price,
-            emoji: emoji,
-            variant: 'Color: Default'
-        });
+    countEl.textContent = totalItems + ' ITEM' + (totalItems !== 1 ? 'S' : '');
+    subtotalEl.textContent = '$' + totalPrice.toFixed(2);
+    
+    // 更新免运费进度
+    const threshold = 72;
+    const progress = Math.min((totalPrice / threshold) * 100, 100);
+    const remaining = threshold - totalPrice;
+    document.getElementById('freeShippingProgress').style.width = progress + '%';
+    document.getElementById('freeShippingText').textContent = remaining > 0 
+        ? '🚚 Add $' + remaining.toFixed(2) + ' more for FREE shipping!' 
+        : '🎉 Congratulations! You got FREE shipping!';
+    
+    if (cartData.length === 0) {
+        emptyCart.style.display = 'flex';
+        itemsContainer.style.display = 'none';
+        footer.style.display = 'none';
+    } else {
+        emptyCart.style.display = 'none';
+        itemsContainer.style.display = 'flex';
+        footer.style.display = 'block';
+        
+        itemsContainer.innerHTML = cartData.map((item, index) => `
+            <div class="cart-item">
+                <div class="cart-item-image">${item.emoji}</div>
+                <div class="cart-item-details">
+                    <div>
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-variant">${item.variant || ''}</div>
+                    </div>
+                    <div class="cart-item-bottom">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn" onclick="updateQty(${index}, -1)">−</button>
+                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
+                            <button class="quantity-btn" onclick="updateQty(${index}, 1)">+</button>
+                        </div>
+                        <div class="cart-item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                </div>
+                <button class="cart-item-remove" onclick="removeItem(${index})">×</button>
+            </div>
+        `).join('');
     }
     
-    // 恢复按钮
-    setTimeout(() => {
-        btn.innerHTML = originalText;
-        btn.style.background = '';
-        btn.style.transform = '';
-    }, 1500);
+    localStorage.setItem('holyMolyCart', JSON.stringify(cartData));
 }
+
+function updateQty(index, change) {
+    cartData[index].quantity += change;
+    if (cartData[index].quantity < 1) cartData[index].quantity = 1;
+    updateCartUI();
+}
+
+function removeItem(index) {
+    cartData.splice(index, 1);
+    updateCartUI();
+}
+
+function checkout() {
+    if (cartData.length === 0) return;
+    alert('🎉 Ready to checkout! Total: ' + document.getElementById('cartSubtotal').textContent);
+}
+
+// 暴露到全局
+window.openCartDrawer = openCartDrawer;
+window.addToCart = addToCart;
+
+// 恢复购物车
+const saved = localStorage.getItem('holyMolyCart');
+if (saved) {
+    cartData = JSON.parse(saved);
+    updateCartUI();
+}
+</script>
