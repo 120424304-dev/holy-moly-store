@@ -765,7 +765,27 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveal();
   initTestimonialSlider();
   initMarqueePause();
+  initProductCardClicks();
 });
+
+// Product Card Click Handler
+function initProductCardClicks() {
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      // If clicked on add-to-cart button or its children, don't navigate
+      if (e.target.closest('.add-to-cart')) {
+        return;
+      }
+      // Otherwise, navigate to the product link
+      const link = this.querySelector('.product-link');
+      if (link) {
+        window.location.href = link.href;
+      }
+    });
+    // Add pointer cursor to indicate clickable
+    card.style.cursor = 'pointer';
+  });
+}
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

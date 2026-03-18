@@ -865,20 +865,6 @@
   display: block;
   text-decoration: none;
   color: inherit;
-  cursor: pointer;
-  position: relative;
-  z-index: 2;
-}
-
-.product-link:hover {
-  text-decoration: none;
-}
-
-.product-link::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
 }
 
 .product-card.visible {
@@ -987,8 +973,6 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
-  z-index: 5;
-  pointer-events: auto;
 }
 
 .add-to-cart:hover {
