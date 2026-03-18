@@ -1,0 +1,677 @@
+{% comment %}
+  HOLY MOLY Product Detail Page Template
+  像素风商品详情页模板 - 带占位符版本
+  使用说明：替换所有 {{ placeholder_xxx }} 为实际内容
+{% endcomment %}
+
+{{ 'holy-product.css' | asset_url | stylesheet_tag }}
+
+<div id="holy-product-detail" data-product="{{ placeholder_product_handle }}">
+  
+  <!-- ==================== 第1屏：视觉冲击区 ==================== -->
+  <section class="pd-hero">
+    <div class="pd-hero-grid">
+      
+      <!-- 左侧：产品图 -->
+      <div class="pd-gallery">
+        <div class="pd-main-image">
+          <!-- TODO: 替换为产品主图 -->
+          <img src="{{ placeholder_main_image }}" 
+               alt="{{ placeholder_product_name }}"
+               class="pixel-float"
+               data-pixel-effect="true">
+          
+          <!-- 像素粒子特效容器 -->
+          <div class="pixel-particles" id="pixelParticles"></div>
+        </div>
+        
+        <!-- 缩略图列表 -->
+        <div class="pd-thumbnails">
+          {% for i in (1..4) %}
+            <div class="pd-thumb {% if forloop.first %}active{% endif %}" 
+                 data-image="{{ placeholder_gallery_image_ }}{{ i }}">
+              <!-- TODO: 替换为缩略图 -->
+              <img src="{{ placeholder_thumbnail_ }}{{ i }}" alt="view {{ i }}">
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- 右侧：产品信息 -->
+      <div class="pd-info">
+        <!-- 标签徽章 -->
+        <div class="pd-badges">
+          {% if placeholder_badge_new %}
+            <span class="badge badge-new">🆕 NEW</span>
+          {% endif %}
+          {% if placeholder_badge_hot %}
+            <span class="badge badge-hot">🔥 HOT</span>
+          {% endif %}
+          {% if placeholder_badge_limited %}
+            <span class="badge badge-limited">💎 LIMITED</span>
+          {% endif %}
+        </div>
+        
+        <!-- 产品名称 -->
+        <h1 class="pd-title glitch-text" data-text="{{ placeholder_product_name }}">
+          {{ placeholder_product_name }}
+        </h1>
+        
+        <!-- 评分 -->
+        <div class="pd-rating">
+          <span class="stars">⭐⭐⭐⭐⭐</span>
+          <span class="rating-score">{{ placeholder_rating }}</span>
+          <span class="rating-count">({{ placeholder_review_count }} reviews)</span>
+        </div>
+        
+        <!-- 价格 -->
+        <div class="pd-price">
+          {% if placeholder_compare_price %}
+            <span class="price-compare">${{ placeholder_compare_price }}</span>
+          {% endif %}
+          <span class="price-current">${{ placeholder_price }}</span>
+        </div>
+        
+        <!-- 简短描述 -->
+        <p class="pd-short-desc">{{ placeholder_short_description }}</p>
+        
+        <!-- 变体选择（如有） -->
+        {% if placeholder_has_variants %}
+          <div class="pd-variants">
+            <label>选择款式：</label>
+            <div class="variant-options">
+              {% for variant in placeholder_variants %}
+                <button class="variant-btn" data-variant="{{ variant }}">{{ variant }}</button>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+        
+        <!-- 数量选择 -->
+        <div class="pd-quantity">
+          <label>数量：</label>
+          <div class="quantity-selector">
+            <button class="qty-btn" onclick="updateQty(-1)">−</button>
+            <input type="number" value="1" min="1" max="10" id="quantity">
+            <button class="qty-btn" onclick="updateQty(1)">+</button>
+          </div>
+        </div>
+        
+        <!-- CTA 按钮 -->
+        <div class="pd-actions">
+          <button class="pixel-btn btn-primary" onclick="addToCart()">
+            <span class="btn-icon">🛒</span>
+            <span class="btn-text">ADD TO CART</span>
+            <span class="btn-price">${{ placeholder_price }}</span>
+          </button>
+          
+          <button class="pixel-btn btn-wishlist" onclick="addToWishlist()">
+            <span class="btn-icon">❤️</span>
+          </button>
+        </div>
+        
+        <!-- 免邮提示 -->
+        <div class="pd-shipping-note">
+          <div class="shipping-progress">
+            <div class="progress-bar" style="width: 60%"></div>
+          </div>
+          <p>🚚 再买 <span class="highlight">$19.01</span> 即享全球包邮！</p>
+        </div>
+        
+        <!-- 信任图标 -->
+        <div class="pd-trust-badges">
+          <span>🔒 安全支付</span>
+          <span>🔄 30天退换</span>
+          <span>✈️ 全球配送</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第2屏：痛点共鸣区 ==================== -->
+  <section class="pd-pain-points">
+    <h2 class="section-title">😫 你有没有经历过这些？</h2>
+    
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">🎒</div>
+        <h3>背包空空太单调</h3>
+        <p>普通钥匙扣毫无个性，出门撞款100次</p>
+      </div>
+      
+      <div class="pain-card">
+        <div class="pain-icon">🔑</div>
+        <h3>钥匙串乱成一团</h3>
+        <p>找钥匙像寻宝，每次都要翻半天</p>
+      </div>
+      
+      <div class="pain-card">
+        <div class="pain-icon">🎁</div>
+        <h3>送礼永远没新意</h3>
+        <p>淘宝同款太廉价， handmade 又太贵</p>
+      </div>
+    </div>
+    
+    <div class="pain-solution">
+      <p class="solution-text">✨ HOLY MOLY 来解决！ ✨</p>
+      <p class="solution-sub">手工像素拼豆，每一个都是独一无二</p>
+    </div>
+  </section>
+
+  <!-- ==================== 第3屏：产品展示区 ==================== -->
+  <section class="pd-features">
+    <h2 class="section-title">🔍 为什么选这个？</h2>
+    
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="feature-media">
+          <!-- TODO: 替换为手工制作过程图/GIF -->
+          <img src="{{ placeholder_feature_image_1 }}" alt="手工制作">
+          <div class="play-btn">▶️</div>
+        </div>
+        <h3>👐 纯手工制作</h3>
+        <p>每一颗豆子都是匠人亲手拼贴，不是机器量产</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-media">
+          <!-- TODO: 替换为细节特写图 -->
+          <img src="{{ placeholder_feature_image_2 }}" alt="像素细节">
+        </div>
+        <h3>🎨 像素级精致</h3>
+        <p>经典 8-bit 风格，游戏情怀满分</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-media">
+          <!-- TODO: 替换为材质展示图 -->
+          <img src="{{ placeholder_feature_image_3 }}" alt="材质展示">
+        </div>
+        <h3>💪 轻巧又耐用</h3>
+        <p>环保塑料拼豆 + 热熔工艺，摔不坏扯不烂</p>
+      </div>
+      
+      <div class="feature-item">
+        <div class="feature-media">
+          <!-- TODO: 替换为限量标识图 -->
+          <img src="{{ placeholder_feature_image_4 }}" alt="独一无二">
+        </div>
+        <h3>💎 独一无二</h3>
+        <p>手工制作，每个都略有不同，专属于你</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第4屏：场景代入区 ==================== -->
+  <section class="pd-scenes">
+    <h2 class="section-title">🎮 LEVEL UP YOUR DAILY</h2>
+    
+    <div class="scene-slider">
+      <div class="scene-card">
+        <!-- TODO: 替换为背包场景GIF -->
+        <div class="scene-media">
+          <img src="{{ placeholder_scene_backpack }}" alt="挂背包">
+          <div class="scene-rpg">魅力值 +10</div>
+        </div>
+        <h3>🎒 挂背包</h3>
+        <p>街头最靓的仔，回头率200%</p>
+      </div>
+      
+      <div class="scene-card">
+        <!-- TODO: 替换为钥匙串场景GIF -->
+        <div class="scene-media">
+          <img src="{{ placeholder_scene_keys }}" alt="钥匙串">
+          <div class="scene-rpg">辨识度 +100</div>
+        </div>
+        <h3>🔑 钥匙串</h3>
+        <p>再也不怕找不到钥匙</p>
+      </div>
+      
+      <div class="scene-card">
+        <!-- TODO: 替换为桌面场景GIF -->
+        <div class="scene-media">
+          <img src="{{ placeholder_scene_desk }}" alt="桌面摆件">
+          <div class="scene-rpg">氛围感 +50</div>
+        </div>
+        <h3>🖥️ 当摆件</h3>
+        <p>工位 instantly 变酷</p>
+      </div>
+      
+      <div class="scene-card">
+        <!-- TODO: 替换为送礼场景GIF -->
+        <div class="scene-media">
+          <img src="{{ placeholder_scene_gift }}" alt="送礼">
+          <div class="scene-rpg">好感度 +999</div>
+        </div>
+        <h3>🎁 送礼物</h3>
+        <p>心意满满，对方一定会喜欢</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第5屏：信任背书区 ==================== -->
+  <section class="pd-social-proof">
+    <h2 class="section-title">💬 买家怎么说</h2>
+    
+    <!-- 买家秀轮播 -->
+    <div class="review-carousel">
+      <div class="review-card">
+        <!-- TODO: 替换为买家实拍图 -->
+        <img src="{{ placeholder_review_image_1 }}" class="review-img" alt="买家秀1">
+        <div class="review-content">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"比图片还可爱！质感超好，已经买了5个了停不下来"</p>
+          <span class="reviewer">@pixel_lover_99</span>
+        </div>
+      </div>
+      
+      <div class="review-card">
+        <!-- TODO: 替换为买家实拍图 -->
+        <img src="{{ placeholder_review_image_2 }}" class="review-img" alt="买家秀2">
+        <div class="review-content">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"送给男朋友当生日礼物，他超喜欢，说是他收到最特别的礼物"</p>
+          <span class="reviewer">@gaming_gf</span>
+        </div>
+      </div>
+      
+      <div class="review-card">
+        <!-- TODO: 替换为买家实拍图 -->
+        <img src="{{ placeholder_review_image_3 }}" class="review-img" alt="买家秀3">
+        <div class="review-content">
+          <div class="stars">⭐⭐⭐⭐⭐</div>
+          <p>"包装超用心，开箱体验满分，会回购！"</p>
+          <span class="reviewer">@unbox_queen</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 制作视频 -->
+    <div class="making-video">
+      <h3>👀 看它是怎么诞生的</h3>
+      <!-- TODO: 替换为制作视频 -->
+      <div class="video-container">
+        <video poster="{{ placeholder_video_poster }}" controls>
+          <source src="{{ placeholder_video_url }}" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <span class="play-icon">▶️</span>
+          <span class="video-duration">⏱️ 45秒</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第6屏：参数规格区 ==================== -->
+  <section class="pd-specs">
+    <h2 class="section-title">📊 产品参数</h2>
+    
+    <div class="specs-grid">
+      <div class="spec-item">
+        <span class="spec-label">📐 尺寸</span>
+        <span class="spec-value">约 {{ placeholder_size }}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">⚖️ 重量</span>
+        <span class="spec-value">约 {{ placeholder_weight }}</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">🎨 材质</span>
+        <span class="spec-value">环保塑料拼豆 + 金属配件</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">🔧 工艺</span>
+        <span class="spec-value">手工热熔拼贴</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">🏷️ 产地</span>
+        <span class="spec-value">Made with 💖 in China</span>
+      </div>
+      <div class="spec-item">
+        <span class="spec-label">🎁 包装</span>
+        <span class="spec-value">品牌盒 + 感谢卡 + 像素贴纸</span>
+      </div>
+    </div>
+    
+    <!-- 包装清单 -->
+    <div class="package-list">
+      <h3>📦 包装内含</h3>
+      <ul>
+        <li>✅ {{ placeholder_product_name }} × 1</li>
+        <li>✅ 品牌感谢卡 × 1</li>
+        <li>✅ 像素风贴纸 × 1（随机款式）</li>
+        <li>✅ 备用配件包 × 1</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ==================== 第7屏：购买保障区 ==================== -->
+  <section class="pd-guarantees">
+    <h2 class="section-title">🛡️ HOLY MOLY 承诺</h2>
+    
+    <div class="guarantee-grid">
+      <div class="guarantee-card">
+        <div class="guarantee-icon">🚀</div>
+        <h3>全球包邮</h3>
+        <p>满 $35 免邮费<br>7-15天送达美国</p>
+      </div>
+      
+      <div class="guarantee-card">
+        <div class="guarantee-icon">🔄</div>
+        <h3>30天无忧退换</h3>
+        <p>不喜欢？全额退款<br>不用退货，直接送您</p>
+      </div>
+      
+      <div class="guarantee-card">
+        <div class="guarantee-icon">💬</div>
+        <h3>24h客服在线</h3>
+        <p>有问题随时找<br>平均响应 &lt; 2小时</p>
+      </div>
+      
+      <div class="guarantee-card">
+        <div class="guarantee-icon">📦</div>
+        <h3>破损包赔</h3>
+        <p>运输破损？<br>免费补发新的</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第8屏：关联推荐区 ==================== -->
+  <section class="pd-related">
+    <h2 class="section-title">🎯 搭配购买更酷</h2>
+    
+    <div class="related-grid">
+      <!-- 相似风格 -->
+      <div class="related-category">
+        <h3>🎮 相似风格</h3>
+        <div class="related-products">
+          {% for i in (1..2) %}
+            <a href="{{ placeholder_related_url_ }}{{ i }}" class="related-card">
+              <!-- TODO: 替换为关联产品图 -->
+              <img src="{{ placeholder_related_image_ }}{{ i }}" alt="related {{ i }}">
+              <span class="related-name">{{ placeholder_related_name_ }}{{ i }}</span>
+              <span class="related-price">${{ placeholder_related_price_ }}{{ i }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- 同系列 -->
+      <div class="related-category">
+        <h3>⭐ 同系列</h3>
+        <div class="related-products">
+          {% for i in (3..4) %}
+            <a href="{{ placeholder_related_url_ }}{{ i }}" class="related-card">
+              <img src="{{ placeholder_related_image_ }}{{ i }}" alt="related {{ i }}">
+              <span class="related-name">{{ placeholder_related_name_ }}{{ i }}</span>
+              <span class="related-price">${{ placeholder_related_price_ }}{{ i }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- 套装优惠 -->
+      <div class="related-bundle">
+        <h3>🎁 套装优惠</h3>
+        <div class="bundle-card">
+          <!-- TODO: 替换为套装图 -->
+          <img src="{{ placeholder_bundle_image }}" alt="bundle">
+          <div class="bundle-info">
+            <h4>{{ placeholder_bundle_name }}</h4>
+            <p class="bundle-price">
+              <span class="bundle-current">${{ placeholder_bundle_price }}</span>
+              <span class="bundle-original">${{ placeholder_bundle_original }}</span>
+              <span class="bundle-save">省 ${{ placeholder_bundle_save }}</span>
+            </p>
+            <button class="pixel-btn btn-small">立即购买套装</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 第9屏：紧迫感区 ==================== -->
+  <section class="pd-urgency">
+    <div class="urgency-box">
+      <h2>⏰ LIMITED DROP</h2>
+      
+      <div class="urgency-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="stockCount">{{ placeholder_stock }}</span>
+          <span class="stat-label">件库存</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" id="viewerCount">{{ placeholder_viewers }}</span>
+          <span class="stat-label">人正在浏览</span>
+        </div>
+      </div>
+      
+      <p class="urgency-note">
+        🎨 本批手工制作，每批只产 {{ placeholder_batch_size }} 个<br>
+        售完下批要等 {{ placeholder_restock_days }} 天
+      </p>
+      
+      <!-- 倒计时（限时活动用） -->
+      {% if placeholder_show_countdown %}
+        <div class="countdown-timer">
+          <span>⏳ 优惠倒计时：</span>
+          <div class="timer" id="countdown">
+            <span>23</span>:
+            <span>59</span>:
+            <span>59</span>
+          </div>
+        </div>
+      {% endif %}
+      
+      <button class="pixel-btn btn-large btn-pulse" onclick="addToCart()">
+        <span class="btn-icon">🛒</span>
+        <span>GET IT NOW</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ==================== 第10屏：FAQ区 ==================== -->
+  <section class="pd-faq">
+    <h2 class="section-title">❓ 常见问题</h2>
+    
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>📦 物流多久能到？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>美国一般 7-15 个工作日，偏远地区可能多 2-3 天。发货后你会收到追踪号，可以随时查看物流状态。</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>💪 质量怎么样？容易坏吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>我们使用热熔工艺，豆子之间结合非常牢固。正常使用（挂钥匙、背包）完全没问题。但毕竟是手工品，不要故意摔砸或者泡水哦。</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>🎨 可以定制吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>当然可以！点击<a href="/pages/custom">这里</a>看定制流程。可以定制图案、文字、颜色搭配，定制款一般需要 3-5 天制作时间。</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>🔄 不喜欢能退吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>30天无理由退换！如果不喜欢，全额退款。因为运费比产品贵，退货就不用了，直接送给你或者送给朋友吧。</p>
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>🎁 包装怎么样？适合送礼吗？</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>我们专门设计了品牌包装盒，打开有仪式感。内含感谢卡和像素贴纸，直接送人完全没问题，不用再额外包装。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 悬浮购买栏（移动端显示） -->
+  <div class="sticky-buy-bar" id="stickyBar">
+    <div class="sticky-info">
+      <img src="{{ placeholder_thumbnail_1 }}" class="sticky-img" alt="product">
+      <div class="sticky-text">
+        <span class="sticky-name">{{ placeholder_product_name }}</span>
+        <span class="sticky-price">${{ placeholder_price }}</span>
+      </div>
+    </div>
+    <button class="pixel-btn" onclick="addToCart()">立即购买</button>
+  </div>
+
+</div>
+
+<!-- JavaScript -->
+<script>
+// 数量选择
+function updateQty(change) {
+  const input = document.getElementById('quantity');
+  let val = parseInt(input.value) + change;
+  if (val >= 1 && val <= 10) {
+    input.value = val;
+  }
+}
+
+// 加入购物车
+function addToCart() {
+  // TODO: 接入 Shopify 购物车逻辑
+  const btn = document.querySelector('.btn-primary');
+  btn.innerHTML = '<span class="btn-icon">✅</span><span>ADDED!</span>';
+  btn.classList.add('added');
+  
+  // 播放像素音效（可选）
+  playPixelSound();
+  
+  setTimeout(() => {
+    btn.innerHTML = '<span class="btn-icon">🛒</span><span class="btn-text">ADD TO CART</span><span class="btn-price">${{ placeholder_price }}</span>';
+    btn.classList.remove('added');
+  }, 2000);
+}
+
+// 像素音效
+function playPixelSound() {
+  // TODO: 添加 8-bit 音效
+  console.log('🎵 Playing 8-bit sound');
+}
+
+// FAQ 展开/收起
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const answer = item.querySelector('.faq-answer');
+  const icon = btn.querySelector('.faq-icon');
+  
+  item.classList.toggle('open');
+  icon.textContent = item.classList.contains('open') ? '−' : '+';
+}
+
+// 动态库存/浏览人数（模拟）
+function updateUrgencyStats() {
+  const stockEl = document.getElementById('stockCount');
+  const viewerEl = document.getElementById('viewerCount');
+  
+  if (stockEl) {
+    let stock = parseInt(stockEl.textContent);
+    if (Math.random() > 0.7 && stock > 5) {
+      stockEl.textContent = stock - 1;
+    }
+  }
+  
+  if (viewerEl) {
+    let viewers = parseInt(viewerEl.textContent);
+    viewers += Math.floor(Math.random() * 3) - 1;
+    viewerEl.textContent = Math.max(50, viewers);
+  }
+}
+
+setInterval(updateUrgencyStats, 5000);
+
+// 悬浮栏显示/隐藏
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const stickyBar = document.getElementById('stickyBar');
+  const currentScroll = window.pageYOffset;
+  
+  if (currentScroll > 800) {
+    stickyBar.classList.add('show');
+  } else {
+    stickyBar.classList.remove('show');
+  }
+  
+  lastScroll = currentScroll;
+});
+
+// 图片切换
+document.querySelectorAll('.pd-thumb').forEach(thumb => {
+  thumb.addEventListener('click', function() {
+    document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    // TODO: 切换主图
+  });
+});
+
+// 变体选择
+document.querySelectorAll('.variant-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// 像素粒子效果
+document.addEventListener('DOMContentLoaded', () => {
+  const particlesContainer = document.getElementById('pixelParticles');
+  if (particlesContainer) {
+    for (let i = 0; i < 20; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'pixel-particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 2 + 's';
+      particle.style.backgroundColor = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3'][Math.floor(Math.random() * 4)];
+      particlesContainer.appendChild(particle);
+    }
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Holy Moly Product Detail",
+  "settings": [
+    {
+      "type": "header",
+      "content": "产品信息占位符配置"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_note",
+      "label": "说明",
+      "default": "此模板包含占位符，请在代码中替换为实际内容"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Holy Product Detail"
+    }
+  ]
+}
+{% endschema %}
