@@ -1,677 +1,581 @@
-{% comment %}
-  HOLY MOLY Product Detail Page Template
-  像素风商品详情页模板 - 带占位符版本
-  使用说明：替换所有 {{ placeholder_xxx }} 为实际内容
-{% endcomment %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-{{ 'holy-product.css' | asset_url | stylesheet_tag }}
+* { box-sizing: border-box; }
 
-<div id="holy-product-detail" data-product="{{ placeholder_product_handle }}">
-  
-  <!-- ==================== 第1屏：视觉冲击区 ==================== -->
-  <section class="pd-hero">
-    <div class="pd-hero-grid">
-      
-      <!-- 左侧：产品图 -->
-      <div class="pd-gallery">
-        <div class="pd-main-image">
-          <!-- TODO: 替换为产品主图 -->
-          <img src="{{ placeholder_main_image }}" 
-               alt="{{ placeholder_product_name }}"
-               class="pixel-float"
-               data-pixel-effect="true">
-          
-          <!-- 像素粒子特效容器 -->
-          <div class="pixel-particles" id="pixelParticles"></div>
-        </div>
-        
-        <!-- 缩略图列表 -->
-        <div class="pd-thumbnails">
-          {% for i in (1..4) %}
-            <div class="pd-thumb {% if forloop.first %}active{% endif %}" 
-                 data-image="{{ placeholder_gallery_image_ }}{{ i }}">
-              <!-- TODO: 替换为缩略图 -->
-              <img src="{{ placeholder_thumbnail_ }}{{ i }}" alt="view {{ i }}">
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-      
-      <!-- 右侧：产品信息 -->
-      <div class="pd-info">
-        <!-- 标签徽章 -->
-        <div class="pd-badges">
-          {% if placeholder_badge_new %}
-            <span class="badge badge-new">🆕 NEW</span>
-          {% endif %}
-          {% if placeholder_badge_hot %}
-            <span class="badge badge-hot">🔥 HOT</span>
-          {% endif %}
-          {% if placeholder_badge_limited %}
-            <span class="badge badge-limited">💎 LIMITED</span>
-          {% endif %}
-        </div>
-        
-        <!-- 产品名称 -->
-        <h1 class="pd-title glitch-text" data-text="{{ placeholder_product_name }}">
-          {{ placeholder_product_name }}
-        </h1>
-        
-        <!-- 评分 -->
-        <div class="pd-rating">
-          <span class="stars">⭐⭐⭐⭐⭐</span>
-          <span class="rating-score">{{ placeholder_rating }}</span>
-          <span class="rating-count">({{ placeholder_review_count }} reviews)</span>
-        </div>
-        
-        <!-- 价格 -->
-        <div class="pd-price">
-          {% if placeholder_compare_price %}
-            <span class="price-compare">${{ placeholder_compare_price }}</span>
-          {% endif %}
-          <span class="price-current">${{ placeholder_price }}</span>
-        </div>
-        
-        <!-- 简短描述 -->
-        <p class="pd-short-desc">{{ placeholder_short_description }}</p>
-        
-        <!-- 变体选择（如有） -->
-        {% if placeholder_has_variants %}
-          <div class="pd-variants">
-            <label>选择款式：</label>
-            <div class="variant-options">
-              {% for variant in placeholder_variants %}
-                <button class="variant-btn" data-variant="{{ variant }}">{{ variant }}</button>
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
-        
-        <!-- 数量选择 -->
-        <div class="pd-quantity">
-          <label>数量：</label>
-          <div class="quantity-selector">
-            <button class="qty-btn" onclick="updateQty(-1)">−</button>
-            <input type="number" value="1" min="1" max="10" id="quantity">
-            <button class="qty-btn" onclick="updateQty(1)">+</button>
-          </div>
-        </div>
-        
-        <!-- CTA 按钮 -->
-        <div class="pd-actions">
-          <button class="pixel-btn btn-primary" onclick="addToCart()">
-            <span class="btn-icon">🛒</span>
-            <span class="btn-text">ADD TO CART</span>
-            <span class="btn-price">${{ placeholder_price }}</span>
-          </button>
-          
-          <button class="pixel-btn btn-wishlist" onclick="addToWishlist()">
-            <span class="btn-icon">❤️</span>
-          </button>
-        </div>
-        
-        <!-- 免邮提示 -->
-        <div class="pd-shipping-note">
-          <div class="shipping-progress">
-            <div class="progress-bar" style="width: 60%"></div>
-          </div>
-          <p>🚚 再买 <span class="highlight">$19.01</span> 即享全球包邮！</p>
-        </div>
-        
-        <!-- 信任图标 -->
-        <div class="pd-trust-badges">
-          <span>🔒 安全支付</span>
-          <span>🔄 30天退换</span>
-          <span>✈️ 全球配送</span>
-        </div>
-      </div>
-    </div>
-  </section>
+.product-page { background: #0a0a0f; min-height: 100vh; padding: 100px 20px 60px; font-family: 'Inter', sans-serif; }
 
-  <!-- ==================== 第2屏：痛点共鸣区 ==================== -->
-  <section class="pd-pain-points">
-    <h2 class="section-title">😫 你有没有经历过这些？</h2>
-    
-    <div class="pain-grid">
-      <div class="pain-card">
-        <div class="pain-icon">🎒</div>
-        <h3>背包空空太单调</h3>
-        <p>普通钥匙扣毫无个性，出门撞款100次</p>
-      </div>
-      
-      <div class="pain-card">
-        <div class="pain-icon">🔑</div>
-        <h3>钥匙串乱成一团</h3>
-        <p>找钥匙像寻宝，每次都要翻半天</p>
-      </div>
-      
-      <div class="pain-card">
-        <div class="pain-icon">🎁</div>
-        <h3>送礼永远没新意</h3>
-        <p>淘宝同款太廉价， handmade 又太贵</p>
-      </div>
-    </div>
-    
-    <div class="pain-solution">
-      <p class="solution-text">✨ HOLY MOLY 来解决！ ✨</p>
-      <p class="solution-sub">手工像素拼豆，每一个都是独一无二</p>
-    </div>
-  </section>
+.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 40px; background: rgba(10,10,15,0.95); backdrop-filter: blur(10px); border-bottom: 4px solid #FFE600; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+.navbar-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+.navbar-logo { font-family: 'Press Start 2P'; font-size: 18px; color: #FFE600; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.navbar-logo-icon { font-size: 24px; animation: logoBounce 2s ease-in-out infinite; }
+@keyframes logoBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.navbar-menu { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.navbar-link { font-family: 'Press Start 2P'; font-size: 10px; color: rgba(255,255,255,0.8); text-decoration: none; padding: 12px 16px; position: relative; transition: all 0.3s; }
+.navbar-link:hover, .navbar-link.active { color: #FFE600; }
+.navbar-cart { position: relative; width: 50px; height: 50px; background: #FFE600; border: 4px solid #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; box-shadow: 4px 4px 0 #000; }
+.navbar-cart:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; background: #FF2D7D; }
+.hamburger { display: none; flex-direction: column; gap: 6px; padding: 10px; cursor: pointer; background: transparent; border: none; }
+.hamburger-line { width: 30px; height: 4px; background: #FFE600; border-radius: 2px; box-shadow: 2px 2px 0 rgba(0,0,0,0.5); }
 
-  <!-- ==================== 第3屏：产品展示区 ==================== -->
-  <section class="pd-features">
-    <h2 class="section-title">🔍 为什么选这个？</h2>
-    
-    <div class="feature-grid">
-      <div class="feature-item">
-        <div class="feature-media">
-          <!-- TODO: 替换为手工制作过程图/GIF -->
-          <img src="{{ placeholder_feature_image_1 }}" alt="手工制作">
-          <div class="play-btn">▶️</div>
-        </div>
-        <h3>👐 纯手工制作</h3>
-        <p>每一颗豆子都是匠人亲手拼贴，不是机器量产</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-media">
-          <!-- TODO: 替换为细节特写图 -->
-          <img src="{{ placeholder_feature_image_2 }}" alt="像素细节">
-        </div>
-        <h3>🎨 像素级精致</h3>
-        <p>经典 8-bit 风格，游戏情怀满分</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-media">
-          <!-- TODO: 替换为材质展示图 -->
-          <img src="{{ placeholder_feature_image_3 }}" alt="材质展示">
-        </div>
-        <h3>💪 轻巧又耐用</h3>
-        <p>环保塑料拼豆 + 热熔工艺，摔不坏扯不烂</p>
-      </div>
-      
-      <div class="feature-item">
-        <div class="feature-media">
-          <!-- TODO: 替换为限量标识图 -->
-          <img src="{{ placeholder_feature_image_4 }}" alt="独一无二">
-        </div>
-        <h3>💎 独一无二</h3>
-        <p>手工制作，每个都略有不同，专属于你</p>
-      </div>
-    </div>
-  </section>
+.mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,10,15,0.98); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 30px; opacity: 0; pointer-events: none; }
+.mobile-menu.active { opacity: 1; pointer-events: all; display: flex; }
 
-  <!-- ==================== 第4屏：场景代入区 ==================== -->
-  <section class="pd-scenes">
-    <h2 class="section-title">🎮 LEVEL UP YOUR DAILY</h2>
-    
-    <div class="scene-slider">
-      <div class="scene-card">
-        <!-- TODO: 替换为背包场景GIF -->
-        <div class="scene-media">
-          <img src="{{ placeholder_scene_backpack }}" alt="挂背包">
-          <div class="scene-rpg">魅力值 +10</div>
-        </div>
-        <h3>🎒 挂背包</h3>
-        <p>街头最靓的仔，回头率200%</p>
-      </div>
-      
-      <div class="scene-card">
-        <!-- TODO: 替换为钥匙串场景GIF -->
-        <div class="scene-media">
-          <img src="{{ placeholder_scene_keys }}" alt="钥匙串">
-          <div class="scene-rpg">辨识度 +100</div>
-        </div>
-        <h3>🔑 钥匙串</h3>
-        <p>再也不怕找不到钥匙</p>
-      </div>
-      
-      <div class="scene-card">
-        <!-- TODO: 替换为桌面场景GIF -->
-        <div class="scene-media">
-          <img src="{{ placeholder_scene_desk }}" alt="桌面摆件">
-          <div class="scene-rpg">氛围感 +50</div>
-        </div>
-        <h3>🖥️ 当摆件</h3>
-        <p>工位 instantly 变酷</p>
-      </div>
-      
-      <div class="scene-card">
-        <!-- TODO: 替换为送礼场景GIF -->
-        <div class="scene-media">
-          <img src="{{ placeholder_scene_gift }}" alt="送礼">
-          <div class="scene-rpg">好感度 +999</div>
-        </div>
-        <h3>🎁 送礼物</h3>
-        <p>心意满满，对方一定会喜欢</p>
-      </div>
-    </div>
-  </section>
+.breadcrumb { max-width: 1400px; margin: 0 auto 30px; padding: 0 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.breadcrumb-link { font-family: 'Press Start 2P'; font-size: 9px; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.3s; }
+.breadcrumb-link:hover { color: #FFE600; }
+.breadcrumb-separator { color: rgba(255,255,255,0.3); font-size: 10px; }
+.breadcrumb-current { font-family: 'Press Start 2P'; font-size: 9px; color: #FFE600; }
 
-  <!-- ==================== 第5屏：信任背书区 ==================== -->
-  <section class="pd-social-proof">
-    <h2 class="section-title">💬 买家怎么说</h2>
-    
-    <!-- 买家秀轮播 -->
-    <div class="review-carousel">
-      <div class="review-card">
-        <!-- TODO: 替换为买家实拍图 -->
-        <img src="{{ placeholder_review_image_1 }}" class="review-img" alt="买家秀1">
-        <div class="review-content">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>"比图片还可爱！质感超好，已经买了5个了停不下来"</p>
-          <span class="reviewer">@pixel_lover_99</span>
-        </div>
-      </div>
-      
-      <div class="review-card">
-        <!-- TODO: 替换为买家实拍图 -->
-        <img src="{{ placeholder_review_image_2 }}" class="review-img" alt="买家秀2">
-        <div class="review-content">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>"送给男朋友当生日礼物，他超喜欢，说是他收到最特别的礼物"</p>
-          <span class="reviewer">@gaming_gf</span>
-        </div>
-      </div>
-      
-      <div class="review-card">
-        <!-- TODO: 替换为买家实拍图 -->
-        <img src="{{ placeholder_review_image_3 }}" class="review-img" alt="买家秀3">
-        <div class="review-content">
-          <div class="stars">⭐⭐⭐⭐⭐</div>
-          <p>"包装超用心，开箱体验满分，会回购！"</p>
-          <span class="reviewer">@unbox_queen</span>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 制作视频 -->
-    <div class="making-video">
-      <h3>👀 看它是怎么诞生的</h3>
-      <!-- TODO: 替换为制作视频 -->
-      <div class="video-container">
-        <video poster="{{ placeholder_video_poster }}" controls>
-          <source src="{{ placeholder_video_url }}" type="video/mp4">
-        </video>
-        <div class="video-overlay">
-          <span class="play-icon">▶️</span>
-          <span class="video-duration">⏱️ 45秒</span>
-        </div>
-      </div>
-    </div>
-  </section>
+.product-container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+@media (max-width: 1024px) { .product-container { grid-template-columns: 1fr; gap: 40px; } }
 
-  <!-- ==================== 第6屏：参数规格区 ==================== -->
-  <section class="pd-specs">
-    <h2 class="section-title">📊 产品参数</h2>
-    
-    <div class="specs-grid">
-      <div class="spec-item">
-        <span class="spec-label">📐 尺寸</span>
-        <span class="spec-value">约 {{ placeholder_size }}</span>
-      </div>
-      <div class="spec-item">
-        <span class="spec-label">⚖️ 重量</span>
-        <span class="spec-value">约 {{ placeholder_weight }}</span>
-      </div>
-      <div class="spec-item">
-        <span class="spec-label">🎨 材质</span>
-        <span class="spec-value">环保塑料拼豆 + 金属配件</span>
-      </div>
-      <div class="spec-item">
-        <span class="spec-label">🔧 工艺</span>
-        <span class="spec-value">手工热熔拼贴</span>
-      </div>
-      <div class="spec-item">
-        <span class="spec-label">🏷️ 产地</span>
-        <span class="spec-value">Made with 💖 in China</span>
-      </div>
-      <div class="spec-item">
-        <span class="spec-label">🎁 包装</span>
-        <span class="spec-value">品牌盒 + 感谢卡 + 像素贴纸</span>
-      </div>
-    </div>
-    
-    <!-- 包装清单 -->
-    <div class="package-list">
-      <h3>📦 包装内含</h3>
-      <ul>
-        <li>✅ {{ placeholder_product_name }} × 1</li>
-        <li>✅ 品牌感谢卡 × 1</li>
-        <li>✅ 像素风贴纸 × 1（随机款式）</li>
-        <li>✅ 备用配件包 × 1</li>
-      </ul>
-    </div>
-  </section>
+.product-images { position: sticky; top: 100px; }
+@media (max-width: 1024px) { .product-images { position: relative; top: 0; } }
 
-  <!-- ==================== 第7屏：购买保障区 ==================== -->
-  <section class="pd-guarantees">
-    <h2 class="section-title">🛡️ HOLY MOLY 承诺</h2>
-    
-    <div class="guarantee-grid">
-      <div class="guarantee-card">
-        <div class="guarantee-icon">🚀</div>
-        <h3>全球包邮</h3>
-        <p>满 $35 免邮费<br>7-15天送达美国</p>
-      </div>
-      
-      <div class="guarantee-card">
-        <div class="guarantee-icon">🔄</div>
-        <h3>30天无忧退换</h3>
-        <p>不喜欢？全额退款<br>不用退货，直接送您</p>
-      </div>
-      
-      <div class="guarantee-card">
-        <div class="guarantee-icon">💬</div>
-        <h3>24h客服在线</h3>
-        <p>有问题随时找<br>平均响应 &lt; 2小时</p>
-      </div>
-      
-      <div class="guarantee-card">
-        <div class="guarantee-icon">📦</div>
-        <h3>破损包赔</h3>
-        <p>运输破损？<br>免费补发新的</p>
-      </div>
-    </div>
-  </section>
+.main-image-container { position: relative; background: linear-gradient(145deg, #1a1a2e, #252542); border: 5px solid #FFE600; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+.main-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.main-image:hover { transform: scale(1.05); }
+.product-emoji-display { font-size: 200px; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)); }
+@keyframes float { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
 
-  <!-- ==================== 第8屏：关联推荐区 ==================== -->
-  <section class="pd-related">
-    <h2 class="section-title">🎯 搭配购买更酷</h2>
-    
-    <div class="related-grid">
-      <!-- 相似风格 -->
-      <div class="related-category">
-        <h3>🎮 相似风格</h3>
-        <div class="related-products">
-          {% for i in (1..2) %}
-            <a href="{{ placeholder_related_url_ }}{{ i }}" class="related-card">
-              <!-- TODO: 替换为关联产品图 -->
-              <img src="{{ placeholder_related_image_ }}{{ i }}" alt="related {{ i }}">
-              <span class="related-name">{{ placeholder_related_name_ }}{{ i }}</span>
-              <span class="related-price">${{ placeholder_related_price_ }}{{ i }}</span>
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-      
-      <!-- 同系列 -->
-      <div class="related-category">
-        <h3>⭐ 同系列</h3>
-        <div class="related-products">
-          {% for i in (3..4) %}
-            <a href="{{ placeholder_related_url_ }}{{ i }}" class="related-card">
-              <img src="{{ placeholder_related_image_ }}{{ i }}" alt="related {{ i }}">
-              <span class="related-name">{{ placeholder_related_name_ }}{{ i }}</span>
-              <span class="related-price">${{ placeholder_related_price_ }}{{ i }}</span>
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-      
-      <!-- 套装优惠 -->
-      <div class="related-bundle">
-        <h3>🎁 套装优惠</h3>
-        <div class="bundle-card">
-          <!-- TODO: 替换为套装图 -->
-          <img src="{{ placeholder_bundle_image }}" alt="bundle">
-          <div class="bundle-info">
-            <h4>{{ placeholder_bundle_name }}</h4>
-            <p class="bundle-price">
-              <span class="bundle-current">${{ placeholder_bundle_price }}</span>
-              <span class="bundle-original">${{ placeholder_bundle_original }}</span>
-              <span class="bundle-save">省 ${{ placeholder_bundle_save }}</span>
-            </p>
-            <button class="pixel-btn btn-small">立即购买套装</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+.image-gallery { display: flex; gap: 16px; margin-top: 24px; justify-content: center; flex-wrap: wrap; }
+.gallery-thumb { width: 80px; height: 80px; border: 4px solid transparent; border-radius: 12px; cursor: pointer; overflow: hidden; transition: all 0.3s; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; }
+.gallery-thumb.active, .gallery-thumb:hover { border-color: #FFE600; box-shadow: 4px 4px 0 #000; transform: translate(-2px,-2px); }
+.gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-thumb .thumb-emoji { font-size: 36px; }
 
-  <!-- ==================== 第9屏：紧迫感区 ==================== -->
-  <section class="pd-urgency">
-    <div class="urgency-box">
-      <h2>⏰ LIMITED DROP</h2>
-      
-      <div class="urgency-stats">
-        <div class="stat-item">
-          <span class="stat-number" id="stockCount">{{ placeholder_stock }}</span>
-          <span class="stat-label">件库存</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-number" id="viewerCount">{{ placeholder_viewers }}</span>
-          <span class="stat-label">人正在浏览</span>
-        </div>
-      </div>
-      
-      <p class="urgency-note">
-        🎨 本批手工制作，每批只产 {{ placeholder_batch_size }} 个<br>
-        售完下批要等 {{ placeholder_restock_days }} 天
-      </p>
-      
-      <!-- 倒计时（限时活动用） -->
-      {% if placeholder_show_countdown %}
-        <div class="countdown-timer">
-          <span>⏳ 优惠倒计时：</span>
-          <div class="timer" id="countdown">
-            <span>23</span>:
-            <span>59</span>:
-            <span>59</span>
-          </div>
-        </div>
-      {% endif %}
-      
-      <button class="pixel-btn btn-large btn-pulse" onclick="addToCart()">
-        <span class="btn-icon">🛒</span>
-        <span>GET IT NOW</span>
-      </button>
-    </div>
-  </section>
+.product-badge { position: absolute; top: 20px; left: 20px; font-family: 'Press Start 2P'; font-size: 10px; padding: 12px 20px; background: #FF2D7D; border: 4px solid #000; border-radius: 8px; color: white; box-shadow: 4px 4px 0 #000; animation: badgePulse 2s infinite; z-index: 10; }
+@keyframes badgePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.product-badge.sale { background: #FF2D7D; }
+.product-badge.new { background: #00D9FF; color: #000; }
 
-  <!-- ==================== 第10屏：FAQ区 ==================== -->
-  <section class="pd-faq">
-    <h2 class="section-title">❓ 常见问题</h2>
-    
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>📦 物流多久能到？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">
-          <p>美国一般 7-15 个工作日，偏远地区可能多 2-3 天。发货后你会收到追踪号，可以随时查看物流状态。</p>
-        </div>
-      </div>
-      
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>💪 质量怎么样？容易坏吗？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">
-          <p>我们使用热熔工艺，豆子之间结合非常牢固。正常使用（挂钥匙、背包）完全没问题。但毕竟是手工品，不要故意摔砸或者泡水哦。</p>
-        </div>
-      </div>
-      
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>🎨 可以定制吗？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">
-          <p>当然可以！点击<a href="/pages/custom">这里</a>看定制流程。可以定制图案、文字、颜色搭配，定制款一般需要 3-5 天制作时间。</p>
-        </div>
-      </div>
-      
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>🔄 不喜欢能退吗？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">
-          <p>30天无理由退换！如果不喜欢，全额退款。因为运费比产品贵，退货就不用了，直接送给你或者送给朋友吧。</p>
-        </div>
-      </div>
-      
-      <div class="faq-item">
-        <button class="faq-question" onclick="toggleFaq(this)">
-          <span>🎁 包装怎么样？适合送礼吗？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">
-          <p>我们专门设计了品牌包装盒，打开有仪式感。内含感谢卡和像素贴纸，直接送人完全没问题，不用再额外包装。</p>
-        </div>
-      </div>
-    </div>
-  </section>
+.product-info { background: rgba(255,255,255,0.03); border: 4px solid rgba(255,230,0,0.2); border-radius: 24px; padding: 40px; }
+@media (max-width: 768px) { .product-info { padding: 24px; } }
 
-  <!-- 悬浮购买栏（移动端显示） -->
-  <div class="sticky-buy-bar" id="stickyBar">
-    <div class="sticky-info">
-      <img src="{{ placeholder_thumbnail_1 }}" class="sticky-img" alt="product">
-      <div class="sticky-text">
-        <span class="sticky-name">{{ placeholder_product_name }}</span>
-        <span class="sticky-price">${{ placeholder_price }}</span>
-      </div>
-    </div>
-    <button class="pixel-btn" onclick="addToCart()">立即购买</button>
+.product-type { font-family: 'Press Start 2P'; font-size: 10px; color: #9D4EDD; margin-bottom: 16px; display: inline-block; padding: 8px 16px; background: rgba(157,78,221,0.1); border-radius: 8px; }
+.product-title { font-family: 'Press Start 2P'; font-size: clamp(20px, 4vw, 28px); color: #FFE600; line-height: 1.5; margin-bottom: 20px; }
+
+.product-rating { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.stars { font-size: 18px; color: #FFB800; letter-spacing: 2px; }
+.rating-text { font-family: 'Press Start 2P'; font-size: 10px; color: rgba(255,255,255,0.6); }
+.rating-count { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+.product-price-section { display: flex; align-items: baseline; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+.current-price { font-family: 'Press Start 2P'; font-size: clamp(24px, 5vw, 36px); color: #FF2D7D; }
+.compare-price { font-family: 'Press Start 2P'; font-size: 20px; color: rgba(255,255,255,0.4); text-decoration: line-through; }
+.discount-badge { font-family: 'Press Start 2P'; font-size: 10px; padding: 8px 16px; background: #00D9FF; border: 3px solid #000; border-radius: 8px; color: #000; }
+
+.product-description { color: rgba(255,255,255,0.7); font-size: 15px; line-height: 1.8; margin-bottom: 32px; padding-bottom: 32px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+
+.product-options { margin-bottom: 32px; }
+.option-group { margin-bottom: 24px; }
+.option-label { font-family: 'Press Start 2P'; font-size: 10px; color: #FFE600; margin-bottom: 12px; display: block; }
+.color-options { display: flex; gap: 12px; flex-wrap: wrap; }
+.color-option { width: 48px; height: 48px; border: 4px solid transparent; border-radius: 12px; cursor: pointer; position: relative; transition: all 0.3s; box-shadow: 3px 3px 0 #000; }
+.color-option:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; }
+.color-option.selected { border-color: #FFE600; box-shadow: 0 0 0 4px rgba(255,230,0,0.3), 3px 3px 0 #000; }
+.color-option::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; text-shadow: 2px 2px 0 #000; opacity: 0; transition: opacity 0.3s; }
+.color-option.selected::after { opacity: 1; }
+
+.size-options { display: flex; gap: 12px; flex-wrap: wrap; }
+.size-option { font-family: 'Press Start 2P'; font-size: 10px; padding: 16px 24px; background: rgba(255,255,255,0.05); border: 3px solid rgba(255,255,255,0.2); border-radius: 12px; color: rgba(255,255,255,0.8); cursor: pointer; transition: all 0.3s; min-width: 60px; text-align: center; }
+.size-option:hover { border-color: #FFE600; color: #FFE600; }
+.size-option.selected { background: #FFE600; border-color: #000; color: #000; box-shadow: 4px 4px 0 #000; transform: translate(-2px,-2px); }
+.size-option:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.quantity-section { margin-bottom: 32px; }
+.quantity-control { display: inline-flex; align-items: center; border: 4px solid #000; border-radius: 12px; overflow: hidden; box-shadow: 4px 4px 0 #000; }
+.quantity-btn { width: 50px; height: 56px; background: #FFE600; border: none; font-family: 'Press Start 2P'; font-size: 16px; cursor: pointer; transition: all 0.2s; }
+.quantity-btn:hover { background: #FF2D7D; color: white; }
+.quantity-input { width: 70px; height: 56px; background: white; border: none; font-family: 'Press Start 2P'; font-size: 14px; text-align: center; }
+
+.stock-status { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; padding: 16px 20px; background: rgba(0,217,255,0.1); border: 2px solid #00D9FF; border-radius: 12px; }
+.stock-status.low { background: rgba(255,184,0,0.1); border-color: #FFB800; }
+.stock-status.out { background: rgba(255,45,125,0.1); border-color: #FF2D7D; }
+.stock-dot { width: 12px; height: 12px; background: #00D9FF; border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+.stock-text { font-family: 'Press Start 2P'; font-size: 10px; color: #00D9FF; }
+
+.action-buttons { display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+.add-to-cart-btn { flex: 1; min-width: 200px; padding: 24px 32px; background: #00D9FF; border: 5px solid #000; border-radius: 16px; font-family: 'Press Start 2P'; font-size: 14px; color: #000; cursor: pointer; box-shadow: 8px 8px 0 #000; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+.add-to-cart-btn:hover:not(:disabled) { transform: translate(4px,4px); box-shadow: 4px 4px 0 #000; background: #FFE600; }
+.add-to-cart-btn:disabled { background: #666; cursor: not-allowed; opacity: 0.5; }
+.wishlist-btn-large { width: 70px; height: 70px; background: rgba(255,45,125,0.1); border: 4px solid rgba(255,45,125,0.3); border-radius: 16px; font-size: 28px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; }
+.wishlist-btn-large:hover, .wishlist-btn-large.active { background: #FF2D7D; border-color: #000; box-shadow: 4px 4px 0 #000; transform: scale(1.05); }
+
+.shipping-info { padding: 20px; background: rgba(255,230,0,0.05); border: 2px dashed rgba(255,230,0,0.3); border-radius: 12px; margin-bottom: 32px; }
+.shipping-text { font-family: 'Press Start 2P'; font-size: 9px; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.8; }
+.shipping-highlight { color: #FFE600; }
+
+.product-features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.feature-item { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; text-align: center; }
+.feature-icon { font-size: 28px; }
+.feature-text { font-family: 'Press Start 2P'; font-size: 8px; color: rgba(255,255,255,0.6); line-height: 1.6; }
+@media (max-width: 768px) { .product-features { grid-template-columns: 1fr; } }
+
+.product-details-tabs { max-width: 1400px; margin: 60px auto 0; padding: 0 20px; }
+.tabs-header { display: flex; gap: 8px; margin-bottom: 32px; border-bottom: 4px solid rgba(255,255,255,0.1); flex-wrap: wrap; }
+.tab-btn { font-family: 'Press Start 2P'; font-size: 10px; padding: 20px 32px; background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer; position: relative; transition: all 0.3s; }
+.tab-btn:hover { color: rgba(255,255,255,0.8); }
+.tab-btn.active { color: #FFE600; }
+.tab-btn.active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 4px; background: #FFE600; }
+
+.tab-content { display: none; animation: fadeIn 0.4s; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.tab-panel { background: rgba(255,255,255,0.03); border: 4px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 40px; }
+@media (max-width: 768px) { .tab-panel { padding: 24px; } }
+
+.specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+@media (max-width: 768px) { .specs-grid { grid-template-columns: 1fr; } }
+.spec-item { display: flex; justify-content: space-between; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; }
+.spec-label { font-family: 'Press Start 2P'; font-size: 9px; color: rgba(255,255,255,0.5); }
+.spec-value { font-family: 'Press Start 2P'; font-size: 10px; color: #FFE600; }
+
+.shipping-table { width: 100%; border-collapse: collapse; }
+.shipping-table th, .shipping-table td { padding: 20px; text-align: left; border-bottom: 2px solid rgba(255,255,255,0.1); }
+.shipping-table th { font-family: 'Press Start 2P'; font-size: 10px; color: #FFE600; }
+.shipping-table td { font-size: 14px; color: rgba(255,255,255,0.7); }
+.shipping-price { font-family: 'Press Start 2P'; font-size: 12px; color: #00D9FF; }
+
+.review-item { padding: 32px; background: rgba(255,255,255,0.03); border-radius: 16px; margin-bottom: 24px; }
+.review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+.reviewer-info { display: flex; align-items: center; gap: 16px; }
+.reviewer-avatar { width: 56px; height: 56px; background: linear-gradient(135deg, #FFE600, #FF2D7D); border: 4px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+.reviewer-name { font-family: 'Press Start 2P'; font-size: 12px; color: white; }
+.review-date { font-size: 12px; color: rgba(255,255,255,0.4); }
+.review-stars { font-size: 16px; color: #FFB800; }
+.review-text { color: rgba(255,255,255,0.7); font-size: 14px; line-height: 1.8; }
+
+.related-products { max-width: 1400px; margin: 80px auto; padding: 0 20px; }
+.section-title { font-family: 'Press Start 2P'; font-size: 24px; color: #FFE600; text-align: center; margin-bottom: 40px; }
+</style>
+
+<nav class="navbar">
+  <div class="navbar-container">
+    <a href="/" class="navbar-logo"><span class="navbar-logo-icon">👾</span><span>HOLY MOLY</span></a>
+    <ul class="navbar-menu">
+      <li><a href="/" class="navbar-link">🏠 HOME</a></li>
+      <li><a href="/pages/shop" class="navbar-link">🛒 SHOP</a></li>
+      <li><a href="/#custom" class="navbar-link">🎨 CUSTOM</a></li>
+      <li><a href="/#features" class="navbar-link">✨ FEATURES</a></li>
+    </ul>
+    <div class="navbar-cart" onclick="openCart()">🛒<span class="cart-badge hidden" id="cartBadge">0</span></div>
+    <button class="hamburger" onclick="toggleMobileMenu()"><span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span></button>
   </div>
+</nav>
 
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/" class="navbar-link">🏠 HOME</a>
+  <a href="/pages/shop" class="navbar-link">🛒 SHOP</a>
+  <a href="/#custom" class="navbar-link">🎨 CUSTOM</a>
+  <a href="/#features" class="navbar-link">✨ FEATURES</a>
+  <div class="navbar-cart" onclick="openCart(); toggleMobileMenu();">🛒<span class="cart-badge hidden" id="cartBadgeMobile">0</span></div>
 </div>
 
-<!-- JavaScript -->
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign product_emoji = '🎮' -%}
+{%- case product.type | downcase -%}
+  {%- when 'keychain' -%}{%- assign product_emoji = '🔑' -%}
+  {%- when 'magnet' -%}{%- assign product_emoji = '🧲' -%}
+  {%- when 'diy kit', 'diy' -%}{%- assign product_emoji = '🎨' -%}
+{%- endcase -%}
+
+<div class="product-page">
+  <div class="breadcrumb">
+    <a href="/" class="breadcrumb-link">🏠 HOME</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/shop" class="breadcrumb-link">🛒 SHOP</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-current">{{ product.title | upcase }}</span>
+  </div>
+
+  <div class="product-container">
+    <div class="product-images">
+      <div class="main-image-container">
+        {%- if product.compare_at_price > product.price -%}
+          {%- assign discount = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price -%}
+          <span class="product-badge sale">🔥 -{{ discount }}% OFF</span>
+        {%- elsif product.tags contains 'new' -%}
+          <span class="product-badge new">✨ NEW</span>
+        {%- endif -%}
+        
+        {%- if product.featured_image -%}
+          <img src="{{ product.featured_image | img_url: '800x800' }}" alt="{{ product.title | escape }}" class="main-image" id="mainImage">
+        {%- else -%}
+          <div class="product-emoji-display" id="mainEmoji">{{ product_emoji }}</div>
+        {%- endif -%}
+      </div>
+      
+      {%- if product.images.size > 1 -%}
+      <div class="image-gallery">
+        {%- for image in product.images limit: 4 -%}
+          <div class="gallery-thumb {% if forloop.first %}active{% endif %}" onclick="changeImage('{{ image | img_url: '800x800' }}', this)">
+            <img src="{{ image | img_url: '150x150', crop: 'center' }}" alt="{{ product.title | escape }}">
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product-info">
+      <span class="product-type">{{ product.type | default: 'KEYCHAIN' | upcase }}</span>
+      <h1 class="product-title">{{ product.title }}</h1>
+      
+      <div class="product-rating">
+        <span class="stars">⭐⭐⭐⭐⭐</span>
+        <span class="rating-text">4.9</span>
+        <span class="rating-count">({{ product.metafields.reviews.count | default: '128' }} reviews)</span>
+      </div>
+      
+      <div class="product-price-section">
+        <span class="current-price" id="productPrice">{{ current_variant.price | money }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="compare-price" id="comparePrice">{{ current_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+      
+      <div class="product-description">
+        {{ product.description | default: 'Handcrafted pixel art made with 1000+ beads. Each piece is unique and made with love! Perfect for gamers, collectors, and anyone who loves retro pixel art.' }}
+      </div>
+      
+      {%- if product.variants.size > 1 -%}
+      <div class="product-options" id="variantSelectors">
+        {%- for option in product.options_with_values -%}
+          <div class="option-group">
+            <span class="option-label">{{ option.name | upcase }}</span>
+            <div class="{{ option.name | downcase }}-options">
+              {%- for value in option.values -%}
+                <button type="button" 
+                        class="{{ option.name | downcase }}-option {% if option.selected_value == value %}selected{% endif %}"
+                        data-option="{{ option.name }}"
+                        data-value="{{ value | escape }}"
+                        onclick="selectOption('{{ option.name | escape }}', '{{ value | escape }}', this)">
+                  {{ value }}
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- endif -%}
+      
+      <div class="quantity-section">
+        <span class="option-label">QUANTITY</span>
+        <div class="quantity-control">
+          <button class="quantity-btn" onclick="updateQuantity(-1)">−</button>
+          <input type="text" class="quantity-input" value="1" id="quantityInput" readonly>
+          <button class="quantity-btn" onclick="updateQuantity(1)">+</button>
+        </div>
+      </div>
+      
+      <div class="stock-status {% if current_variant.inventory_quantity < 10 %}low{% endif %}" id="stockStatus">
+        <span class="stock-dot"></span>
+        <span class="stock-text" id="stockText">
+          {%- if current_variant.available -%}
+            {%- if current_variant.inventory_quantity > 10 -%}
+              ✓ IN STOCK - Ships in 24 hours
+            {%- else -%}
+              ⚡ LOW STOCK - Only {{ current_variant.inventory_quantity }} left!
+            {%- endif -%}
+          {%- else -%}
+            ❌ OUT OF STOCK
+          {%- endif -%}
+        </span>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="add-to-cart-btn" id="addToCartBtn" onclick="addProductToCart()" {% unless current_variant.available %}disabled{% endunless %}>
+          <span>{% if current_variant.available %}🛒 ADD TO CART{% else %}❌ SOLD OUT{% endif %}</span>
+        </button>
+        <button class="wishlist-btn-large" onclick="toggleWishlist(this)">♡</button>
+      </div>
+      
+      <div class="shipping-info">
+        <p class="shipping-text">
+          🚚 <span class="shipping-highlight">FREE SHIPPING</span> on orders over $72<br>
+          🎁 Every order includes <span class="shipping-highlight">FREE STICKERS</span> & candy!
+        </p>
+      </div>
+      
+      <div class="product-features">
+        <div class="feature-item"><span class="feature-icon">✋</span><span class="feature-text">HANDCRAFTED<br>WITH LOVE</span></div>
+        <div class="feature-item"><span class="feature-icon">🎨</span><span class="feature-text">1000+ BEADS<br>PER PIECE</span></div>
+        <div class="feature-item"><span class="feature-icon">🎁</span><span class="feature-text">GIFT READY<br>PACKAGING</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-details-tabs">
+    <div class="tabs-header">
+      <button class="tab-btn active" onclick="switchTab('specs', this)">📋 SPECS</button>
+      <button class="tab-btn" onclick="switchTab('shipping', this)">🚚 SHIPPING</button>
+      <button class="tab-btn" onclick="switchTab('reviews', this)">⭐ REVIEWS</button>
+    </div>
+    
+    <div class="tab-content active" id="tab-specs">
+      <div class="tab-panel">
+        <div class="specs-grid">
+          <div class="spec-item"><span class="spec-label">MATERIAL</span><span class="spec-value">PERLER BEADS</span></div>
+          <div class="spec-item"><span class="spec-label">SIZE</span><span class="spec-value">~3-4 INCHES</span></div>
+          <div class="spec-item"><span class="spec-label">WEIGHT</span><span class="spec-value">~30G</span></div>
+          <div class="spec-item"><span class="spec-label">HANDMADE IN</span><span class="spec-value">USA 🇺🇸</span></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tab-content" id="tab-shipping">
+      <div class="tab-panel">
+        <table class="shipping-table">
+          <tr><th>📍 REGION</th><th>⏱️ DELIVERY</th><th>💰 PRICE</th></tr>
+          <tr><td>USA</td><td>3-5 business days</td><td class="shipping-price">$4.99</td></tr>
+          <tr><td>Canada</td><td>5-10 business days</td><td class="shipping-price">$9.99</td></tr>
+          <tr><td>International</td><td>7-14 business days</td><td class="shipping-price">$14.99</td></tr>
+        </table>
+        <p style="color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 20px; text-align: center;">FREE shipping on orders over $72! ✨</p>
+      </div>
+    </div>
+    
+    <div class="tab-content" id="tab-reviews">
+      <div class="tab-panel">
+        <div class="review-item">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">👾</div>
+              <div><div class="reviewer-name">PixelFan99</div><div class="review-date">2 days ago</div></div>
+            </div>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <p class="review-text">Absolutely love this! The quality is amazing and it looks perfect on my bag. Will definitely buy more! 🎮</p>
+        </div>
+        <div class="review-item">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">🎨</div>
+              <div><div class="reviewer-name">RetroGamer</div><div class="review-date">1 week ago</div></div>
+            </div>
+            <span class="review-stars">⭐⭐⭐⭐⭐</span>
+          </div>
+          <p class="review-text">Best pixel art keychain I've ever bought. The colors are so vibrant and the packaging was adorable!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-// 数量选择
-function updateQty(change) {
-  const input = document.getElementById('quantity');
-  let val = parseInt(input.value) + change;
-  if (val >= 1 && val <= 10) {
-    input.value = val;
+const productVariants = [
+  {%- for variant in product.variants -%}
+  {
+    id: {{ variant.id }},
+    title: "{{ variant.title | escape }}",
+    price: {{ variant.price }},
+    compare_at_price: {{ variant.compare_at_price | default: 0 }},
+    available: {{ variant.available | json }},
+    inventory_quantity: {{ variant.inventory_quantity | default: 0 }},
+    options: {
+      {%- for option in product.options -%}
+      "{{ option }}": "{{ variant.options[forloop.index0] | escape }}"{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    }
+  }{%- unless forloop.last %},{% endunless -%}
+  {%- endfor -%}
+];
+
+let currentQuantity = 1;
+let selectedVariant = {{ current_variant.id }};
+let selectedOptions = {};
+
+{%- for option in product.options -%}
+selectedOptions["{{ option | escape }}"] = "{{ current_variant.options[forloop.index0] | escape }}";
+{%- endfor -%}
+
+function findVariant() {
+  return productVariants.find(v => {
+    return Object.entries(selectedOptions).every(([key, value]) => v.options[key] === value);
+  });
+}
+
+function selectOption(optionName, value, btn) {
+  selectedOptions[optionName] = value;
+  
+  document.querySelectorAll(`[data-option="${optionName}"]`).forEach(el => {
+    el.classList.remove('selected');
+  });
+  btn.classList.add('selected');
+  
+  const variant = findVariant();
+  if (variant) {
+    selectedVariant = variant.id;
+    updateProductDisplay(variant);
   }
 }
 
-// 加入购物车
-function addToCart() {
-  // TODO: 接入 Shopify 购物车逻辑
-  const btn = document.querySelector('.btn-primary');
-  btn.innerHTML = '<span class="btn-icon">✅</span><span>ADDED!</span>';
-  btn.classList.add('added');
+function updateProductDisplay(variant) {
+  document.getElementById('productPrice').textContent = formatMoney(variant.price);
   
-  // 播放像素音效（可选）
-  playPixelSound();
-  
-  setTimeout(() => {
-    btn.innerHTML = '<span class="btn-icon">🛒</span><span class="btn-text">ADD TO CART</span><span class="btn-price">${{ placeholder_price }}</span>';
-    btn.classList.remove('added');
-  }, 2000);
-}
-
-// 像素音效
-function playPixelSound() {
-  // TODO: 添加 8-bit 音效
-  console.log('🎵 Playing 8-bit sound');
-}
-
-// FAQ 展开/收起
-function toggleFaq(btn) {
-  const item = btn.parentElement;
-  const answer = item.querySelector('.faq-answer');
-  const icon = btn.querySelector('.faq-icon');
-  
-  item.classList.toggle('open');
-  icon.textContent = item.classList.contains('open') ? '−' : '+';
-}
-
-// 动态库存/浏览人数（模拟）
-function updateUrgencyStats() {
-  const stockEl = document.getElementById('stockCount');
-  const viewerEl = document.getElementById('viewerCount');
-  
-  if (stockEl) {
-    let stock = parseInt(stockEl.textContent);
-    if (Math.random() > 0.7 && stock > 5) {
-      stockEl.textContent = stock - 1;
+  const comparePriceEl = document.getElementById('comparePrice');
+  if (comparePriceEl) {
+    if (variant.compare_at_price > variant.price) {
+      comparePriceEl.textContent = formatMoney(variant.compare_at_price);
+      comparePriceEl.style.display = 'inline';
+    } else {
+      comparePriceEl.style.display = 'none';
     }
   }
   
-  if (viewerEl) {
-    let viewers = parseInt(viewerEl.textContent);
-    viewers += Math.floor(Math.random() * 3) - 1;
-    viewerEl.textContent = Math.max(50, viewers);
-  }
-}
-
-setInterval(updateUrgencyStats, 5000);
-
-// 悬浮栏显示/隐藏
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-  const stickyBar = document.getElementById('stickyBar');
-  const currentScroll = window.pageYOffset;
+  const stockStatus = document.getElementById('stockStatus');
+  const stockText = document.getElementById('stockText');
+  const addBtn = document.getElementById('addToCartBtn');
   
-  if (currentScroll > 800) {
-    stickyBar.classList.add('show');
+  if (variant.available) {
+    stockStatus.className = 'stock-status ' + (variant.inventory_quantity < 10 ? 'low' : '');
+    stockText.textContent = variant.inventory_quantity < 10 
+      ? '⚡ LOW STOCK - Only ' + variant.inventory_quantity + ' left!'
+      : '✓ IN STOCK - Ships in 24 hours';
+    addBtn.disabled = false;
+    addBtn.innerHTML = '<span>🛒 ADD TO CART</span>';
   } else {
-    stickyBar.classList.remove('show');
+    stockStatus.className = 'stock-status out';
+    stockText.textContent = '❌ OUT OF STOCK';
+    addBtn.disabled = true;
+    addBtn.innerHTML = '<span>❌ SOLD OUT</span>';
+  }
+}
+
+function updateQuantity(change) {
+  currentQuantity = Math.max(1, Math.min(10, currentQuantity + change));
+  document.getElementById('quantityInput').value = currentQuantity;
+}
+
+async function addProductToCart() {
+  const btn = document.getElementById('addToCartBtn');
+  if (btn.disabled) return;
+  
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<span>⏳ ADDING...</span>';
+  btn.disabled = true;
+  
+  try {
+    const response = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: selectedVariant, quantity: currentQuantity })
+    });
+    
+    if (!response.ok) throw new Error('Failed to add');
+    
+    animateCartIcon();
+    openCartDrawer();
+    
+    const cart = await fetch('/cart.js').then(r => r.json());
+    updateAllCartBadges(cart.item_count);
+    
+  } catch (error) {
+    alert('Failed to add to cart. Please try again.');
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
+
+function changeImage(src, thumb) {
+  const mainImage = document.getElementById('mainImage');
+  if (mainImage) {
+    mainImage.style.opacity = '0';
+    setTimeout(() => {
+      mainImage.src = src;
+      mainImage.style.opacity = '1';
+    }, 200);
   }
   
-  lastScroll = currentScroll;
-});
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  thumb.classList.add('active');
+}
 
-// 图片切换
-document.querySelectorAll('.pd-thumb').forEach(thumb => {
-  thumb.addEventListener('click', function() {
-    document.querySelectorAll('.pd-thumb').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    // TODO: 切换主图
+function switchTab(tabId, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
+function toggleWishlist(btn) {
+  btn.classList.toggle('active');
+  btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
+}
+
+function toggleMobileMenu() {
+  document.getElementById('mobileMenu').classList.toggle('active');
+}
+
+function formatMoney(cents) {
+  return '$' + (cents / 100).toFixed(2);
+}
+
+function animateCartIcon() {
+  const icons = document.querySelectorAll('.navbar-cart');
+  icons.forEach(icon => {
+    icon.style.animation = 'none';
+    icon.offsetHeight;
+    icon.style.animation = 'cartShake 0.5s ease';
   });
-});
+}
 
-// 变体选择
-document.querySelectorAll('.variant-btn').forEach(btn => {
-  btn.addEventListener('click', function() {
-    document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
-    this.classList.add('selected');
-  });
-});
-
-// 像素粒子效果
-document.addEventListener('DOMContentLoaded', () => {
-  const particlesContainer = document.getElementById('pixelParticles');
-  if (particlesContainer) {
-    for (let i = 0; i < 20; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'pixel-particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 2 + 's';
-      particle.style.backgroundColor = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3'][Math.floor(Math.random() * 4)];
-      particlesContainer.appendChild(particle);
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const cart = await fetch('/cart.js').then(r => r.json());
+    if (typeof updateAllCartBadges === 'function') {
+      updateAllCartBadges(cart.item_count);
     }
+  } catch (e) {
+    console.error('Failed to load cart:', e);
   }
 });
 </script>
 
-{% schema %}
-{
-  "name": "Holy Moly Product Detail",
-  "settings": [
-    {
-      "type": "header",
-      "content": "产品信息占位符配置"
-    },
-    {
-      "type": "text",
-      "id": "placeholder_note",
-      "label": "说明",
-      "default": "此模板包含占位符，请在代码中替换为实际内容"
-    }
-  ],
-  "presets": [
-    {
-      "name": "Holy Product Detail"
-    }
-  ]
+<style>
+@keyframes cartShake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20% { transform: translateX(-5px) rotate(-10deg); }
+  40% { transform: translateX(5px) rotate(10deg); }
+  60% { transform: translateX(-3px) rotate(-5deg); }
+  80% { transform: translateX(3px) rotate(5deg); }
 }
-{% endschema %}
+
+@media (max-width: 768px) {
+  .product-page { padding-top: 80px; }
+  .navbar { padding: 12px 16px; }
+  .navbar-logo { font-size: 14px; }
+  .navbar-menu { display: none; }
+  .hamburger { display: flex; }
+  .navbar-cart { width: 42px; height: 42px; font-size: 16px; }
+  
+  .product-container { gap: 30px; }
+  .product-images { position: relative; top: 0; }
+  .main-image-container { border-width: 3px; border-radius: 16px; }
+  .product-emoji-display { font-size: 120px; }
+  .gallery-thumb { width: 60px; height: 60px; }
+  
+  .product-info { padding: 20px; border-width: 3px; }
+  .product-title { font-size: 18px; }
+  .current-price { font-size: 24px; }
+  .action-buttons { flex-direction: column; }
+  .add-to-cart-btn { width: 100%; }
+  .wishlist-btn-large { width: 100%; height: 56px; }
+  
+  .color-option { width: 40px; height: 40px; }
+  .size-option { padding: 12px 16px; font-size: 9px; }
+  
+  .tabs-header { overflow-x: auto; flex-wrap: nowrap; }
+  .tab-btn { padding: 16px 20px; font-size: 9px; white-space: nowrap; }
+  .tab-panel { padding: 20px; }
+  
+  .spec-item { flex-direction: column; gap: 8px; }
+  .shipping-table th, .shipping-table td { padding: 12px; font-size: 12px; }
+  .review-header { flex-direction: column; align-items: flex-start; }
+}
+</style>
