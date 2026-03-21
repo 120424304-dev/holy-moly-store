@@ -4,14 +4,173 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="">
+  <meta name="theme-color" content="#0a0a0f">
+
+  {% comment %} SEO Meta Tags {% endcomment %}
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
+
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% else %}
+    <meta name="description" content="Holy Moly Beads - Handcrafted pixel art keychains, magnets, and DIY kits made with 1000+ Perler beads. Perfect for gamers, anime fans, and retro lovers.">
+  {% endif %}
+
   <link rel="canonical" href="{{ canonical_url }}">
-  <title>{{ page_title }}</title>
+
+  {% comment %} Favicon {% endcomment %}
+  {%- if settings.favicon -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- else -%}
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👾</text></svg>">
+  {%- endif -%}
+
+  {% comment %} Open Graph {% endcomment %}
+  <meta property="og:site_name" content="{{ shop.name | escape }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  <meta property="og:description" content="{{ page_description | default: 'Handcrafted pixel art for gamers & creators' | escape }}">
+  <meta property="og:type" content="{% if template.name == 'product' %}product{% elsif template.name == 'collection' %}product.group{% else %}website{% endif %}">
+  {%- if template.name == 'product' -%}
+    <meta property="og:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+  {%- else -%}
+    <meta property="og:image" content="https://cdn.shopify.com/s/files/1/0000/0001/files/holymoly-og.jpg">
+  {%- endif -%}
+
+  {% comment %} Twitter Card {% endcomment %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | escape }}">
+  <meta name="twitter:description" content="{{ page_description | default: 'Handcrafted pixel art for gamers & creators' | escape }}">
+  {%- if template.name == 'product' and product.featured_image -%}
+    <meta name="twitter:image" content="{{ product.featured_image | image_url: width: 1200 }}">
+  {%- endif -%}
+
+  {% comment %} JSON-LD Organization Schema {% endcomment %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ shop.name | escape }}",
+    "url": "{{ shop.url }}",
+    "description": "Handcrafted pixel art keychains, magnets, and DIY kits made with 1000+ Perler beads.",
+    "sameAs": []
+  }
+  </script>
+
+  {% comment %} Google Fonts - Preload + Stylesheet {% endcomment %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800;900&display=swap">
+
+  {% comment %} Base CSS {% endcomment %}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+
   {{ content_for_header }}
 </head>
 <body>
+  {% comment %} ===== UNIFIED NAVBAR ===== {% endcomment %}
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="/" class="navbar-logo">
+        <span class="navbar-logo-icon">👾</span>
+        <span>HOLY MOLY</span>
+      </a>
+      <ul class="navbar-menu">
+        <li><a href="/" class="navbar-link">🏠 HOME</a></li>
+        <li><a href="/pages/shop" class="navbar-link">🛒 SHOP</a></li>
+        <li><a href="/pages/custom-order" class="navbar-link">🎨 CUSTOM</a></li>
+        <li><a href="/#features" class="navbar-link" onclick="smoothScroll(event, 'features')">✨ FEATURES</a></li>
+      </ul>
+
+      {% if customer %}
+        <a href="/account" class="navbar-link" style="background: var(--pixel-yellow); color: #000; padding: 8px 16px; border-radius: var(--radius-sm); border: 3px solid #000; box-shadow: 3px 3px 0 #000; margin-right: 10px; font-family: var(--font-pixel); font-size: 9px;">
+          👤 {{ customer.first_name | upcase }}
+        </a>
+      {% else %}
+        <a href="/account/login" class="navbar-link" style="background: var(--pixel-pink); color: #fff; padding: 8px 16px; border-radius: var(--radius-sm); border: 3px solid #000; box-shadow: 3px 3px 0 #000; margin-right: 10px; font-family: var(--font-pixel); font-size: 9px;">
+          🎮 LOGIN
+        </a>
+      {% endif %}
+
+      <div class="navbar-cart" onclick="openCart()">
+        🛒
+        <span class="cart-badge hidden" id="cartBadge">0</span>
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </nav>
+
+  {% comment %} ===== MOBILE MENU ===== {% endcomment %}
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" class="navbar-link" onclick="toggleMobileMenu()">🏠 HOME</a>
+    <a href="/pages/shop" class="navbar-link" onclick="toggleMobileMenu()">🛒 SHOP</a>
+    <a href="/pages/custom-order" class="navbar-link" onclick="toggleMobileMenu()">🎨 CUSTOM</a>
+    <a href="/#features" class="navbar-link" onclick="smoothScroll(event, 'features'); toggleMobileMenu()">✨ FEATURES</a>
+    <div class="navbar-cart" onclick="openCart(); toggleMobileMenu();">
+      🛒
+      <span class="cart-badge hidden" id="cartBadgeMobile">0</span>
+    </div>
+  </div>
+
+  {% comment %} ===== PAGE CONTENT ===== {% endcomment %}
   {{ content_for_layout }}
-  
+
+  {% comment %} ===== UNIFIED FOOTER ===== {% endcomment %}
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>HOLY MOLY</h3>
+        <p>Handmade pixel art for gamers, anime fans, and retro lovers. Made with 💛 and thousands of beads.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-link" aria-label="Instagram">📸</a>
+          <a href="#" class="footer-social-link" aria-label="Twitter">🐦</a>
+          <a href="#" class="footer-social-link" aria-label="YouTube">📺</a>
+          <a href="#" class="footer-social-link" aria-label="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>SHOP</h4>
+        <ul>
+          <li><a href="/pages/shop">All Products</a></li>
+          <li><a href="/pages/shop">Keychains</a></li>
+          <li><a href="/pages/shop">DIY Kits</a></li>
+          <li><a href="/pages/custom-order">Custom Orders</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>SUPPORT</h4>
+        <ul>
+          <li><a href="#">Shipping Info</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="/pages/custom-order">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>COMPANY</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 HOLY MOLY BEADS — INSERT COIN TO CONTINUE... 🎮
+    </div>
+  </footer>
+
+  {% comment %} ===== CART DRAWER ===== {% endcomment %}
   {% section 'cart-drawer' %}
+
+  {% comment %} ===== GLOBAL JS ===== {% endcomment %}
+  {{ 'global.js' | asset_url | script_tag }}
 </body>
 </html>

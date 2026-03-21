@@ -9,15 +9,13 @@
   assign product_price = product.price | money
   assign product_compare_price = product.compare_at_price | money
   assign product_image = product.featured_image | default: product.images.first
-  assign product_type = product.type | default: 'keychain'
+  assign product_type = product.type | default: 'KEYCHAIN'
   assign has_variants = product.variants.size > 1
   
-  # 获取第一个可用变体
   assign first_variant = product.selected_or_first_available_variant
   assign variant_id = first_variant.id
   assign is_available = first_variant.available
   
-  # 确定产品类别和表情符号
   assign product_emoji = '🎮'
   assign product_category = 'keychain'
   assign badge_type = ''
@@ -35,20 +33,18 @@
       assign product_category = 'diy'
   endcase
   
-  # 确定徽章
   if product.compare_at_price > product.price
     assign badge_type = 'sale'
     assign discount_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
     assign badge_text = '-' | append: discount_percent | append: '%'
   elsif product.tags contains 'new' or product.created_at > 'now' | date: '%s' | minus: 2592000
     assign badge_type = 'new'
-    assign badge_text = 'product.badge_new' | t
+    assign badge_text = 'NEW'
   elsif product.tags contains 'hot' or product.tags contains 'bestseller'
     assign badge_type = 'hot'
-    assign badge_text = 'product.badge_hot' | t
+    assign badge_text = 'HOT'
   endif
   
-  # 背景渐变色
   assign bg_colors = '#FFE600, #FFB800|#FF6B9D, #C44569|#4ECDC4, #44A3AA|#FFD93D, #FFA502|#9D4EDD, #FF6B6B|#74B9FF, #0984E3|#FF7675, #D63031|#FFFFFF, #FF0000|#00B894, #00CEC9|#A29BFE, #6C5CE7|#FDCB6E, #E17055|#00CEC9, #81ECEC|#E17055, #D63031|#636E72, #2D3436|#FD79A8, #E84393' | split: '|'
   assign bg_index = product.id | modulo: bg_colors.size
   assign bg_gradient = bg_colors[bg_index]
@@ -66,11 +62,11 @@
     
     {%- if show_quick_add -%}
     <div class="quick-actions" onclick="event.stopPropagation()">
-      <button class="quick-btn quick-view" onclick="openQuickView('{{ product_title | escape }}', '{{ product_emoji }}', '{{ product_price }}', '{{ product.description | escape | truncate: 100 }}')">{{ 'shop.quick_view' | t }}</button>
+      <button class="quick-btn quick-view" onclick="openQuickView('{{ product_title | escape }}', '{{ product_emoji }}', '{{ product_price }}', '{{ product.description | escape | truncate: 100 }}')">👁️ VIEW</button>
       {%- if is_available -%}
-        <button class="quick-btn add-cart" onclick="addProductToCart({{ variant_id }}, '{{ product_title | escape }}', {{ product.price | divided_by: 100.0 }}, '{{ product_emoji }}')">{{ 'shop.add_to_cart' | t }}</button>
+        <button class="quick-btn add-cart" onclick="addProductToCart({{ variant_id }}, '{{ product_title | escape }}', {{ product.price | divided_by: 100.0 }}, '{{ product_emoji }}')">🛒 ADD</button>
       {%- else -%}
-        <button class="quick-btn add-cart" disabled style="background: #666; cursor: not-allowed;">{{ 'shop.sold_out' | t }}</button>
+        <button class="quick-btn add-cart" disabled style="background: #666; cursor: not-allowed;">SOLD OUT</button>
       {%- endif -%}
     </div>
     {%- endif -%}
@@ -93,9 +89,9 @@
     
     <div class="card-info">
       <div class="card-meta">
-        <span class="card-type">{{ 'product.type_' | append: product_category | t | upcase }}</span>
+        <span class="card-type">{{ product_type | upcase }}</span>
         <span class="card-stock {% if is_available %}in{% else %}out{% endif %}">
-          {% if is_available %}{{ 'shop.in_stock' | t }}{% else %}{{ 'shop.out_of_stock' | t }}{% endif %}
+          {% if is_available %}● IN STOCK{% else %}○ SOLD OUT{% endif %}
         </span>
       </div>
       <h3 class="card-title">{{ product_title }}</h3>

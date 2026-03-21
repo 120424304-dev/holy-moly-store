@@ -1,33 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap');
+/* Fonts loaded in layout/theme.liquid */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: white; overflow-x: hidden; cursor: crosshair; }
 
 .navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 16px 40px; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); background: transparent; }
-.navbar.scrolled { background: rgba(10, 10, 15, 0.95); backdrop-filter: blur(10px); border-bottom: 4px solid #FFE600; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); padding: 12px 40px; }
-.navbar-container { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
-.navbar-logo { font-family: 'Press Start 2P', cursive; font-size: 18px; color: #FFE600; text-decoration: none; text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5); transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
-.navbar-logo:hover { color: #FF2D7D; transform: scale(1.05); }
-.navbar-logo-icon { font-size: 24px; animation: logoBounce 2s ease-in-out infinite; }
-@keyframes logoBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-.navbar-menu { display: flex; align-items: center; gap: 8px; list-style: none; }
-.navbar-link { font-family: 'Press Start 2P', cursive; font-size: 10px; color: rgba(255, 255, 255, 0.8); text-decoration: none; padding: 12px 16px; position: relative; transition: all 0.3s; display: flex; align-items: center; gap: 6px; }
-.navbar-link::before { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 3px; background: #FFE600; transition: width 0.3s; box-shadow: 0 0 10px #FFE600; }
-.navbar-link:hover, .navbar-link.active { color: #FFE600; }
-.navbar-link:hover::before, .navbar-link.active::before { width: 80%; }
-.navbar-cart { position: relative; width: 50px; height: 50px; background: #FFE600; border: 4px solid #000; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; box-shadow: 4px 4px 0px #000; transition: all 0.2s; margin-left: 16px; }
-.navbar-cart:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #000; background: #FF2D7D; }
-.cart-badge { position: absolute; top: -10px; right: -10px; width: 26px; height: 26px; background: #FF2D7D; border: 3px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Press Start 2P', cursive; font-size: 10px; color: white; animation: badgePulse 2s infinite; }
-.cart-badge.hidden { display: none; }
-@keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-.hamburger { display: none; flex-direction: column; gap: 6px; padding: 10px; cursor: pointer; background: transparent; border: none; z-index: 1001; }
-.hamburger-line { width: 30px; height: 4px; background: #FFE600; border-radius: 2px; transition: all 0.3s; box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5); }
-.mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 15, 0.98); backdrop-filter: blur(20px); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 30px; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
-.mobile-menu.active { opacity: 1; pointer-events: all; }
-.mobile-menu .navbar-link { font-size: 16px; padding: 20px; }
-
-#loader { position: fixed; inset: 0; background: #0a0a0f; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s, transform 0.8s; }
 #loader.hidden { opacity: 0; transform: scale(1.1); pointer-events: none; }
 .loader-container { position: relative; width: 200px; height: 200px; }
 .pixel-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; width: 100%; height: 100%; }
@@ -150,23 +127,6 @@ body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: white; over
 .cparticle:nth-child(4) { left: 80%; top: 70%; animation-delay: 6s; }
 @keyframes ctaFloat { 0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; } 50% { transform: translateY(-30px) scale(1.2); opacity: 0.6; } }
 
-.footer { background: #0a0a0f; padding: clamp(60px, 10vw, 80px) clamp(20px, 5vw, 40px) clamp(30px, 5vw, 40px); border-top: 4px solid #FFE600; }
-.footer-content { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: clamp(30px, 6vw, 60px); max-width: 1200px; margin: 0 auto 60px; }
-.footer-brand { font-family: 'Press Start 2P', cursive; font-size: clamp(16px, 3vw, 24px); color: #FFE600; margin-bottom: 20px; text-shadow: 3px 3px 0px rgba(0,0,0,0.5); }
-.footer-desc { color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 24px; font-size: clamp(13px, 2vw, 14px); }
-.social-icons { display: flex; gap: 16px; }
-.social-icon { width: clamp(44px, 8vw, 50px); height: clamp(44px, 8vw, 50px); background: rgba(255,255,255,0.1); border: 3px solid rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 3vw, 20px); cursor: pointer; transition: all 0.3s; }
-.social-icon:hover { background: #FFE600; border-color: #000; transform: translateY(-5px) rotate(10deg); box-shadow: 4px 4px 0px #000; }
-.footer-column h4 { font-family: 'Press Start 2P', cursive; font-size: clamp(10px, 1.8vw, 12px); color: #00D9FF; margin-bottom: 24px; }
-.footer-links { list-style: none; }
-.footer-links li { margin-bottom: 12px; }
-.footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: clamp(12px, 2vw, 14px); position: relative; padding-left: 0; transition: all 0.3s; display: inline-block; }
-.footer-links a::before { content: '▶'; position: absolute; left: -20px; opacity: 0; transition: all 0.3s; color: #FF2D7D; }
-.footer-links a:hover { color: #FFE600; padding-left: 20px; }
-.footer-links a:hover::before { opacity: 1; left: 0; }
-.footer-bottom { text-align: center; padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); }
-.footer-copy { font-family: 'Press Start 2P', cursive; font-size: clamp(8px, 1.5vw, 10px); color: rgba(255,255,255,0.4); animation: copyBlink 3s infinite; }
-@keyframes copyBlink { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.8; } }
 
 .click-ripple { position: fixed; width: 20px; height: 20px; background: #FFE600; border-radius: 50%; pointer-events: none; z-index: 9996; animation: ripple 0.6s ease-out forwards; }
 @keyframes ripple { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(4); opacity: 0; } }

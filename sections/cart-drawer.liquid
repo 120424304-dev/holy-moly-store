@@ -112,7 +112,6 @@
 </div>
 
 <script>
-// Shopify AJAX Cart API 实现
 const HOLY_CART = {
   async fetchCart() {
     try {
@@ -127,23 +126,16 @@ const HOLY_CART = {
 
   async addItem(variantId, quantity = 1, properties = {}) {
     try {
-      const data = {
-        id: variantId,
-        quantity: quantity,
-        properties: properties
-      };
-      
+      const data = { id: variantId, quantity: quantity, properties: properties };
       const response = await fetch('/cart/add.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.description || 'Failed to add item');
       }
-      
       return await response.json();
     } catch (error) {
       console.error('Add to cart error:', error);
@@ -158,7 +150,6 @@ const HOLY_CART = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ line: line, quantity: quantity })
       });
-      
       if (!response.ok) throw new Error('Failed to update item');
       return await response.json();
     } catch (error) {
@@ -177,7 +168,6 @@ const HOLY_CART = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      
       if (!response.ok) throw new Error('Failed to clear cart');
       return await response.json();
     } catch (error) {
@@ -240,7 +230,6 @@ function updateCartUI() {
   const subtotalEl = document.getElementById('cartSubtotal');
   
   const totalItems = cartData.item_count;
-  const totalPrice = cartData.total_price / 100;
   
   let itemCountText;
   if (totalItems === 0) {
@@ -314,16 +303,12 @@ async function addToCart(product) {
     } else if (product.id) {
       await HOLY_CART.addItem(product.id, product.quantity || 1);
     }
-    
     animateCartIcon();
-    
     if (document.getElementById('cartDrawer').classList.contains('active')) {
       await loadCart();
     }
-    
     const cart = await HOLY_CART.fetchCart();
     updateAllCartBadges(cart.item_count);
-    
     return true;
   } catch (error) {
     showError("{{ 'errors.cart_add_failed' | t }}");
@@ -333,7 +318,6 @@ async function addToCart(product) {
 
 async function updateCartQty(line, quantity) {
   if (quantity < 1) return;
-  
   try {
     cartData = await HOLY_CART.updateItem(line, quantity);
     updateCartUI();
@@ -352,45 +336,16 @@ async function removeCartItem(line) {
 }
 
 function formatMoney(cents) {
-  const amount = cents / 100;
-  return '$' + amount.toFixed(2);
+  return '$' + (cents / 100).toFixed(2);
 }
 
 function getProductEmoji(type, title) {
-  const typeEmojis = {
-    'keychain': '🔑',
-    'magnet': '🧲',
-    'diy': '🎨'
-  };
-  
-  const titleEmojis = {
-    'mario': '🍄',
-    'mushroom': '🍄',
-    'pikachu': '⚡',
-    'pokemon': '⚡',
-    'controller': '🎮',
-    'star': '⭐',
-    'ghost': '👻',
-    'pacman': '👻',
-    'pokeball': '🔴',
-    'space': '👾',
-    'tetris': '🧱',
-    'sonic': '💍',
-    'heart': '❤️',
-    'diamond': '⛏️',
-    'minecraft': '⛏️',
-    'food': '🍕',
-    'yoshi': '🥚',
-    'cartridge': '🎲',
-    'coin': '🪙',
-    'pet': '🐱'
-  };
-  
+  const typeEmojis = { 'keychain': '🔑', 'magnet': '🧲', 'diy': '🎨' };
+  const titleEmojis = { 'mario': '🍄', 'mushroom': '🍄', 'pikachu': '⚡', 'pokemon': '⚡', 'controller': '🎮', 'star': '⭐', 'ghost': '👻', 'pacman': '👻', 'pokeball': '🔴', 'space': '👾', 'tetris': '🧱', 'sonic': '💍', 'heart': '❤️', 'diamond': '⛏️', 'minecraft': '⛏️', 'food': '🍕', 'yoshi': '🥚', 'cartridge': '🎲', 'coin': '🪙', 'pet': '🐱' };
   const lowerTitle = title.toLowerCase();
   for (const [key, emoji] of Object.entries(titleEmojis)) {
     if (lowerTitle.includes(key)) return emoji;
   }
-  
   return typeEmojis[type?.toLowerCase()] || '🎮';
 }
 
@@ -405,11 +360,8 @@ function updateAllCartBadges(count) {
   const badges = document.querySelectorAll('.cart-badge, #cartBadge, #cartBadgeMobile');
   badges.forEach(badge => {
     badge.textContent = count;
-    if (count > 0) {
-      badge.classList.remove('hidden');
-    } else {
-      badge.classList.add('hidden');
-    }
+    if (count > 0) badge.classList.remove('hidden');
+    else badge.classList.add('hidden');
   });
 }
 

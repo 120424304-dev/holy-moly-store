@@ -134,21 +134,17 @@
     80% { transform: translateX(3px) rotate(5deg); }
 }
 
-/* ========== 移动端优化 ========== */
 @media (max-width: 768px) {
     .shop-page { padding: 90px 16px 60px !important; }
     .shop-header { margin-bottom: 30px; margin-top: 20px; }
     .shop-title { font-size: clamp(20px, 7vw, 32px) !important; text-shadow: 2px 2px 0 #FF2D7D, 4px 4px 0 #00D9FF !important; line-height: 1.4; }
     .shop-subtitle { font-size: 9px !important; opacity: 0.7; }
-    
     .control-panel { padding: 16px !important; gap: 12px !important; margin-bottom: 24px !important; flex-direction: column !important; }
     .pixel-search { min-width: 100% !important; padding: 10px 14px !important; }
     .pixel-search input { font-size: 11px !important; }
-    
     .filter-chips { flex-wrap: nowrap !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; scrollbar-width: none !important; padding-bottom: 4px; width: 100%; gap: 8px !important; }
     .filter-chips::-webkit-scrollbar { display: none; }
     .chip { flex-shrink: 0 !important; padding: 10px 16px !important; font-size: 9px !important; }
-    
     .products-container { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
     .product-pixel-card { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .card-inner { border-width: 3px !important; border-radius: 16px !important; }
@@ -159,37 +155,20 @@
     .card-type, .card-stock { font-size: 7px !important; }
     .current-price { font-size: 16px !important; }
     .card-rating { font-size: 12px !important; }
-    
-    .quick-actions { 
-        display: flex !important; 
-        opacity: 1 !important; 
-        position: absolute !important; 
-        bottom: 16px !important; 
-        top: auto !important; 
-        left: 50% !important; 
-        transform: translateX(-50%) !important; 
-        flex-direction: row !important; 
-        gap: 8px !important; 
-        pointer-events: auto !important;
-    }
+    .quick-actions { display: flex !important; opacity: 1 !important; position: absolute !important; bottom: 16px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important; flex-direction: row !important; gap: 8px !important; pointer-events: auto !important; }
     .quick-btn { padding: 10px 14px !important; font-size: 8px !important; box-shadow: 3px 3px 0 #000 !important; border-width: 2px !important; }
-    
     .card-badge { font-size: 8px !important; padding: 6px 10px !important; border-width: 2px !important; top: 10px !important; left: 10px !important; }
-    
     .wishlist-btn { width: 36px !important; height: 36px !important; font-size: 16px !important; opacity: 1 !important; background: rgba(0,0,0,0.6) !important; top: 10px !important; right: 10px !important; }
-    
     .shop-navbar { padding: 12px 16px !important; }
     .navbar-logo { font-size: 14px !important; gap: 6px !important; }
     .navbar-logo-icon { font-size: 18px !important; }
     .navbar-cart { width: 42px !important; height: 42px !important; font-size: 16px !important; border-width: 3px !important; box-shadow: 3px 3px 0 #000 !important; }
-    
     .modal-content { max-width: 95% !important; margin: 20px !important; border-width: 3px !important; }
     .modal-body { padding: 20px !important; }
     .modal-image { font-size: 80px !important; }
     .modal-title { font-size: 12px !important; }
     .modal-price { font-size: 20px !important; }
     .modal-add-btn { padding: 14px 28px !important; font-size: 11px !important; }
-    
     .pixel-dropdown { width: 100% !important; }
     .pixel-dropdown-btn { min-width: 100% !important; padding: 12px 16px !important; font-size: 9px !important; justify-content: center !important; }
     .pixel-dropdown-menu { position: fixed !important; left: 16px !important; right: 16px !important; top: auto !important; bottom: 20px !important; }
@@ -202,267 +181,217 @@
     .quick-btn { padding: 12px 20px !important; font-size: 9px !important; }
 }
 
-/* 禁用文本选择 */
 .product-pixel-card, .chip, .quick-btn, .wishlist-btn, .navbar-cart { user-select: none !important; -webkit-user-select: none !important; }
 </style>
 
 <nav class="shop-navbar">
-    <div class="navbar-container">
-        <a href="/" class="navbar-logo"><span class="navbar-logo-icon">👾</span><span>HOLY MOLY</span></a>
-        <ul class="navbar-menu">
-            <li><a href="/" class="navbar-link">{{ 'navigation.home' | t }}</a></li>
-            <li><a href="/pages/shop" class="navbar-link active">{{ 'navigation.shop' | t }}</a></li>
-            <li><a href="/#custom" class="navbar-link">{{ 'navigation.custom' | t }}</a></li>
-            <li><a href="/#features" class="navbar-link">{{ 'navigation.features' | t }}</a></li>
-        </ul>
-        <div class="navbar-cart" onclick="openCart()">🛒<span class="cart-badge hidden" id="cartBadge">0</span></div>
-        <button class="hamburger" onclick="toggleMobileMenu()"><span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span></button>
-    </div>
+  <div class="navbar-container">
+    <a href="/" class="navbar-logo"><span class="navbar-logo-icon">👾</span><span>HOLY MOLY</span></a>
+    <ul class="navbar-menu">
+      <li><a href="/" class="navbar-link">{{ 'navigation.home' | t }}</a></li>
+      <li><a href="/pages/shop" class="navbar-link active">{{ 'navigation.shop' | t }}</a></li>
+      <li><a href="/#custom" class="navbar-link">{{ 'navigation.custom' | t }}</a></li>
+      <li><a href="/#features" class="navbar-link">{{ 'navigation.features' | t }}</a></li>
+    </ul>
+    <div class="navbar-cart" onclick="openCart()">🛒<span class="cart-badge hidden" id="cartBadge">0</span></div>
+    <button class="hamburger" onclick="toggleMobileMenu()"><span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span></button>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
-    <a href="/" class="navbar-link">{{ 'navigation.home' | t }}</a>
-    <a href="/pages/shop" class="navbar-link active">{{ 'navigation.shop' | t }}</a>
-    <a href="/#custom" class="navbar-link">{{ 'navigation.custom' | t }}</a>
-    <a href="/#features" class="navbar-link">{{ 'navigation.features' | t }}</a>
-    <div class="navbar-cart" onclick="openCart(); toggleMobileMenu();">🛒<span class="cart-badge hidden" id="cartBadgeMobile">0</span></div>
+  <a href="/" class="navbar-link">{{ 'navigation.home' | t }}</a>
+  <a href="/pages/shop" class="navbar-link active">{{ 'navigation.shop' | t }}</a>
+  <a href="/#custom" class="navbar-link">{{ 'navigation.custom' | t }}</a>
+  <a href="/#features" class="navbar-link">{{ 'navigation.features' | t }}</a>
+  <div class="navbar-cart" onclick="openCart(); toggleMobileMenu();">🛒<span class="cart-badge hidden" id="cartBadgeMobile">0</span></div>
 </div>
 
 <div class="shop-page">
-    <div class="shop-header">
-        <div class="shop-title">{{ 'shop.title' | t }}</div>
-        <div class="shop-subtitle">{{ 'shop.subtitle' | t }}</div>
-    </div>
+  <div class="shop-header">
+    <div class="shop-title">{{ 'shop.title' | t }}</div>
+    <div class="shop-subtitle">{{ 'shop.subtitle' | t }}</div>
+  </div>
 
-    <div class="control-panel">
-        <div class="pixel-search"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="{{ 'shop.search_placeholder' | t }}" onkeyup="searchProducts()"></div>
-        <div class="filter-chips">
-            <button class="chip active" onclick="filterProducts('all', this)">{{ 'shop.filter_all' | t }}</button>
-            <button class="chip" onclick="filterProducts('keychain', this)">{{ 'shop.filter_keychains' | t }}</button>
-            <button class="chip" onclick="filterProducts('magnet', this)">{{ 'shop.filter_magnets' | t }}</button>
-            <button class="chip" onclick="filterProducts('diy', this)">{{ 'shop.filter_diy' | t }}</button>
+  <div class="control-panel">
+    <div class="pixel-search"><span class="search-icon">🔍</span><input type="text" id="searchInput" placeholder="{{ 'shop.search_placeholder' | t }}" onkeyup="searchProducts()"></div>
+    <div class="filter-chips">
+      <button class="chip active" onclick="filterProducts('all', this)">{{ 'shop.filter_all' | t }}</button>
+      <button class="chip" onclick="filterProducts('keychain', this)">{{ 'shop.filter_keychains' | t }}</button>
+      <button class="chip" onclick="filterProducts('magnet', this)">{{ 'shop.filter_magnets' | t }}</button>
+      <button class="chip" onclick="filterProducts('diy', this)">{{ 'shop.filter_diy' | t }}</button>
+    </div>
+    <div class="pixel-dropdown" id="sortDropdown">
+      <button class="pixel-dropdown-btn" onclick="toggleDropdown()"><span>🆕</span><span id="sortText">{{ 'shop.sort_newest' | t }}</span><span class="dropdown-arrow">▼</span></button>
+      <div class="pixel-dropdown-menu">
+        <div class="dropdown-item active" onclick="selectSort('newest', '🆕', '{{ 'shop.sort_newest' | t }}')"><span>🆕</span><span>{{ 'shop.sort_newest' | t }}</span></div>
+        <div class="dropdown-item" onclick="selectSort('price-low', '💰', '{{ 'shop.sort_price_low' | t }}')"><span>💰</span><span>{{ 'shop.sort_price_low' | t }}</span></div>
+        <div class="dropdown-item" onclick="selectSort('price-high', '💎', '{{ 'shop.sort_price_high' | t }}')"><span>💎</span><span>{{ 'shop.sort_price_high' | t }}</span></div>
+        <div class="dropdown-item" onclick="selectSort('popular', '🔥', '{{ 'shop.sort_popular' | t }}')"><span>🔥</span><span>{{ 'shop.sort_popular' | t }}</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="products-container" id="productsContainer">
+    {%- paginate collections.all.products by 20 -%}
+      {%- if collections.all.products.size > 0 -%}
+        {%- for product in collections.all.products -%}
+          {%- render 'product-card', product: product, show_quick_add: true -%}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="empty-shop">
+          <div class="empty-shop-icon">📦</div>
+          <div class="empty-shop-text">{{ 'shop.empty_title' | t }}</div>
+          <p style="color: rgba(255,255,255,0.5); font-family: 'Press Start 2P'; font-size: 10px;">{{ 'shop.empty_subtitle' | t }}</p>
         </div>
-        <div class="pixel-dropdown" id="sortDropdown">
-            <button class="pixel-dropdown-btn" onclick="toggleDropdown()"><span>🆕</span><span id="sortText">{{ 'shop.sort_newest' | t }}</span><span class="dropdown-arrow">▼</span></button>
-            <div class="pixel-dropdown-menu">
-                <div class="dropdown-item active" onclick="selectSort('newest', '🆕', '{{ 'shop.sort_newest' | t }}')"><span>🆕</span><span>{{ 'shop.sort_newest' | t }}</span></div>
-                <div class="dropdown-item" onclick="selectSort('price-low', '💰', '{{ 'shop.sort_price_low' | t }}')"><span>💰</span><span>{{ 'shop.sort_price_low' | t }}</span></div>
-                <div class="dropdown-item" onclick="selectSort('price-high', '💎', '{{ 'shop.sort_price_high' | t }}')"><span>💎</span><span>{{ 'shop.sort_price_high' | t }}</span></div>
-                <div class="dropdown-item" onclick="selectSort('popular', '🔥', '{{ 'shop.sort_popular' | t }}')"><span>🔥</span><span>{{ 'shop.sort_popular' | t }}</span></div>
-            </div>
-        </div>
-    </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
 
-    <div class="products-container" id="productsContainer">
-        {%- paginate collections.all.products by 20 -%}
-            {%- if collections.all.products.size > 0 -%}
-                {%- for product in collections.all.products -%}
-                    {%- render 'product-card', product: product, show_quick_add: true -%}
-                {%- endfor -%}
-            {%- else -%}
-                <div class="empty-shop">
-                    <div class="empty-shop-icon">📦</div>
-                    <div class="empty-shop-text">{{ 'shop.empty_title' | t }}</div>
-                    <p style="color: rgba(255,255,255,0.5); font-family: 'Press Start 2P'; font-size: 10px;">{{ 'shop.empty_subtitle' | t }}</p>
-                </div>
-            {%- endif -%}
-        {%- endpaginate -%}
-    </div>
-
-    {%- if collections.all.products.size > 0 -%}
+  {%- if collections.all.products.size > 0 -%}
     <div class="load-more-container"><button class="load-more-btn" onclick="loadMoreProducts()">{{ 'shop.load_more' | t }}</button></div>
-    {%- endif -%}
+  {%- endif -%}
 </div>
 
 <div class="quick-view-modal" id="quickViewModal">
-    <div class="modal-overlay" onclick="closeQuickView()"></div>
-    <div class="modal-content">
-        <button class="modal-close" onclick="closeQuickView()">×</button>
-        <div class="modal-body">
-            <div class="modal-image" id="modalImage">🎮</div>
-            <h2 class="modal-title" id="modalTitle">Product Name</h2>
-            <div class="modal-price" id="modalPrice">$00.00</div>
-            <p class="modal-desc">Handcrafted pixel art made with 1000+ beads. Each piece is unique!</p>
-            <button class="modal-add-btn" id="modalAddBtn" onclick="addToCartFromModal()">🛒 ADD TO CART</button>
-        </div>
+  <div class="modal-overlay" onclick="closeQuickView()"></div>
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeQuickView()">×</button>
+    <div class="modal-body">
+      <div class="modal-image" id="modalImage">🎮</div>
+      <h2 class="modal-title" id="modalTitle">Product Name</h2>
+      <div class="modal-price" id="modalPrice">$00.00</div>
+      <p class="modal-desc">Handcrafted pixel art made with 1000+ beads. Each piece is unique!</p>
+      <button class="modal-add-btn" id="modalAddBtn" onclick="addToCartFromModal()">🛒 ADD TO CART</button>
     </div>
+  </div>
 </div>
 
 <script>
-// 当前弹窗产品
 let currentModalProduct = { variantId: null, name: '', price: 0 };
 let currentSort = 'newest';
-let loadedCount = 20;
 
-// 移动端菜单
 document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.product-pixel-card');
-    cards.forEach((card, index) => {
-        setTimeout(() => {
-            card.classList.add('visible');
-        }, index * 50);
-    });
+  const cards = document.querySelectorAll('.product-pixel-card');
+  cards.forEach((card, index) => {
+    setTimeout(() => card.classList.add('visible'), index * 50);
+  });
 });
 
 function toggleMobileMenu() {
-    document.getElementById('mobileMenu').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('active');
 }
 
-// 下拉菜单
 document.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('sortDropdown');
-    if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('open');
-    }
+  const dropdown = document.getElementById('sortDropdown');
+  if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
 });
 
 function toggleDropdown() {
-    document.getElementById('sortDropdown').classList.toggle('open');
+  document.getElementById('sortDropdown').classList.toggle('open');
 }
 
 function selectSort(value, icon, text) {
-    document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
-    event.target.closest('.dropdown-item').classList.add('active');
-    document.getElementById('sortText').textContent = text;
-    document.querySelector('.pixel-dropdown-btn span:first-child').textContent = icon;
-    document.getElementById('sortDropdown').classList.remove('open');
-    currentSort = value;
-    sortProducts(value);
+  document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+  event.target.closest('.dropdown-item').classList.add('active');
+  document.getElementById('sortText').textContent = text;
+  document.querySelector('.pixel-dropdown-btn span:first-child').textContent = icon;
+  document.getElementById('sortDropdown').classList.remove('open');
+  currentSort = value;
+  sortProducts(value);
 }
 
-// 搜索产品
 function searchProducts() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const cards = document.querySelectorAll('.product-pixel-card');
-    
-    cards.forEach(card => {
-        const name = card.getAttribute('data-name');
-        if (name && name.includes(query)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.product-pixel-card').forEach(card => {
+    const name = card.getAttribute('data-name');
+    card.style.display = (name && name.includes(query)) ? 'block' : 'none';
+  });
 }
 
-// 筛选产品
 function filterProducts(category, btn) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    
-    const cards = document.querySelectorAll('.product-pixel-card');
-    
-    cards.forEach(card => {
-        if (category === 'all' || card.getAttribute('data-category') === category) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
-    });
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.product-pixel-card').forEach(card => {
+    card.style.display = (category === 'all' || card.getAttribute('data-category') === category) ? 'block' : 'none';
+  });
 }
 
-// 排序产品
 function sortProducts(sortType) {
-    const container = document.getElementById('productsContainer');
-    const cards = Array.from(container.querySelectorAll('.product-pixel-card'));
-    
-    cards.sort((a, b) => {
-        const priceA = parseFloat(a.getAttribute('data-price'));
-        const priceB = parseFloat(b.getAttribute('data-price'));
-        
-        switch(sortType) {
-            case 'price-low': return priceA - priceB;
-            case 'price-high': return priceB - priceA;
-            case 'popular': return Math.random() - 0.5;
-            default: return 0;
-        }
-    });
-    
-    cards.forEach(card => container.appendChild(card));
+  const container = document.getElementById('productsContainer');
+  const cards = Array.from(container.querySelectorAll('.product-pixel-card'));
+  cards.sort((a, b) => {
+    const priceA = parseFloat(a.getAttribute('data-price'));
+    const priceB = parseFloat(b.getAttribute('data-price'));
+    switch(sortType) {
+      case 'price-low': return priceA - priceB;
+      case 'price-high': return priceB - priceA;
+      case 'popular': return Math.random() - 0.5;
+      default: return 0;
+    }
+  });
+  cards.forEach(card => container.appendChild(card));
 }
 
-// 添加到购物车
 async function addProductToCart(variantId, name, price, emoji) {
-    try {
-        const response = await fetch('/cart/add.js', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: variantId, quantity: 1 })
-        });
-        
-        if (!response.ok) throw new Error('Failed to add');
-        
-        animateCartIcon();
-        
-        if (typeof openCartDrawer === 'function') {
-            openCartDrawer();
-        }
-        
-        const cart = await fetch('/cart.js').then(r => r.json());
-        if (typeof updateAllCartBadges === 'function') {
-            updateAllCartBadges(cart.item_count);
-        }
-        
-    } catch (error) {
-        alert("{{ 'errors.cart_add_failed' | t }}");
-    }
-}
-
-// 购物车图标动画
-function animateCartIcon() {
-    const badges = document.querySelectorAll('.navbar-cart');
-    badges.forEach(icon => {
-        icon.style.animation = 'cartShake 0.5s ease';
-        setTimeout(() => icon.style.animation = '', 500);
+  try {
+    const response = await fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
     });
-}
-
-// 打开快速预览
-function openQuickView(name, emoji, price, description) {
-    currentModalProduct = { name, emoji, price };
-    document.getElementById('modalTitle').textContent = name;
-    document.getElementById('modalImage').textContent = emoji;
-    document.getElementById('modalPrice').textContent = price;
-    document.getElementById('quickViewModal').classList.add('active');
-}
-
-// 关闭快速预览
-function closeQuickView() {
-    document.getElementById('quickViewModal').classList.remove('active');
-}
-
-// 从弹窗添加到购物车
-function addToCartFromModal() {
-    closeQuickView();
+    if (!response.ok) throw new Error('Failed to add');
     animateCartIcon();
+    if (typeof openCartDrawer === 'function') openCartDrawer();
+    const cart = await fetch('/cart.js').then(r => r.json());
+    if (typeof updateAllCartBadges === 'function') updateAllCartBadges(cart.item_count);
+  } catch (error) {
+    alert("{{ 'errors.cart_add_failed' | t }}");
+  }
 }
 
-// 切换愿望单
+function animateCartIcon() {
+  document.querySelectorAll('.navbar-cart').forEach(icon => {
+    icon.style.animation = 'none';
+    icon.offsetHeight;
+    icon.style.animation = 'cartShake 0.5s ease';
+  });
+}
+
+function openQuickView(name, emoji, price, description) {
+  currentModalProduct = { name, emoji, price };
+  document.getElementById('modalTitle').textContent = name;
+  document.getElementById('modalImage').textContent = emoji;
+  document.getElementById('modalPrice').textContent = price;
+  document.getElementById('quickViewModal').classList.add('active');
+}
+
+function closeQuickView() {
+  document.getElementById('quickViewModal').classList.remove('active');
+}
+
+function addToCartFromModal() {
+  closeQuickView();
+  animateCartIcon();
+}
+
 function toggleWishlist(btn) {
-    btn.classList.toggle('active');
-    btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
+  btn.classList.toggle('active');
+  btn.textContent = btn.classList.contains('active') ? '♥' : '♡';
 }
 
-// 加载更多产品
 function loadMoreProducts() {
-    const btn = event.target;
-    btn.textContent = '📦 LOADING...';
+  const btn = event.target;
+  btn.textContent = '📦 LOADING...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = "{{ 'shop.load_more' | t }}";
     btn.disabled = true;
-    
-    setTimeout(() => {
-        btn.textContent = "{{ 'shop.load_more' | t }}";
-        btn.disabled = true;
-    }, 1000);
+  }, 1000);
 }
 
-// 全局打开购物车
 function openCart() {
-    if (typeof openCartDrawer === 'function') {
-        openCartDrawer();
-    } else {
-        window.location.href = '/cart';
-    }
+  if (typeof openCartDrawer === 'function') openCartDrawer();
+  else window.location.href = '/cart';
 }
-
 window.openCart = openCart;
 </script>
