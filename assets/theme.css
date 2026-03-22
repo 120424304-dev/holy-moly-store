@@ -1,0 +1,400 @@
+{% comment %}
+  Theme CSS for Holy Moly
+{% endcomment %}
+
+/* ===== Hero Section ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--white);
+  padding: 120px 40px 80px;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(240,255,10,0.1) 0%, transparent 70%);
+  animation: pulse 4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+}
+
+.hero-tagline {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.hero h1 {
+  font-size: clamp(60px, 12vw, 140px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+  font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+}
+
+.hero h1 .lime { 
+  color: var(--black);
+  background: var(--lime);
+  padding: 0 20px;
+  margin: 0 5px;
+}
+
+.hero h1 .pink { color: var(--pink); }
+
+.hero-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  font-weight: 400;
+  color: rgba(0,0,0,0.7);
+  max-width: 600px;
+  line-height: 1.8;
+  margin-bottom: 50px;
+  position: relative;
+  z-index: 1;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-lime {
+  padding: 18px 50px;
+  background: var(--lime);
+  color: var(--black);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  border-radius: 50px;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  border: 3px solid var(--lime);
+  font-family: 'Noto Sans SC', sans-serif;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-lime:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 40px rgba(240,255,10,0.4);
+}
+
+.btn-pink {
+  padding: 18px 50px;
+  background: var(--pink);
+  color: var(--white);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  border-radius: 50px;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  border: 3px solid var(--pink);
+  font-family: 'Noto Sans SC', sans-serif;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-pink:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 40px rgba(255,0,125,0.4);
+}
+
+/* ===== Lime Banner ===== */
+.lime-banner {
+  background: var(--lime);
+  padding: 80px 60px;
+  text-align: center;
+}
+
+.lime-banner h2 {
+  font-size: clamp(20px, 4vw, 36px);
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.lime-banner p {
+  font-size: 18px;
+  color: var(--black);
+  font-weight: 600;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* ===== Sale Section ===== */
+.sale-section {
+  background: var(--white);
+  padding: 100px 60px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 15px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.section-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--black);
+}
+
+.sale-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.sale-card {
+  background: var(--gray-light);
+  border-radius: 24px;
+  padding: 25px 15px;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  cursor: pointer;
+}
+
+.sale-card:hover {
+  transform: scale(1.05);
+  background: var(--lime);
+}
+
+.sale-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--pink);
+  color: var(--white);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.sale-emoji {
+  font-size: 60px;
+  margin-bottom: 12px;
+}
+
+.sale-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.sale-price-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.sale-original {
+  text-decoration: line-through;
+  color: var(--gray);
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.sale-price {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--pink);
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ===== Custom Section ===== */
+.custom-section {
+  background: var(--white);
+  padding: 100px 60px;
+}
+
+.custom-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.custom-visual {
+  aspect-ratio: 1;
+  background: var(--pink);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 140px;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-visual::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 15px,
+    rgba(240,255,10,0.3) 15px,
+    rgba(240,255,10,0.3) 30px
+  );
+  animation: slide 15s linear infinite;
+}
+
+@keyframes slide {
+  0% { transform: translate(-50%, -50%); }
+  100% { transform: translate(0, 0); }
+}
+
+.custom-text h3 {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  line-height: 1.2;
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--black);
+}
+
+.custom-text h3 span {
+  background: var(--lime);
+  padding: 0 10px;
+}
+
+.custom-text p {
+  font-size: 18px;
+  color: var(--gray);
+  line-height: 1.8;
+  margin-bottom: 30px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* ===== Features Section ===== */
+.features-section {
+  background: var(--pink);
+  padding: 100px 60px;
+}
+
+.features-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+.feature-card {
+  text-align: center;
+  color: var(--white);
+}
+
+.feature-icon {
+  width: 90px;
+  height: 90px;
+  background: var(--lime);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  margin: 0 auto 25px;
+}
+
+.feature-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.feature-desc {
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.6;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+.feature-tag {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: var(--lime);
+  color: var(--black);
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 1024px) {
+  .sale-grid { grid-template-columns: repeat(3, 1fr); }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 100px 20px 60px; }
+  .hero h1 { font-size: clamp(40px, 15vw, 80px); }
+  .hero-ctas { flex-direction: column; width: 100%; max-width: 280px; }
+  .btn-lime, .btn-pink { width: 100%; text-align: center; }
+  
+  .lime-banner { padding: 60px 20px; }
+  
+  .sale-section { padding: 60px 20px; }
+  .sale-grid { grid-template-columns: repeat(2, 1fr); }
+  
+  .custom-section { padding: 60px 20px; }
+  .custom-content { grid-template-columns: 1fr; }
+  .custom-text h3 { font-size: 28px; }
+  
+  .features-section { padding: 60px 20px; }
+  .features-grid { grid-template-columns: 1fr; }
+}

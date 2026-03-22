@@ -1,0 +1,53 @@
+{% comment %}
+  Announcement Bar Section for Holy Moly
+{% endcomment %}
+
+{% if section.settings.show_announcement %}
+  <style>
+    .announcement-bar {
+      background: {{ section.settings.background_color }};
+      color: {{ section.settings.text_color }};
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Noto Sans SC', sans-serif;
+    }
+  </style>
+  
+  <div class="announcement-bar">
+    {{ section.settings.text }}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Announcement text",
+      "default": "Welcome to Holy Moly!"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#F0FF0A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1A1A1A"
+    }
+  ]
+}
+{% endschema %}

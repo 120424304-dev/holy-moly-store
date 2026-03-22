@@ -1,0 +1,32 @@
+{
+  "general": {
+    "pagination": {
+      "previous": "上一页",
+      "next": "下一页"
+    },
+    "search": {
+      "search": "搜索"
+    }
+  },
+  "sections": {
+    "header": {
+      "menu": "菜单"
+    },
+    "cart": {
+      "title": "购物车",
+      "remove": "移除",
+      "empty": "您的购物车是空的"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "加入购物车",
+      "sold_out": "已售罄",
+      "unavailable": "暂时缺货"
+    }
+  },
+  "accessibility": {
+    "skip_to_text": "跳转到内容",
+    "refresh_page": "刷新页面"
+  }
+}

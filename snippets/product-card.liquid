@@ -1,0 +1,113 @@
+{% comment %}
+  Product Card Snippet - 像素风格产品卡片
+  用法: {% render 'product-card', product: product, show_quick_add: true %}
+{% endcomment %}
+
+{%- liquid
+  assign product_url = product.url
+  assign product_title = product.title
+  assign product_price = product.price | money
+  assign product_compare_price = product.compare_at_price | money
+  assign product_image = product.featured_image | default: product.images.first
+  assign product_type = product.type | default: 'KEYCHAIN'
+  assign has_variants = product.variants.size > 1
+  
+  assign first_variant = product.selected_or_first_available_variant
+  assign variant_id = first_variant.id
+  assign is_available = first_variant.available
+  
+  assign product_emoji = '🎮'
+  assign product_category = 'keychain'
+  assign badge_type = ''
+  assign badge_text = ''
+  
+  case product_type | downcase
+    when 'keychain'
+      assign product_emoji = '🔑'
+      assign product_category = 'keychain'
+    when 'magnet'
+      assign product_emoji = '🧲'
+      assign product_category = 'magnet'
+    when 'diy kit', 'diy'
+      assign product_emoji = '🎨'
+      assign product_category = 'diy'
+  endcase
+  
+  if product.compare_at_price > product.price
+    assign badge_type = 'sale'
+    assign discount_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
+    assign badge_text = '-' | append: discount_percent | append: '%'
+  elsif product.tags contains 'new' or product.created_at > 'now' | date: '%s' | minus: 2592000
+    assign badge_type = 'new'
+    assign badge_text = 'NEW'
+  elsif product.tags contains 'hot' or product.tags contains 'bestseller'
+    assign badge_type = 'hot'
+    assign badge_text = 'HOT'
+  endif
+  
+  assign bg_colors = '#FFE600, #FFB800|#FF6B9D, #C44569|#4ECDC4, #44A3AA|#FFD93D, #FFA502|#9D4EDD, #FF6B6B|#74B9FF, #0984E3|#FF7675, #D63031|#FFFFFF, #FF0000|#00B894, #00CEC9|#A29BFE, #6C5CE7|#FDCB6E, #E17055|#00CEC9, #81ECEC|#E17055, #D63031|#636E72, #2D3436|#FD79A8, #E84393' | split: '|'
+  assign bg_index = product.id | modulo: bg_colors.size
+  assign bg_gradient = bg_colors[bg_index]
+-%}
+
+<div class="product-pixel-card" 
+     data-category="{{ product_category }}" 
+     data-price="{{ product.price | divided_by: 100 }}" 
+     data-name="{{ product_title | downcase | escape }}" 
+     data-id="{{ product.id }}"
+     data-variant-id="{{ variant_id }}"
+     onclick="window.location.href='{{ product_url }}'">
+  <div class="card-inner">
+    <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist(this)">♡</button>
+    
+    {%- if show_quick_add -%}
+    <div class="quick-actions" onclick="event.stopPropagation()">
+      <button class="quick-btn quick-view" onclick="openQuickView('{{ product_title | escape }}', '{{ product_emoji }}', '{{ product_price }}', '{{ product.description | escape | truncate: 100 }}')">👁️ VIEW</button>
+      {%- if is_available -%}
+        <button class="quick-btn add-cart" onclick="addProductToCart({{ variant_id }}, '{{ product_title | escape }}', {{ product.price | divided_by: 100.0 }}, '{{ product_emoji }}')">🛒 ADD</button>
+      {%- else -%}
+        <button class="quick-btn add-cart" disabled style="background: #666; cursor: not-allowed;">SOLD OUT</button>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+    
+    <div class="card-image-wrapper">
+      <div class="card-image" style="background: linear-gradient(145deg, {{ bg_gradient }});">
+        {%- if product_image -%}
+          <img src="{{ product_image | img_url: '400x400', crop: 'center' }}" 
+               alt="{{ product_title | escape }}" 
+               class="product-img"
+               loading="lazy">
+        {%- else -%}
+          <div class="product-img-placeholder">{{ product_emoji }}</div>
+        {%- endif -%}
+      </div>
+      {%- if badge_type != blank -%}
+        <span class="card-badge {{ badge_type }}">{{ badge_text }}</span>
+      {%- endif -%}
+    </div>
+    
+    <div class="card-info">
+      <div class="card-meta">
+        <span class="card-type">{{ product_type | upcase }}</span>
+        <span class="card-stock {% if is_available %}in{% else %}out{% endif %}">
+          {% if is_available %}● IN STOCK{% else %}○ SOLD OUT{% endif %}
+        </span>
+      </div>
+      <h3 class="card-title">{{ product_title }}</h3>
+      <div class="card-footer">
+        <span class="current-price">{{ product_price }}</span>
+        {%- if product.compare_at_price > product.price -%}
+          <span class="old-price">{{ product_compare_price }}</span>
+        {%- endif -%}
+        <span class="card-rating">⭐ {{ product.metafields.reviews.rating | default: '4.8' }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="pixel-corners">
+    <span class="corner tl"></span>
+    <span class="corner tr"></span>
+    <span class="corner bl"></span>
+    <span class="corner br"></span>
+  </div>
+</div>

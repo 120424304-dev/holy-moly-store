@@ -1,0 +1,215 @@
+<style>
+  :root {
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --gray: #666666;
+    --gray-light: #F5F5F5;
+    --lime: #F0FF0A;
+    --pink: #FF007D;
+  }
+
+  .hot-section {
+    background: var(--gray-light);
+    padding: 100px 60px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .section-tag {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--black);
+  }
+
+  .products-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  .product-card {
+    background: var(--white);
+    border-radius: 30px;
+    overflow: hidden;
+    transition: all 0.4s;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  }
+
+  .product-image {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, var(--gray-light), var(--white));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 100px;
+    overflow: hidden;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-info {
+    padding: 30px;
+  }
+
+  .product-category {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .product-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    font-family: 'Noto Sans SC', sans-serif;
+    color: var(--black);
+  }
+
+  .product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-rating {
+    font-size: 14px;
+    color: var(--gray);
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .product-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--pink);
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .view-more {
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .view-more a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 14px;
+    border-bottom: 1px solid var(--gray);
+    padding-bottom: 3px;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all 0.3s;
+  }
+
+  .view-more a:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+  }
+
+  @media (max-width: 1024px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .hot-section { padding: 60px 20px; }
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<section class="hot-section" id="hot">
+  <div class="section-header">
+    <div class="section-tag">TOP SELLING</div>
+    <h2 class="section-title">热门魔法藏品 · TOP 3</h2>
+  </div>
+  
+  <div class="products-grid">
+    {%- for product in collections.all.products limit: 3 -%}
+      <a href="{{ product.url }}" class="product-card">
+        <div class="product-image">
+          {%- if product.featured_image -%}
+            <img src="{{ product.featured_image | img_url: 'large' }}" alt="{{ product.title }}" loading="lazy">
+          {%- else -%}
+            🌟
+          {%- endif -%}
+        </div>
+        <div class="product-info">
+          <div class="product-category">{{ product.type | default: "COLLECTION" }}</div>
+          <h3 class="product-name">{{ product.title }}</h3>
+          <div class="product-meta">
+            <span class="product-rating">⭐ {{ product.metafields.reviews.rating | default: "4.8" }} · 已售 {{ product.metafields.stats.sold | default: "500+" }}</span>
+            <span class="product-price">{{ product.price | money }}</span>
+          </div>
+        </div>
+      </a>
+    {%- else -%}
+      <a href="#" class="product-card">
+        <div class="product-image">🌟</div>
+        <div class="product-info">
+          <div class="product-category">KEYCHAIN</div>
+          <h3 class="product-name">星光护身符</h3>
+          <div class="product-meta">
+            <span class="product-rating">⭐ 4.9 · 已售 999+</span>
+            <span class="product-price">¥45</span>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="product-card">
+        <div class="product-image">🍄</div>
+        <div class="product-info">
+          <div class="product-category">MAGNET</div>
+          <h3 class="product-name">蘑菇小屋</h3>
+          <div class="product-meta">
+            <span class="product-rating">⭐ 4.8 · 已售 856</span>
+            <span class="product-price">¥38</span>
+          </div>
+        </div>
+      </a>
+      <a href="#" class="product-card">
+        <div class="product-image">🦋</div>
+        <div class="product-info">
+          <div class="product-category">BROOCH</div>
+          <h3 class="product-name">蓝闪蝶</h3>
+          <div class="product-meta">
+            <span class="product-rating">⭐ 5.0 · 已售 723</span>
+            <span class="product-price">¥52</span>
+          </div>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+  
+  <div class="view-more">
+    <a href="/collections/all">探索更多商品请进入商店 →</a>
+  </div>
+</section>

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.shop-page { background: #0a0a0f; min-height: 100vh; padding: 120px 40px 80px; }
+.shop-header { text-align: center; margin-bottom: 60px; }
+.shop-title { font-family: 'Press Start 2P', cursive; font-size: clamp(32px, 6vw, 56px); color: #FFE600; text-shadow: 4px 4px 0 #FF2D7D, 8px 8px 0 #00D9FF; margin-bottom: 16px; }
+.shop-subtitle { font-family: 'Press Start 2P', cursive; font-size: 12px; color: rgba(255,255,255,0.5); }
+
+.control-panel { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: center; margin-bottom: 40px; padding: 30px; background: rgba(255,255,255,0.03); border: 3px solid rgba(255,230,0,0.2); border-radius: 20px; }
+
+.pixel-search { position: relative; display: flex; align-items: center; background: #1a1a2e; border: 4px solid #FFE600; border-radius: 12px; padding: 12px 16px; min-width: 280px; }
+.pixel-search .search-icon { font-size: 18px; margin-right: 12px; }
+.pixel-search input { background: transparent; border: none; color: #FFE600; font-family: 'Press Start 2P', cursive; font-size: 10px; outline: none; width: 100%; text-transform: uppercase; }
+.pixel-search input::placeholder { color: rgba(255,230,0,0.4); }
+
+.filter-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { font-family: 'Press Start 2P', cursive; font-size: 9px; padding: 12px 20px; background: transparent; border: 3px solid rgba(255,255,255,0.2); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+.chip:hover, .chip.active { background: #FFE600; border-color: #000; color: #000; box-shadow: 4px 4px 0 #000; transform: translate(-2px, -2px); }
+
+.pixel-select { position: relative; }
+.pixel-select select { font-family: 'Press Start 2P', cursive; font-size: 9px; padding: 14px 40px 14px 16px; background: #FF2D7D; border: 4px solid #000; border-radius: 8px; color: white; cursor: pointer; appearance: none; box-shadow: 4px 4px 0 #000; }
+.pixel-select::after { content: '▼'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 10px; pointer-events: none; }
+
+.products-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; max-width: 1400px; margin: 0 auto; perspective: 1000px; }
+
+.product-pixel-card { position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.3s; }
+.card-inner { background: #1a1a2e; border: 4px solid rgba(255,255,255,0.1); border-radius: 20px; overflow: hidden; position: relative; transition: all 0.3s; }
+.product-pixel-card:hover .card-inner { border-color: #FFE600; box-shadow: 0 20px 60px rgba(255,230,0,0.2); }
+
+.pixel-corners .corner { position: absolute; width: 12px; height: 12px; border: 3px solid #FFE600; opacity: 0; transition: opacity 0.3s; }
+.corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+.product-pixel-card:hover .corner { opacity: 1; }
+
+.wishlist-btn { position: absolute; top: 16px; right: 16px; z-index: 10; width: 44px; height: 44px; background: rgba(0,0,0,0.5); border: 3px solid rgba(255,255,255,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: all 0.3s; }
+.wishlist-btn:hover, .wishlist-btn.active { background: #FF2D7D; border-color: #000; box-shadow: 3px 3px 0 #000; }
+
+.quick-actions { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; gap: 12px; opacity: 0; z-index: 5; transition: opacity 0.3s; }
+.product-pixel-card:hover .quick-actions { opacity: 1; }
+.quick-btn { font-family: 'Press Start 2P', cursive; font-size: 9px; padding: 14px 24px; border: 3px solid #000; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap; box-shadow: 4px 4px 0 #000; }
+.quick-btn:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #000; }
+.quick-view { background: #FFE600; color: #000; }
+.add-cart { background: #00D9FF; color: #000; }
+
+.card-image-wrapper { position: relative; height: 280px; overflow: hidden; }
+.card-image { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+.card-image img { width: 80%; height: 80%; object-fit: contain; transition: all 0.4s; }
+.pixel-placeholder { font-size: 80px; }
+
+.card-badge { position: absolute; top: 16px; left: 16px; font-family: 'Press Start 2P', cursive; font-size: 9px; padding: 8px 14px; border: 3px solid #000; border-radius: 6px; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); }
+.card-badge.sale { background: #FF2D7D; color: white; }
+.card-badge.new { background: #00D9FF; color: #000; }
+.card-badge.hot { background: #FFE600; color: #000; }
+
+.card-info { padding: 24px; background: white; }
+.card-meta { display: flex; justify-content: space-between; margin-bottom: 12px; }
+.card-type { font-family: 'Press Start 2P', cursive; font-size: 8px; color: #9D4EDD; }
+.card-stock { font-family: 'Press Start 2P', cursive; font-size: 8px; }
+.card-stock.in { color: #00D9FF; }
+.card-stock.out { color: #FF2D7D; }
+.card-title { font-family: 'Press Start 2P', cursive; font-size: 12px; color: #000; line-height: 1.6; margin-bottom: 16px; min-height: 40px; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; }
+.current-price { font-size: 22px; font-weight: 800; color: #FF2D7D; }
+.card-rating { font-size: 14px; color: #FFB800; }
+
+.load-more-container { text-align: center; margin-top: 60px; }
+.load-more-btn { position: relative; background: #FFE600; color: #000; border: 5px solid #000; padding: 24px 48px; font-family: 'Press Start 2P', cursive; font-size: 14px; cursor: pointer; box-shadow: 8px 8px 0 #000; transition: all 0.2s; }
+.load-more-btn:hover { transform: translate(4px, 4px); box-shadow: 4px 4px 0 #000; }
+
+.hidden { display: none !important; }
+
+@media (max-width: 768px) {
+  .shop-page { padding: 100px 20px 60px; }
+  .control-panel { flex-direction: column; padding: 20px; }
+  .pixel-search { min-width: 100%; }
+  .products-container { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card-image-wrapper { height: 200px; }
+  .quick-actions { display: none; }
+}
+@media (max-width: 480px) {
+  .products-container { grid-template-columns: 1fr; }
+}

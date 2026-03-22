@@ -1,0 +1,27 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Holy Moly",
+    "theme_version": "1.0.0",
+    "theme_author": "Holy Moly Team",
+    "theme_documentation_url": "https://holymolybeads.com",
+    "theme_support_url": "https://holymolybeads.com/support"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary Color",
+        "default": "#F0FF0A"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Secondary Color",
+        "default": "#FF007D"
+      }
+    ]
+  }
+]

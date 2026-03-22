@@ -1,0 +1,64 @@
+{% comment %}
+  Base CSS for Holy Moly Theme
+{% endcomment %}
+
+:root {
+  --white: #FFFFFF;
+  --black: #1A1A1A;
+  --gray: #666666;
+  --gray-light: #F5F5F5;
+  --lime: #F0FF0A;
+  --pink: #FF007D;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  word-wrap: normal !important;
+}
+
+.skip-to-content-link:focus {
+  z-index: 9999;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--lime);
+  color: var(--black);
+  padding: 10px 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.focus-none:focus {
+  outline: none;
+}
+
+.content-for-layout {
+  padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .content-for-layout {
+    padding-top: 70px;
+  }
+}

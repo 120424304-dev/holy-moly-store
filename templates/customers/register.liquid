@@ -1,0 +1,701 @@
+{% layout 'theme' %}
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.register-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #252542 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-page::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    radial-gradient(circle at 30% 40%, rgba(255, 45, 125, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(0, 217, 255, 0.12) 0%, transparent 50%);
+  animation: bgFloat 20s ease-in-out infinite;
+}
+
+@keyframes bgFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-5%, -5%) rotate(2deg); }
+}
+
+/* 游戏机外框 - 注册版用粉色边框区分 */
+.game-console {
+  background: #2d2d44;
+  border: 6px solid #000;
+  border-radius: 30px;
+  padding: 50px 40px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow: 
+    0 0 0 4px #FF2D7D,
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 2px 0 rgba(255,255,255,0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.game-console::before {
+  content: '';
+  position: absolute;
+  top: 20px; left: 20px; right: 20px;
+  height: 100px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+/* 标题 */
+.register-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  color: #FF2D7D;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 3px 3px 0 #FFE600;
+  line-height: 1.6;
+  animation: titlePulse 2s infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+.register-subtitle {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* 表单 */
+.pixel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #00D9FF;
+  display: block;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 18px 20px;
+  background: #1a1a2e;
+  border: 4px solid #000;
+  border-radius: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #FFE600;
+  box-shadow: inset 0 4px 0 rgba(0,0,0,0.3);
+  transition: all 0.3s;
+}
+
+.form-input::placeholder {
+  color: rgba(255,255,255,0.3);
+  font-size: 10px;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #FF2D7D;
+  box-shadow: inset 0 4px 0 rgba(0,0,0,0.3), 0 0 20px rgba(255,45,125,0.3);
+  transform: scale(1.02);
+}
+
+/* 密码强度指示器 */
+.password-strength {
+  height: 6px;
+  background: #1a1a2e;
+  border: 2px solid #000;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+  display: none;
+}
+
+.password-strength.show {
+  display: block;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0;
+  transition: all 0.3s;
+}
+
+.strength-bar.weak { width: 33%; background: #FF2D7D; }
+.strength-bar.medium { width: 66%; background: #FFE600; }
+.strength-bar.strong { width: 100%; background: #00FF00; }
+
+.strength-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  margin-top: 6px;
+  display: none;
+}
+
+.strength-text.show {
+  display: block;
+}
+
+/* 密码输入框 */
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #FF2D7D;
+  border: 3px solid #000;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  transition: all 0.2s;
+}
+
+.toggle-password:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* 邮箱验证提示 */
+.email-hint {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 条款复选框 */
+.terms-group {
+  margin: 10px 0;
+}
+
+.pixel-checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.pixel-checkbox {
+  width: 24px;
+  height: 24px;
+  background: #1a1a2e;
+  border: 3px solid #000;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: inset 0 2px 0 rgba(0,0,0,0.3);
+  transition: all 0.2s;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pixel-checkbox-wrapper:hover .pixel-checkbox {
+  border-color: #FF2D7D;
+}
+
+.pixel-checkbox-wrapper input:checked + .pixel-checkbox {
+  background: #FFE600;
+  border-color: #000;
+}
+
+.pixel-checkbox-wrapper input { display: none; }
+
+.checkbox-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.8;
+}
+
+.checkbox-text a {
+  color: #FFE600;
+  text-decoration: none;
+}
+
+.checkbox-text a:hover {
+  text-decoration: underline;
+}
+
+/* 注册按钮 - 粉色主按钮 */
+.register-btn {
+  width: 100%;
+  padding: 24px;
+  background: linear-gradient(180deg, #FF2D7D, #e62d6f);
+  border: 5px solid #000;
+  border-radius: 16px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 0 #000,
+    0 10px 20px rgba(0,0,0,0.3),
+    inset 0 -4px 0 rgba(0,0,0,0.1);
+  transition: all 0.1s;
+  margin-top: 10px;
+}
+
+.register-btn::before {
+  content: '▶';
+  margin-right: 12px;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 10px 0 #000,
+    0 12px 25px rgba(0,0,0,0.3),
+    inset 0 -4px 0 rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #00D9FF, #00b4d8);
+  color: #000;
+}
+
+.register-btn:active {
+  transform: translateY(4px);
+  box-shadow: 
+    0 4px 0 #000,
+    inset 0 -4px 0 rgba(0,0,0,0.1);
+}
+
+.register-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 返回登录链接 */
+.back-to-login {
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 3px dashed rgba(255,255,255,0.2);
+}
+
+.back-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+
+.login-link {
+  display: inline-block;
+  padding: 16px 32px;
+  background: #FFE600;
+  border: 4px solid #000;
+  border-radius: 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  color: #000;
+  text-decoration: none;
+  box-shadow: 4px 4px 0 #000;
+  transition: all 0.2s;
+}
+
+.login-link:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #000;
+  background: #00D9FF;
+}
+
+/* 错误提示 */
+.error-message {
+  background: #FF2D7D;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: white;
+  text-align: center;
+  box-shadow: 4px 4px 0 #000;
+  animation: errorShake 0.5s;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* 加载动画 */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 9999;
+}
+
+.loading-overlay.active {
+  display: flex;
+}
+
+.loading-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  color: #FF2D7D;
+  animation: loadingPulse 1s infinite;
+}
+
+.loading-subtext {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+/* 成功提示 */
+.success-message {
+  background: #00FF00;
+  border: 4px solid #000;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #000;
+  text-align: center;
+  box-shadow: 4px 4px 0 #000;
+  animation: successPop 0.5s;
+}
+
+@keyframes successPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* 角色预览 */
+.character-preview {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 3px dashed rgba(255,255,255,0.2);
+  border-radius: 16px;
+}
+
+.character-icon {
+  font-size: 60px;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.character-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.6);
+}
+
+/* 响应式 */
+@media (max-width: 600px) {
+  .game-console {
+    padding: 30px 20px;
+  }
+  .register-title {
+    font-size: 14px;
+  }
+  .form-input {
+    font-size: 10px;
+    padding: 16px;
+  }
+  .checkbox-text {
+    font-size: 7px;
+  }
+}
+</style>
+
+<div class="register-page">
+  <div class="game-console">
+    <!-- 角色预览 -->
+    <div class="character-preview">
+      <div class="character-icon" id="characterIcon">👾</div>
+      <div class="character-text">{{ 'register.avatar_title' | t }}</div>
+    </div>
+
+    <h1 class="register-title">{{ 'register.title' | t }}</h1>
+    <p class="register-subtitle">{{ 'register.subtitle' | t }}</p>
+    
+    {% form 'create_customer' %}
+      {% if form.errors %}
+        <div class="error-message">
+          {{ 'register.error_title' | t }}<br>
+          {{ form.errors | default_errors }}
+        </div>
+      {% endif %}
+      
+      <div class="pixel-form">
+        <!-- 用户名 -->
+        <div class="form-group">
+          <label class="form-label">{{ 'register.name_label' | t }}</label>
+          <input 
+            type="text" 
+            name="customer[first_name]" 
+            class="form-input" 
+            placeholder="{{ 'register.name_placeholder' | t }}"
+            required
+            maxlength="20"
+            oninput="updateCharacter(this.value)"
+          >
+        </div>
+        
+        <!-- 邮箱 -->
+        <div class="form-group">
+          <label class="form-label">{{ 'register.email_label' | t }}</label>
+          <input 
+            type="email" 
+            name="customer[email]" 
+            class="form-input" 
+            placeholder="{{ 'register.email_placeholder' | t }}"
+            required
+            autocorrect="off"
+            autocapitalize="off"
+          >
+          <div class="email-hint">
+            <span>ℹ️</span> {{ 'register.email_hint' | t }}
+          </div>
+        </div>
+        
+        <!-- 密码 -->
+        <div class="form-group">
+          <label class="form-label">{{ 'register.password_label' | t }}</label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              name="customer[password]" 
+              id="password"
+              class="form-input" 
+              placeholder="{{ 'register.password_placeholder' | t }}"
+              required
+              minlength="8"
+              oninput="checkPasswordStrength(this.value)"
+            >
+            <button type="button" class="toggle-password" onclick="togglePassword('password')">👁️</button>
+          </div>
+          <!-- 密码强度条 -->
+          <div class="password-strength" id="strengthBar">
+            <div class="strength-bar" id="strengthValue"></div>
+          </div>
+          <div class="strength-text" id="strengthText"></div>
+        </div>
+        
+        <!-- 确认密码 -->
+        <div class="form-group">
+          <label class="form-label">{{ 'register.password_confirm_label' | t }}</label>
+          <div class="password-wrapper">
+            <input 
+              type="password" 
+              id="passwordConfirm"
+              class="form-input" 
+              placeholder="{{ 'register.password_confirm_placeholder' | t }}"
+              required
+              oninput="checkPasswordMatch()"
+            >
+            <button type="button" class="toggle-password" onclick="togglePassword('passwordConfirm')">👁️</button>
+          </div>
+          <div class="email-hint" id="matchHint" style="color: #FF2D7D; display: none;">
+            <span>❌</span> <span data-key="register.password_match_error">{{ 'register.password_match_error' | t }}</span>
+          </div>
+        </div>
+        
+        <!-- 条款同意 -->
+        <div class="form-group terms-group">
+          <label class="pixel-checkbox-wrapper">
+            <input type="checkbox" name="terms" required onchange="toggleSubmit()">
+            <span class="pixel-checkbox">✓</span>
+            <span class="checkbox-text">
+              {{ 'register.terms_text' | t }}
+            </span>
+          </label>
+        </div>
+        
+        <button type="submit" class="register-btn" id="submitBtn" onclick="showLoading()">
+          {{ 'register.submit' | t }}
+        </button>
+      </div>
+    {% endform %}
+    
+    <!-- 返回登录 -->
+    <div class="back-to-login">
+      <p class="back-text">{{ 'register.already_account' | t }}</p>
+      <a href="/account/login" class="login-link">{{ 'register.back_to_login' | t }}</a>
+    </div>
+  </div>
+</div>
+
+<!-- 加载遮罩 -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-text">{{ 'register.loading_title' | t }}</div>
+  <div class="loading-subtext">{{ 'register.loading_subtitle' | t }}</div>
+</div>
+
+<script>
+// 切换密码显示
+function togglePassword(inputId) {
+  var input = document.getElementById(inputId);
+  var btn = event.target;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁️';
+  }
+}
+
+// 检查密码强度
+function checkPasswordStrength(password) {
+  var bar = document.getElementById('strengthBar');
+  var value = document.getElementById('strengthValue');
+  var text = document.getElementById('strengthText');
+  
+  if (password.length === 0) {
+    bar.classList.remove('show');
+    text.classList.remove('show');
+    return;
+  }
+  
+  bar.classList.add('show');
+  text.classList.add('show');
+  
+  var strength = 0;
+  if (password.length >= 8) strength++;
+  if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+  if (password.match(/[0-9]/)) strength++;
+  if (password.match(/[^a-zA-Z0-9]/)) strength++;
+  
+  value.className = 'strength-bar';
+  
+  if (strength <= 1) {
+    value.classList.add('weak');
+    text.textContent = "{{ 'register.password_strength_weak' | t }}";
+    text.style.color = '#FF2D7D';
+  } else if (strength === 2) {
+    value.classList.add('medium');
+    text.textContent = "{{ 'register.password_strength_medium' | t }}";
+    text.style.color = '#FFE600';
+  } else {
+    value.classList.add('strong');
+    text.textContent = "{{ 'register.password_strength_strong' | t }}";
+    text.style.color = '#00FF00';
+  }
+}
+
+// 检查密码匹配
+function checkPasswordMatch() {
+  var password = document.getElementById('password').value;
+  var confirm = document.getElementById('passwordConfirm').value;
+  var hint = document.getElementById('matchHint');
+  
+  if (confirm.length > 0 && password !== confirm) {
+    hint.style.display = 'flex';
+  } else {
+    hint.style.display = 'none';
+  }
+}
+
+// 更新角色图标
+function updateCharacter(name) {
+  var icons = ['👾', '🤖', '👻', '🦄', '🐱', '🦊', '🐼', '🐸', '🌟', '⚡'];
+  var icon = document.getElementById('characterIcon');
+  if (name.length > 0) {
+    var index = name.charCodeAt(0) % icons.length;
+    icon.textContent = icons[index];
+  } else {
+    icon.textContent = '👾';
+  }
+}
+
+// 启用/禁用提交按钮
+function toggleSubmit() {
+  var checkbox = document.querySelector('input[name="terms"]');
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = !checkbox.checked;
+}
+
+// 显示加载
+function showLoading() {
+  var password = document.getElementById('password').value;
+  var confirm = document.getElementById('passwordConfirm').value;
+  
+  if (password !== confirm) {
+    event.preventDefault();
+    document.getElementById('matchHint').style.display = 'flex';
+    document.getElementById('passwordConfirm').focus();
+    return false;
+  }
+  
+  document.getElementById('loadingOverlay').classList.add('active');
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('submitBtn').disabled = true;
+});
+
+// 输入框焦点效果
+document.querySelectorAll('.form-input').forEach(function(input) {
+  input.addEventListener('focus', function() {
+    this.style.transform = 'scale(1.02)';
+  });
+  input.addEventListener('blur', function() {
+    this.style.transform = 'scale(1)';
+  });
+});
+</script>

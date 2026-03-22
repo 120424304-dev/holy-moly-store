@@ -1,0 +1,176 @@
+<style>
+  :root {
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --gray: #666666;
+    --gray-light: #F5F5F5;
+    --lime: #F0FF0A;
+    --pink: #FF007D;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .nav-logo {
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--black);
+    text-decoration: none;
+    font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+  }
+
+  .nav-logo span { color: var(--pink); }
+
+  .nav-links {
+    display: flex;
+    gap: 50px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    color: var(--black);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: color 0.3s;
+    font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+  }
+
+  .nav-links a:hover { color: var(--pink); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 10px;
+    background: none;
+    border: none;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 3px;
+    background: var(--black);
+    transition: all 0.3s;
+    display: block;
+  }
+
+  .nav-icons {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .nav-icons a {
+    color: var(--black);
+    font-size: 20px;
+    text-decoration: none;
+    position: relative;
+  }
+
+  .cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--pink);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  @media (max-width: 768px) {
+    .nav { padding: 15px 20px; }
+    
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      flex-direction: column;
+      padding: 20px;
+      gap: 0;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    
+    .nav-links.active { display: flex; }
+    
+    .nav-links li {
+      border-bottom: 1px solid var(--gray-light);
+      list-style: none;
+    }
+    
+    .nav-links li:last-child { border-bottom: none; }
+    
+    .nav-links a {
+      display: block;
+      padding: 15px 0;
+      font-size: 16px;
+    }
+    
+    .hamburger { display: flex; }
+  }
+</style>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">HOLY<span>MOLY</span></a>
+  
+  <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/">主页</a></li>
+    <li><a href="/collections/all">商店</a></li>
+    <li><a href="/pages/custom">定制化</a></li>
+    <li><a href="/pages/community">社区</a></li>
+    <li><a href="/account">用户</a></li>
+  </ul>
+  
+  <div class="nav-icons">
+    <a href="/account" aria-label="Account">👤</a>
+    <a href="/cart" aria-label="Cart">
+      🛒
+      <span class="cart-badge">{{ cart.item_count }}</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+  }
+  
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('active');
+    });
+  });
+</script>

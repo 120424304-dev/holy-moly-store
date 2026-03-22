@@ -1,0 +1,128 @@
+{{ 'theme.css' | asset_url | stylesheet_tag }}
+
+<section class="hero" id="home">
+  <div class="hero-tagline">✨ 点亮创意 传递快乐</div>
+  <h1><span class="lime">HOLY</span> <span class="pink">MOLY</span></h1>
+  <p class="hero-subtitle">
+    手工拼豆艺术品聚集地<br>
+    如果你想获得卓越的拼豆体验以及购买拼豆艺术收藏品，那就请选择 HOLY MOLY 吧！
+  </p>
+  <div class="hero-ctas">
+    <a href="/collections/all" class="btn-lime">进入商店</a>
+    <a href="/pages/custom" class="btn-pink">开始定制</a>
+  </div>
+</section>
+
+<section class="lime-banner">
+  <h2>TO LIGHT UP PASSION AND BRING JOY</h2>
+  <p>创造潮流 传递美好</p>
+</section>
+
+{% section 'featured-products' %}
+
+<section class="section sale-section" id="sale">
+  <div class="section-header">
+    <div class="section-tag">SPECIAL OFFER</div>
+    <h2 class="section-title">限时魔法特惠</h2>
+  </div>
+  <div class="sale-grid">
+    <div class="sale-card">
+      <span class="sale-badge">-34%</span>
+      <div class="sale-emoji">🎮</div>
+      <div class="sale-name">像素马里奥</div>
+      <div class="sale-price-box">
+        <span class="sale-original">¥68</span>
+        <span class="sale-price">¥45</span>
+      </div>
+    </div>
+    <div class="sale-card">
+      <span class="sale-badge">-29%</span>
+      <div class="sale-emoji">🐱</div>
+      <div class="sale-name">三花猫咪</div>
+      <div class="sale-price-box">
+        <span class="sale-original">¥55</span>
+        <span class="sale-price">¥39</span>
+      </div>
+    </div>
+    <div class="sale-card">
+      <span class="sale-badge">-33%</span>
+      <div class="sale-emoji">🌸</div>
+      <div class="sale-name">樱花挂件</div>
+      <div class="sale-price-box">
+        <span class="sale-original">¥48</span>
+        <span class="sale-price">¥32</span>
+      </div>
+    </div>
+    <div class="sale-card">
+      <span class="sale-badge">-31%</span>
+      <div class="sale-emoji">🌙</div>
+      <div class="sale-name">月亮耳环</div>
+      <div class="sale-price-box">
+        <span class="sale-original">¥42</span>
+        <span class="sale-price">¥29</span>
+      </div>
+    </div>
+    <div class="sale-card">
+      <span class="sale-badge">-33%</span>
+      <div class="sale-emoji">💎</div>
+      <div class="sale-name">宝石戒指</div>
+      <div class="sale-price-box">
+        <span class="sale-original">¥88</span>
+        <span class="sale-price">¥59</span>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 40px;">
+    <a href="/collections/all" style="color: var(--gray); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--gray); padding-bottom: 3px;">探索更多商品请进入商店 →</a>
+  </div>
+</section>
+
+<section class="section custom-section" id="custom">
+  <div class="custom-content">
+    <div class="custom-visual">🧚‍♂️</div>
+    <div class="custom-text">
+      <div class="section-tag" style="text-align: left;">CUSTOM MADE</div>
+      <h3>客户定制 · <span>CUSTOM</span></h3>
+      <p>独一无二的拼豆收藏艺术品<br><br>如果你想拥有一件独一无二的拼豆收藏艺术品，我们的拼豆艺术家会满足你的一切需求！</p>
+      <a href="/pages/custom" class="btn-lime">开始定制 →</a>
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="why">
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🫘</div>
+      <h4 class="feature-title">卓越产品供应</h4>
+      <p class="feature-desc">从无数源头工厂筛选最棒的豆子及配件</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚚</div>
+      <h4 class="feature-title">高效物流</h4>
+      <p class="feature-desc">全球5日达，覆盖10+国家/地区</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎨</div>
+      <h4 class="feature-title">精致定制</h4>
+      <p class="feature-desc">艺术家手工制作，每件都包含热情</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎮</div>
+      <h4 class="feature-title">玩家聚集地</h4>
+      <p class="feature-desc">专属于全球拼豆爱好者的潮流社区</p>
+      <span class="feature-tag">即将上线：玩家家园系统</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+  }
+  
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.remove('active');
+    });
+  });
+</script>

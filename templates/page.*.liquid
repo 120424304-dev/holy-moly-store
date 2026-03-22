@@ -1,0 +1,43 @@
+<div class="generic-page">
+  <div class="generic-page-content">
+    {% if page.title != blank %}
+      <h1 class="page-title">{{ page.title }}</h1>
+    {% endif %}
+    <div class="page-body">
+      {{ page.content }}
+    </div>
+  </div>
+</div>
+
+<style>
+.generic-page {
+  background: var(--pixel-dark);
+  min-height: 100vh;
+  padding: 120px 20px 80px;
+}
+.generic-page-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.page-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(20px, 4vw, 32px);
+  color: var(--pixel-yellow);
+  margin-bottom: 32px;
+  text-shadow: 3px 3px 0 var(--pixel-pink);
+}
+.page-body {
+  color: rgba(255,255,255,0.7);
+  font-size: 15px;
+  line-height: 1.8;
+}
+.page-body h2 {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  color: var(--pixel-yellow);
+  margin: 40px 0 16px;
+}
+.page-body p { margin-bottom: 16px; }
+.page-body a { color: var(--pixel-cyan); text-decoration: underline; }
+.page-body img { border-radius: 12px; margin: 20px 0; }
+</style>
