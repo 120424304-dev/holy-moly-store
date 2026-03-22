@@ -167,21 +167,42 @@
             position: relative;
         }
 
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(240,255,10,0.1) 0%, transparent 70%);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
         .hero-tagline {
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 500;
             letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--pink);
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 {
             font-size: clamp(60px, 12vw, 140px);
             font-weight: 900;
-            letter-spacing: -3px;
+            letter-spacing: -2px;
             line-height: 1;
             margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .hero h1 .lime { 
@@ -195,15 +216,19 @@
         .hero-subtitle {
             font-size: clamp(16px, 2vw, 20px);
             font-weight: 400;
-            color: var(--gray);
+            color: rgba(0,0,0,0.7);
             max-width: 600px;
             line-height: 1.8;
             margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
         }
 
         .hero-ctas {
             display: flex;
             gap: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .btn-lime {
@@ -244,27 +269,6 @@
             box-shadow: 0 10px 40px rgba(255,0,125,0.4);
         }
 
-        /* ===== Lime Banner ===== */
-        .lime-banner {
-            background: var(--lime);
-            padding: 80px 60px;
-            text-align: center;
-        }
-
-        .lime-banner h2 {
-            font-size: clamp(20px, 4vw, 36px);
-            font-weight: 800;
-            color: var(--black);
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .lime-banner p {
-            font-size: 18px;
-            color: var(--black);
-            font-weight: 600;
-        }
-
         /* ===== Section Common ===== */
         .section {
             padding: 100px 60px;
@@ -290,7 +294,28 @@
             letter-spacing: -1px;
         }
 
-        /* ===== Hot Products ===== */
+        /* ===== Lime Banner ===== */
+        .lime-banner {
+            background: var(--lime);
+            padding: 80px 60px;
+            text-align: center;
+        }
+
+        .lime-banner h2 {
+            font-size: clamp(20px, 4vw, 36px);
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .lime-banner p {
+            font-size: 18px;
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        /* ===== Hot Products - Dark Section ===== */
         .hot-section {
             background: var(--gray-light);
         }
@@ -620,7 +645,7 @@
 
         .footer-social a:hover {
             background: var(--lime);
-            transform: translateY(-5px) rotate(10deg);
+            transform: translateY(-5px);
         }
 
         .footer-copy {
@@ -637,7 +662,6 @@
 
         @media (max-width: 768px) {
             .nav { padding: 15px 20px; }
-            .nav-links { display: none; }
             .section { padding: 60px 20px; }
             .products-grid { grid-template-columns: 1fr; }
             .sale-grid { grid-template-columns: repeat(2, 1fr); }
@@ -734,7 +758,7 @@
                 </div>
             </div>
         </div>
-        <div style="text-align: center; margin-top: 40px;">
+        <div style="text-align: center; margin-top: 50px;">
             <a href="#shop" style="color: var(--gray); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--gray); padding-bottom: 3px;">探索更多商品请进入商店 →</a>
         </div>
     </section>
@@ -792,6 +816,9 @@
                 </div>
             </div>
         </div>
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="#shop" style="color: var(--gray); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--gray); padding-bottom: 3px;">探索更多商品请进入商店 →</a>
+        </div>
     </section>
 
     <!-- Custom Section -->
@@ -804,9 +831,6 @@
                 <p>独一无二的拼豆收藏艺术品<br><br>如果你想拥有一件独一无二的拼豆收藏艺术品，我们的拼豆艺术家会满足你的一切需求！</p>
                 <a href="#" class="btn-lime">开始定制 →</a>
             </div>
-        </div>
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="#shop" style="color: var(--gray); text-decoration: none; font-size: 14px; border-bottom: 1px solid var(--gray); padding-bottom: 3px;">探索更多商品请进入商店 →</a>
         </div>
     </section>
 
