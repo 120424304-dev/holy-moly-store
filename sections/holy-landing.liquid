@@ -1,6 +1,12 @@
 {{ 'theme.css' | asset_url | stylesheet_tag }}
 
 <section class="hero" id="home">
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="{{ 'hero-video.mp4' | asset_url }}" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
+  </div>
   <div class="hero-tagline">✨ 点亮创意 传递快乐</div>
   <h1><span class="lime">HOLY</span> <span class="pink">MOLY</span></h1>
   <p class="hero-subtitle">
