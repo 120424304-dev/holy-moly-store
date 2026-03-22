@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLY MOLY · 手工拼豆艺术品聚集地</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #000000;
+            --white: #FFFFFF;
+            --yellow: #FFE600;
+            --pink: #FF2D7D;
+            --cyan: #00D9FF;
+            --gray: #1A1A1A;
+            --gray-light: #2A2A2A;
+        }
+
+        body {
+            font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* ===== Navigation ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+        }
+
+        .nav-logo {
+            font-weight: 900;
+            font-size: 28px;
+            letter-spacing: 2px;
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--yellow);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 50px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--yellow);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-icons a {
+            color: var(--white);
+            font-size: 20px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--pink);
+            color: var(--black);
+            font-size: 10px;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,230,0,0.1) 0%, transparent 70%);
+            animation: pulse 4s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-tagline {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--yellow);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(60px, 12vw, 140px);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .yellow { color: var(--yellow); }
+        .hero h1 .pink { color: var(--pink); }
+        .hero h1 .cyan { color: var(--cyan); }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            font-weight: 400;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-yellow {
+            padding: 18px 50px;
+            background: var(--yellow);
+            color: var(--black);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-yellow:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(255,230,0,0.4);
+        }
+
+        .btn-outline {
+            padding: 18px 50px;
+            background: transparent;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 50px;
+            border: 2px solid var(--white);
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        /* ===== Section Common ===== */
+        .section {
+            padding: 120px 60px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-tag {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--yellow);
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* ===== Yellow Banner ===== */
+        .yellow-banner {
+            background: var(--yellow);
+            padding: 100px 60px;
+            text-align: center;
+        }
+
+        .yellow-banner h2 {
+            font-size: clamp(24px, 4vw, 40px);
+            font-weight: 800;
+            color: var(--black);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .yellow-banner p {
+            font-size: 18px;
+            color: var(--black);
+            opacity: 0.7;
+        }
+
+        /* ===== Hot Products - Dark Section ===== */
+        .hot-section {
+            background: var(--gray);
+        }
+
+        .products-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .product-card {
+            background: var(--black);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--yellow), var(--pink), var(--cyan));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-image {
+            aspect-ratio: 1;
+            background: var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+        }
+
+        .product-info {
+            padding: 30px;
+        }
+
+        .product-category {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--yellow);
+            margin-bottom: 10px;
+        }
+
+        .product-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-rating {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .product-price {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--yellow);
+        }
+
+        /* ===== Sale Section ===== */
+        .sale-section {
+            background: var(--black);
+        }
+
+        .sale-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+        }
+
+        .sale-card {
+            background: var(--gray);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sale-card:hover {
+            transform: scale(1.05);
+            background: var(--gray-light);
+        }
+
+        .sale-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--pink);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .sale-emoji {
+            font-size: 70px;
+            margin-bottom: 15px;
+        }
+
+        .sale-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .sale-price-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sale-original {
+            text-decoration: line-through;
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+
+        .sale-price {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--pink);
+        }
+
+        /* ===== Custom Section ===== */
+        .custom-section {
+            background: linear-gradient(135deg, var(--gray) 0%, var(--black) 100%);
+        }
+
+        .custom-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .custom-visual {
+            aspect-ratio: 1;
+            background: var(--yellow);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-visual::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.05) 10px,
+                rgba(0,0,0,0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translate(-50%, -50%); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .custom-text h3 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .custom-text h3 span {
+            color: var(--yellow);
+        }
+
+        .custom-text p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        /* ===== Features Section ===== */
+        .features-section {
+            background: var(--yellow);
+            padding: 100px 60px;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .feature-card {
+            text-align: center;
+            color: var(--black);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: 0 auto 25px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--black);
+            color: var(--yellow);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: var(--black);
+            border-top: 1px solid var(--gray-light);
+            padding: 80px 60px 40px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo span {
+            color: var(--yellow);
+        }
+
+        .footer-tagline {
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--yellow);
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .footer-social a {
+            width: 50px;
+            height: 50px;
+            background: var(--gray);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .footer-social a:hover {
+            background: var(--yellow);
+            transform: translateY(-5px);
+        }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.3);
+            font-size: 13px;
+        }
+
+        /* ===== Mobile ===== */
+        @media (max-width: 1024px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .sale-grid { grid-template-columns: repeat(3, 1fr); }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav { padding: 15px 20px; }
+            .nav-links { display: none; }
+            .section { padding: 80px 20px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .sale-grid { grid-template-columns: repeat(2, 1fr); }
+            .features-grid { grid-template-columns: 1fr; }
+            .custom-content { grid-template-columns: 1fr; }
+            .hero-ctas { flex-direction: column; width: 100%; max-width: 280px; }
+            .btn-yellow, .btn-outline { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#" class="nav-logo">HOLY<span>MOLY</span></a>
+        <ul class="nav-links">
+            <li><a href="#home">主页</a></li>
+            <li><a href="#shop">商店</a></li>
+            <li><a href="#custom">定制化</a></li>
+            <li><a href="#community">社区</a></li>
+        </ul>
+        <div class="nav-icons">
+            <a href="#">👤</a>
+            <a href="#">
+                🛒
+                <span class="cart-badge">3</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-tagline">✨ 点亮创意 传递快乐</div>
+        <h1><span class="yellow">HOLY</span> <span class="pink">MOLY</span></h1>
+        <p class="hero-subtitle">
+            手工拼豆艺术品聚集地<br>
+            如果你想获得卓越的拼豆体验以及购买拼豆艺术收藏品，那就请选择 HOLY MOLY 吧！
+        </p>
+        <div class="hero-ctas">
+            <a href="#shop" class="btn-yellow">进入商店</a>
+            <a href="#custom" class="btn-outline">开始定制</a>
+        </div>
+    </section>
+
+    <!-- Yellow Banner -->
+    <section class="yellow-banner">
+        <h2>TO LIGHT UP PASSION AND BRING JOY</h2>
+        <p>创造潮流 传递美好</p>
+    </section>
+
+    <!-- Hot Products -->
+    <section class="section hot-section" id="hot">
+        <div class="section-header">
+            <div class="section-tag">TOP SELLING</div>
+            <h2 class="section-title">热门魔法藏品 · TOP 3</h2>
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">🌟</div>
+                <div class="product-info">
+                    <div class="product-category">KEYCHAIN</div>
+                    <h3 class="product-name">星光护身符</h3>
+                    <div class="product-meta">
+                        <span class="product-rating">⭐ 4.9 · 已售 999+</span>
+                        <span class="product-price">¥45</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">🍄</div>
+                <div class="product-info">
+                    <div class="product-category">MAGNET</div>
+                    <h3 class="product-name">蘑菇小屋</h3>
+                    <div class="product-meta">
+                        <span class="product-rating">⭐ 4.8 · 已售 856</span>
+                        <span class="product-price">¥38</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">🦋</div>
+                <div class="product-info">
+                    <div class="product-category">BROOCH</div>
+                    <h3 class="product-name">蓝闪蝶</h3>
+                    <div class="product-meta">
+                        <span class="product-rating">⭐ 5.0 · 已售 723</span>
+                        <span class="product-price">¥52</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sale Section -->
+    <section class="section sale-section" id="sale">
+        <div class="section-header">
+            <div class="section-tag">SPECIAL OFFER</div>
+            <h2 class="section-title">限时魔法特惠</h2>
+        </div>
+        <div class="sale-grid">
+            <div class="sale-card">
+                <span class="sale-badge">-34%</span>
+                <div class="sale-emoji">🎮</div>
+                <div class="sale-name">像素马里奥</div>
+                <div class="sale-price-box">
+                    <span class="sale-original">¥68</span>
+                    <span class="sale-price">¥45</span>
+                </div>
+            </div>
+            <div class="sale-card">
+                <span class="sale-badge">-29%</span>
+                <div class="sale-emoji">🐱</div>
+                <div class="sale-name">三花猫咪</div>
+                <div class="sale-price-box">
+                    <span class="sale-original">¥55</span>
+                    <span class="sale-price">¥39</span>
+                </div>
+            </div>
+            <div class="sale-card">
+                <span class="sale-badge">-33%</span>
+                <div class="sale-emoji">🌸</div>
+                <div class="sale-name">樱花挂件</div>
+                <div class="sale-price-box">
+                    <span class="sale-original">¥48</span>
+                    <span class="sale-price">¥32</span>
+                </div>
+            </div>
+            <div class="sale-card">
+                <span class="sale-badge">-31%</span>
+                <div class="sale-emoji">🌙</div>
+                <div class="sale-name">月亮耳环</div>
+                <div class="sale-price-box">
+                    <span class="sale-original">¥42</span>
+                    <span class="sale-price">¥29</span>
+                </div>
+            </div>
+            <div class="sale-card">
+                <span class="sale-badge">-33%></span>
+                <div class="sale-emoji">💎</div>
+                <div class="sale-name">宝石戒指</div>
+                <div class="sale-price-box">
+                    <span class="sale-original">¥88</span>
+                    <span class="sale-price">¥59</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Custom Section -->
+    <section class="section custom-section" id="custom">
+        <div class="custom-content">
+            <div class="custom-visual">🧚‍♂️</div>
+            <div class="custom-text">
+                <div class="section-tag" style="text-align: left;">CUSTOM MADE</div>
+                <h3>客户定制 · <span>CUSTOM</span></h3>
+                <p>独一无二的拼豆收藏艺术品<br><br>如果你想拥有一件独一无二的拼豆收藏艺术品，我们的拼豆艺术家会满足你的一切需求！</p>
+                <a href="#" class="btn-yellow">开始定制 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section" id="why">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🫘</div>
+                <h4 class="feature-title">卓越产品供应</h4>
+                <p class="feature-desc">从无数源头工厂筛选最棒的豆子及配件</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h4 class="feature-title">高效物流</h4>
+                <p class="feature-desc">全球5日达，覆盖10+国家/地区</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h4 class="feature-title">精致定制</h4>
+                <p class="feature-desc">艺术家手工制作，每件都包含热情</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h4 class="feature-title">玩家聚集地</h4>
+                <p class="feature-desc">专属于全球拼豆爱好者的潮流社区</p>
+                <span class="feature-tag">即将上线：玩家家园系统</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">HOLY<span>MOLY</span></div>
+            <p class="footer-tagline">手工拼豆艺术品聚集地</p>
+            <div class="footer-links">
+                <a href="#home">主页</a>
+                <a href="#shop">商店</a>
+                <a href="#custom">定制化</a>
+                <a href="#community">社区</a>
+                <a href="#contact">联系我们</a>
+            </div>
+            <div class="footer-social">
+                <a>💬</a>
+                <a>📕</a>
+                <a>📝</a>
+                <a>📺</a>
+            </div>
+            <p class="footer-copy">© 2024 HOLY MOLY 魔法拼豆工坊 — 蓝蓝为你守护 ✨</p>
+        </div>
+    </footer>
+</body>
+</html>

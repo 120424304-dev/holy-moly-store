@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOLY MOLY - 手工拼豆艺术品聚集地</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep-1: #1a1a3e;
+            --bg-deep-2: #0f0f2a;
+            --magic-blue: #4facfe;
+            --magic-purple: #9b59b6;
+            --star-gold: #ffeaa7;
+            --text-white: #f5f6fa;
+            --promo-red: #ff6b6b;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, var(--bg-deep-1) 0%, var(--bg-deep-2) 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== 星星Canvas背景 ===== */
+        #star-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ===== 萤火虫 ===== */
+        .fireflies-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .firefly {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ffeaa7 0%, rgba(255, 234, 167, 0) 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffeaa7, 0 0 20px #ffeaa7, 0 0 30px #ffd700;
+            animation: firefly-float 15s infinite ease-in-out;
+        }
+
+        @keyframes firefly-float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            25% {
+                transform: translate(30px, -50px) scale(1.2);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-20px, -80px) scale(1);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translate(40px, -30px) scale(1.3);
+                opacity: 0.9;
+            }
+        }
+
+        /* ===== 导航栏 ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            background: linear-gradient(180deg, rgba(26, 26, 62, 0.95) 0%, rgba(26, 26, 62, 0.7) 60%, transparent 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* 蓝精灵SVG */
+        .smurf-mushroom {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+
+        .smurf-mushroom svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 10px rgba(79, 172, 254, 0.5));
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--magic-blue) 0%, #00f2fe 50%, var(--star-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+            animation: logo-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logo-glow {
+            0% { filter: brightness(1) drop-shadow(0 0 10px rgba(79, 172, 254, 0.5)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(79, 172, 254, 0.8)); }
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 400;
+            position: relative;
+            padding: 5px 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--magic-blue), var(--star-gold));
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--magic-blue);
+            text-shadow: 0 0 10px rgba(79, 172, 254, 0.8);
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: var(--text-white);
+            stroke-width: 2;
+            transition: stroke 0.3s ease;
+        }
+
+        .cart-icon:hover svg {
+            stroke: var(--magic-blue);
+            filter: drop-shadow(0 0 8px rgba(79, 172, 254, 0.8));
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: linear-gradient(135deg, var(--promo-red) 0%, #ff4757 100%);
+            color: white;
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.5);
+            animation: cart-pulse 2s infinite;
+        }
+
+        @keyframes cart-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* ===== 通用区块样式 ===== */
+        section {
+            position: relative;
+            z-index: 2;
+            padding: 80px 5%;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--magic-blue) 0%, #00f2fe 50%, var(--star-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: rgba(245, 246, 250, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+        }
+
+        /* ===== Hero区域 ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: hero-glow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes hero-glow {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--magic-blue) 0%, #00f2fe 30%, var(--star-gold) 60%, #fff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 50px rgba(79, 172, 254, 0.5);
+            animation: hero-title-glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes hero-title-glow {
+            0% { filter: brightness(1) drop-shadow(0 0 20px rgba(79, 172, 254, 0.5)); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(79, 172, 254, 0.8)); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--text-white);
+            margin-bottom: 25px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-slogan {
+            max-width: 700px;
+            font-size: 1.1rem;
+            color: rgba(245, 246, 250, 0.8);
+            line-height: 1.8;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--magic-blue) 0%, #9b59b6 100%);
+            color: white;
+            box-shadow: 0 5px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(79, 172, 254, 0.6);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--magic-blue);
+            color: var(--magic-blue);
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+        }
+
+        /* ===== 热门产品 ===== */
+        .products-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(79, 172, 254, 0.03) 50%, transparent 100%);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.5), transparent);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(79, 172, 254, 0.2), 0 0 30px rgba(79, 172, 254, 0.1);
+            border-color: rgba(79, 172, 254, 0.3);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::after {
+            content: '产品图片';
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-rank {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--star-gold) 0%, #ffd700 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #1a1a3e;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(255, 234, 167, 0.4);
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            color: var(--text-white);
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--star-gold) 0%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--star-gold);
+        }
+
+        .product-sales {
+            color: rgba(245, 246, 250, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%);
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            border-radius: 10px;
+            color: var(--magic-blue);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-cart:hover {
+            background: linear-gradient(135deg, var(--magic-blue) 0%, #9b59b6 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(79, 172, 254, 0.4);
+        }
+
+        /* ===== 促销区域 ===== */
+        .promo-section {
+            background: linear-gradient(180deg, rgba(255, 107, 107, 0.03) 0%, transparent 100%);
+        }
+
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .promo-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .promo-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.15);
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--promo-red) 0%, #ff4757 100%);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            z-index: 2;
+            animation: badge-pulse 2s infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8); }
+        }
+
+        .promo-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(79, 172, 254, 0.1) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .promo-image::after {
+            content: '促销商品';
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .promo-info {
+            padding: 15px;
+        }
+
+        .promo-name {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .promo-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: rgba(245, 246, 250, 0.4);
+            font-size: 0.9rem;
+        }
+
+        .current-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--promo-red);
+        }
+
+        /* ===== 客户定制 ===== */
+        .custom-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(79, 172, 254, 0.02) 50%, transparent 100%);
+        }
+
+        .custom-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .custom-image {
+            position: relative;
+        }
+
+        .custom-image-frame {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.15);
+        }
+
+        .custom-image-placeholder {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(155, 89, 182, 0.1) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-image-placeholder::after {
+            content: '定制展示';
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .custom-text h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--magic-blue) 0%, var(--star-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .custom-text p {
+            color: rgba(245, 246, 250, 0.8);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+
+        .custom-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .custom-features li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            color: rgba(245, 246, 250, 0.9);
+        }
+
+        .custom-features li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+
+        /* ===== 为什么选择 ===== */
+        .features-section {
+            background: linear-gradient(180deg, rgba(155, 89, 182, 0.03) 0%, transparent 100%);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(79, 172, 254, 0.3);
+            box-shadow: 0 20px 50px rgba(79, 172, 254, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(155, 89, 182, 0.2) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-white);
+        }
+
+        .feature-card p {
+            color: rgba(245, 246, 250, 0.7);
+            line-height: 1.6;
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            background: linear-gradient(180deg, rgba(15, 15, 42, 0.95) 0%, #0f0f2a 100%);
+            border-top: 1px solid rgba(79, 172, 254, 0.1);
+            padding: 60px 5% 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h5 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--magic-blue);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: rgba(245, 246, 250, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--magic-blue);
+            padding-left: 5px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            background: rgba(79, 172, 254, 0.2);
+            border-color: var(--magic-blue);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(245, 246, 250, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 响应式设计 ===== */
+        @media (max-width: 1024px) {
+            .custom-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 15px 3%;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+                letter-spacing: 4px;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            section {
+                padding: 60px 3%;
+            }
+        }
+
+        /* ===== 滚动动画 ===== */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 星星Canvas -->
+    <canvas id="star-canvas"></canvas>
+
+    <!-- 萤火虫容器 -->
+    <div class="fireflies-container" id="fireflies"></div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="smurf-mushroom">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 蘑菇 -->
+                    <ellipse cx="50" cy="75" rx="25" ry="20" fill="#8B4513"/>
+                    <ellipse cx="50" cy="75" rx="15" ry="12" fill="#A0522D"/>
+                    <!-- 蘑菇伞 -->
+                    <path d="M20 65 Q20 25 50 20 Q80 25 80 65 Z" fill="#FF6B6B"/>
+                    <ellipse cx="50" cy="65" rx="30" ry="8" fill="#FFE4E1"/>
+                    <!-- 蘑菇斑点 -->
+                    <circle cx="35" cy="45" r="5" fill="white" opacity="0.8"/>
+                    <circle cx="65" cy="40" r="4" fill="white" opacity="0.8"/>
+                    <circle cx="50" cy="35" r="3" fill="white" opacity="0.8"/>
+                    <!-- 蓝精灵身体 -->
+                    <ellipse cx="50" cy="55" rx="12" ry="15" fill="#4FACFE"/>
+                    <!-- 蓝精灵头 -->
+                    <circle cx="50" cy="42" r="10" fill="#4FACFE"/>
+                    <!-- 帽子 -->
+                    <path d="M40 40 Q35 25 45 20 Q50 15 55 20 Q60 30 60 40" fill="white"/>
+                    <ellipse cx="50" cy="40" rx="10" ry="3" fill="white"/>
+                    <!-- 眼睛 -->
+                    <circle cx="47" cy="42" r="2" fill="black"/>
+                    <circle cx="53" cy="42" r="2" fill="black"/>
+                    <circle cx="47.5" cy="41.5" r="0.7" fill="white"/>
+                    <circle cx="53.5" cy="41.5" r="0.7" fill="white"/>
+                    <!-- 鼻子 -->
+                    <ellipse cx="50" cy="45" rx="2" ry="1.5" fill="#2E86AB"/>
+                    <!-- 嘴巴 -->
+                    <path d="M47 47 Q50 49 53 47" stroke="black" stroke-width="0.5" fill="none"/>
+                </svg>
+            </div>
+            <div class="logo">HOLY MOLY</div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#home">主页</a></li>
+            <li><a href="#shop">商店</a></li>
+            <li><a href="#custom">定制化</a></li>
+            <li><a href="#community">社区</a></li>
+            <li><a href="#user">用户</a></li>
+        </ul>
+        <div class="nav-right">
+            <div class="cart-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 2C9 1.44772 9.44772 1 10 1H14C14.5523 1 15 1.44772 15 2V5H9V2Z"/>
+                    <path d="M3 7C3 6.44772 3.44772 6 4 6H20C20.5523 6 21 6.44772 21 7C21 7.55228 20.5523 8 20 8H19.3333L18.2222 20.2C18.0974 21.7464 16.7957 23 15.2222 23H8.77778C7.20431 23 5.90264 21.7464 5.77778 20.2L4.66667 8H4C3.44772 8 3 7.55228 3 7Z"/>
+                </svg>
+                <span class="cart-badge">3</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero区域 -->
+    <section class="hero" id="home">
+        <h1 class="hero-title">HOLY MOLY</h1>
+        <p class="hero-subtitle">手工拼豆艺术品聚集地</p>
+        <p class="hero-slogan">如果你想获得卓越的拼豆体验以及购买拼豆艺术收藏品，那就请选择HOLY MOLY吧！我们致力于为每一位艺术爱好者提供最优质的拼豆材料和独一无二的设计作品。</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary">立即探索</button>
+            <button class="btn btn-secondary">了解更多</button>
+        </div>
+    </section>
+
+    <!-- 热门产品TOP 3 -->
+    <section class="products-section" id="shop">
+        <h2 class="section-title animate-on-scroll">热门产品 TOP 3</h2>
+        <p class="section-subtitle animate-on-scroll">精选最受欢迎的拼豆艺术品</p>
+        <div class="products-grid">
+            <div class="product-card animate-on-scroll">
+                <div class="product-image">
+                    <span class="product-rank">1</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">星空蓝精灵限量版套装</h3>
+                    <div class="product-meta">
+                        <span class="product-price">¥299</span>
+                        <div class="product-rating">
+                            <span>★★★★★</span>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <p class="product-sales">已售出 2,847 件</p>
+                    <button class="btn-add-cart">加入购物车</button>
+                </div>
+            </div>
+            <div class="product-card animate-on-scroll">
+                <div class="product-image">
+                    <span class="product-rank">2</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">魔法森林系列拼豆套装</h3>
+                    <div class="product-meta">
+                        <span class="product-price">¥199</span>
+                        <div class="product-rating">
+                            <span>★★★★★</span>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <p class="product-sales">已售出 1,956 件</p>
+                    <button class="btn-add-cart">加入购物车</button>
+                </div>
+            </div>
+            <div class="product-card animate-on-scroll">
+                <div class="product-image">
+                    <span class="product-rank">3</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">彩虹独角兽拼豆挂饰</h3>
+                    <div class="product-meta">
+                        <span class="product-price">¥89</span>
+                        <div class="product-rating">
+                            <span>★★★★☆</span>
+                            <span>4.7</span>
+                        </div>
+                    </div>
+                    <p class="product-sales">已售出 3,521 件</p>
+                    <button class="btn-add-cart">加入购物车</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 促销中 -->
+    <section class="promo-section">
+        <h2 class="section-title animate-on-scroll">🔥 促销中</h2>
+        <p class="section-subtitle animate-on-scroll">限时特惠，不容错过</p>
+        <div class="promo-grid">
+            <div class="promo-card animate-on-scroll">
+                <span class="discount-badge">-30%</span>
+                <div class="promo-image"></div>
+                <div class="promo-info">
+                    <h4 class="promo-name">蓝精灵基础套装</h4>
+                    <div class="promo-price">
+                        <span class="original-price">¥149</span>
+                        <span class="current-price">¥104</span>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-card animate-on-scroll">
+                <span class="discount-badge">-50%</span>
+                <div class="promo-image"></div>
+                <div class="promo-info">
+                    <h4 class="promo-name">圣诞限定礼盒</h4>
+                    <div class="promo-price">
+                        <span class="original-price">¥399</span>
+                        <span class="current-price">¥199</span>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-card animate-on-scroll">
+                <span class="discount-badge">-25%</span>
+                <div class="promo-image"></div>
+                <div class="promo-info">
+                    <h4 class="promo-name">梦幻花园系列</h4>
+                    <div class="promo-price">
+                        <span class="original-price">¥259</span>
+                        <span class="current-price">¥194</span>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-card animate-on-scroll">
+                <span class="discount-badge">-40%</span>
+                <div class="promo-image"></div>
+                <div class="promo-info">
+                    <h4 class="promo-name">精灵小屋模型</h4>
+                    <div class="promo-price">
+                        <span class="original-price">¥329</span>
+                        <span class="current-price">¥197</span>
+                    </div>
+                </div>
+            </div>
+            <div class="promo-card animate-on-scroll">
+                <span class="discount-badge">-35%</span>
+                <div class="promo-image"></div>
+                <div class="promo-info">
+                    <h4 class="promo-name">星空挂饰套装</h4>
+                    <div class="promo-price">
+                        <span class="original-price">¥199</span>
+                        <span class="current-price">¥129</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 客户定制 -->
+    <section class="custom-section" id="custom">
+        <h2 class="section-title animate-on-scroll">客户定制</h2>
+        <p class="section-subtitle animate-on-scroll">打造专属于你的独特作品</p>
+        <div class="custom-content">
+            <div class="custom-image animate-on-scroll">
+                <div class="custom-image-frame">
+                    <div class="custom-image-placeholder"></div>
+                </div>
+            </div>
+            <div class="custom-text animate-on-scroll">
+                <h3>专属定制服务</h3>
+                <p>我们提供一对一的专属定制服务，将你的创意变为现实。无论是个人肖像、宠物形象，还是特殊主题的设计，我们的专业团队都能为你精心打造。</p>
+                <ul class="custom-features">
+                    <li>专业设计师一对一沟通</li>
+                    <li>高品质进口拼豆材料</li>
+                    <li>精密封装，持久保存</li>
+                    <li>专属定制包装礼盒</li>
+                </ul>
+                <button class="btn btn-primary">开始定制</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 为什么选择HOLY MOLY -->
+    <section class="features-section">
+        <h2 class="section-title animate-on-scroll">为什么选择 HOLY MOLY</h2>
+        <p class="section-subtitle animate-on-scroll">我们用心做好每一个细节</p>
+        <div class="features-grid">
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">🎨</div>
+                <h4>原创设计</h4>
+                <p>所有产品均为原创设计，与知名IP合作，确保每一件作品都独一无二</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">✨</div>
+                <h4>优质材料</h4>
+                <p>精选进口拼豆材料，色彩饱满持久，无毒环保，让您安心创作</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">🚀</div>
+                <h4>快速发货</h4>
+                <p>现货24小时内发货，全国包邮，让等待不再漫长</p>
+            </div>
+            <div class="feature-card animate-on-scroll">
+                <div class="feature-icon">💝</div>
+                <h4>贴心服务</h4>
+                <p>7x24小时客服在线，30天无理由退换，让您购物无忧</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>关于我们</h5>
+                <ul>
+                    <li><a href="#">品牌故事</a></li>
+                    <li><a href="#">设计理念</a></li>
+                    <li><a href="#">加入我们</a></li>
+                    <li><a href="#">联系方式</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h5>购物指南</h5>
+                <ul>
+                    <li><a href="#">新手指南</a></li>
+                    <li><a href="#">常见问题</a></li>
+                    <li><a href="#">配送说明</a></li>
+                    <li><a href="#">退换政策</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h5>社区互动</h5>
+                <ul>
+                    <li><a href="#">作品展示</a></li>
+                    <li><a href="#">教程分享</a></li>
+                    <li><a href="#">活动资讯</a></li>
+                    <li><a href="#">会员中心</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h5>关注我们</h5>
+                <div class="social-links">
+                    <div class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </div>
+                    <div class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </div>
+                    <div class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/>
+                        </svg>
+                    </div>
+                    <div class="social-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                            <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 01.213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 00.167-.054l1.903-1.114a.864.864 0 01.717-.098 10.16 10.16 0 002.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178A1.17 1.17 0 014.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 01-1.162 1.178 1.17 1.17 0 01-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 01.598.082l1.584.926a.272.272 0 00.14.045c.134 0 .24-.11.24-.245 0-.06-.024-.12-.04-.178l-.327-1.233a.49.49 0 01.177-.553C23.256 18.449 24 16.811 24 14.997c0-3.42-3.166-6.139-7.062-6.139zm-2.652 3.099c.535 0 .969.44.969.983a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.983.97-.983zm4.844 0c.535 0 .969.44.969.983a.976.976 0 01-.969.983.976.976 0 01-.969-.983c0-.542.434-.983.97-.983z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 HOLY MOLY. All rights reserved. | 手工拼豆艺术品聚集地</p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== 星星Canvas动画 =====
+        const starCanvas = document.getElementById('star-canvas');
+        const ctx = starCanvas.getContext('2d');
+        let stars = [];
+        const numStars = 200;
+
+        function resizeCanvas() {
+            starCanvas.width = window.innerWidth;
+            starCanvas.height = window.innerHeight;
+        }
+
+        class Star {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * starCanvas.width;
+                this.y = Math.random() * starCanvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.opacity = Math.random();
+                this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+                this.twinkleDir = Math.random() > 0.5 ? 1 : -1;
+            }
+
+            update() {
+                this.opacity += this.twinkleSpeed * this.twinkleDir;
+                if (this.opacity >= 1 || this.opacity <= 0.2) {
+                    this.twinkleDir *= -1;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 234, 167, ${this.opacity})`;
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = '#ffeaa7';
+                ctx.fill();
+            }
+        }
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+            requestAnimationFrame(animateStars);
+        }
+
+        resizeCanvas();
+        initStars();
+        animateStars();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initStars();
+        });
+
+        // ===== 萤火虫生成 =====
+        const firefliesContainer = document.getElementById('fireflies');
+        const numFireflies = 20;
+
+        for (let i = 0; i < numFireflies; i++) {
+            const firefly = document.createElement('div');
+            firefly.className = 'firefly';
+            firefly.style.left = Math.random() * 100 + '%';
+            firefly.style.top = Math.random() * 100 + '%';
+            firefly.style.animationDelay = Math.random() * 15 + 's';
+            firefly.style.animationDuration = (15 + Math.random() * 10) + 's';
+            firefliesContainer.appendChild(firefly);
+        }
+
+        // ===== 滚动动画 =====
+        const animateElements = document.querySelectorAll('.animate-on-scroll');
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        animateElements.forEach(el => observer.observe(el));
+
+        // ===== 导航栏滚动效果 =====
+        const navbar = document.querySelector('.navbar');
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(26, 26, 62, 0.98)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'linear-gradient(180deg, rgba(26, 26, 62, 0.95) 0%, rgba(26, 26, 62, 0.7) 60%, transparent 100%)';
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        // ===== 平滑滚动 =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== 按钮点击效果 =====
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // 添加ripple动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ===== 购物车数字动画 =====
+        const cartBadge = document.querySelector('.cart-badge');
+        let cartCount = 3;
+
+        document.querySelectorAll('.btn-add-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                cartCount++;
+                cartBadge.textContent = cartCount;
+                cartBadge.style.animation = 'none';
+                setTimeout(() => {
+                    cartBadge.style.animation = 'cart-pulse 2s infinite';
+                }, 10);
+                
+                // 添加成功提示
+                const toast = document.createElement('div');
+                toast.textContent = '已添加到购物车！';
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: linear-gradient(135deg, #4facfe 0%, #9b59b6 100%);
+                    color: white;
+                    padding: 12px 30px;
+                    border-radius: 30px;
+                    font-size: 14px;
+                    z-index: 10000;
+                    animation: slideUp 0.3s ease;
+                `;
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.animation = 'slideDown 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            });
+        });
+
+        // 添加slide动画
+        const slideStyle = document.createElement('style');
+        slideStyle.textContent = `
+            @keyframes slideUp {
+                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+            @keyframes slideDown {
+                from { opacity: 1; transform: translateX(-50%) translateY(0); }
+                to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            }
+        `;
+        document.head.appendChild(slideStyle);
+
+        console.log('🧚 HOLY MOLY 魔法森林拼豆商店已加载完成！');
+    </script>
+</body>
+</html>
