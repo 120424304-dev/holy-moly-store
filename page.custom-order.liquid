@@ -1,0 +1,486 @@
+<!-- Holy Moly Custom Order Page Template -->
+{% layout 'theme' %}
+
+{{ 'custom-order.css' | asset_url | stylesheet_tag }}
+
+<div id="holy-custom-order">
+  
+  <!-- HERO SECTION -->
+  <section class="hco-hero">
+    <div class="hco-hero-badge">✨ CUSTOM ORDER</div>
+    <h1 class="hco-hero-title">
+      <span>HOLY MOLY</span><br>
+      定制你的像素艺术
+    </h1>
+    <p class="hco-hero-subtitle">
+      把你的创意变成独一无二的拼豆作品<br>
+      照片、文字、图案，我们都能帮你实现
+    </p>
+    <div class="hco-hero-tags">
+      <span class="hco-tag"><span class="hco-tag-icon">📷</span> 照片转拼豆</span>
+      <span class="hco-tag"><span class="hco-tag-icon">📝</span> 文字定制</span>
+      <span class="hco-tag"><span class="hco-tag-icon">🎨</span> 图案设计</span>
+    </div>
+    <div class="hco-hero-buttons">
+      <a href="#custom-form" class="hco-btn hco-btn-primary">开始定制 →</a>
+      <a href="#showcase" class="hco-btn hco-btn-secondary">查看案例</a>
+    </div>
+  </section>
+
+  <!-- TYPE SELECTOR -->
+  <section class="hco-section" id="custom-form">
+    <h2 class="hco-section-title">选择你的定制类型</h2>
+    <div class="hco-type-grid">
+      <div class="hco-type-card" data-type="photo">
+        <div class="hco-type-icon">📷</div>
+        <h3 class="hco-type-name">照片像素化</h3>
+        <p class="hco-type-desc">人像、宠物、风景照片转换成像素拼豆画，适合送礼纪念</p>
+      </div>
+      <div class="hco-type-card" data-type="text">
+        <div class="hco-type-icon">📝</div>
+        <h3 class="hco-type-name">文字拼豆</h3>
+        <p class="hco-type-desc">名字、祝福语、企业LOGO，用拼豆拼出你的专属文字</p>
+      </div>
+      <div class="hco-type-card" data-type="pattern">
+        <div class="hco-type-icon">🎨</div>
+        <h3 class="hco-type-name">图案设计</h3>
+        <p class="hco-type-desc">游戏角色、动漫人物、原创图案，设计师帮你实现创意</p>
+      </div>
+      <div class="hco-type-card" data-type="creative">
+        <div class="hco-type-icon">💡</div>
+        <h3 class="hco-type-name">自由创意</h3>
+        <p class="hco-type-desc">有想法但不确定？描述你的想法，设计师帮你实现</p>
+      </div>
+    </div>
+
+    <!-- FORM CONTAINER -->
+    <div class="hco-form-container" id="form-container" style="display: none;">
+      
+      <!-- Progress Steps -->
+      <div class="hco-steps">
+        <div class="hco-step active" data-step="1">
+          <span class="hco-step-number">1</span>
+          <span class="hco-step-label">选择类型</span>
+        </div>
+        <div class="hco-step" data-step="2">
+          <span class="hco-step-number">2</span>
+          <span class="hco-step-label">填写需求</span>
+        </div>
+        <div class="hco-step" data-step="3">
+          <span class="hco-step-number">3</span>
+          <span class="hco-step-label">获取报价</span>
+        </div>
+      </div>
+
+      <form id="custom-order-form" action="/contact" method="post">
+        <input type="hidden" name="form_type" value="contact">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[subject]" value="Custom Order Request">
+        <input type="hidden" name="contact[type]" id="order-type" value="">
+
+        <!-- BASE INFO -->
+        <div class="hco-form-row">
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">👤</span> 你的称呼
+            </label>
+            <input type="text" name="contact[name]" class="hco-form-input" placeholder="怎么称呼你？" required>
+          </div>
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">📧</span> 联系邮箱
+            </label>
+            <input type="email" name="contact[email]" class="hco-form-input" placeholder="your@email.com" required>
+          </div>
+        </div>
+
+        <div class="hco-form-group">
+          <label class="hco-form-label">
+            <span class="hco-form-label-icon">📅</span> 期望完成时间
+          </label>
+          <select name="contact[deadline]" class="hco-form-select">
+            <option value="normal">不着急，正常制作（5-7天）</option>
+            <option value="urgent">有点急，加急制作（2-3天，+50%）</option>
+            <option value="super-urgent">非常急，超急制作（24小时，+100%）</option>
+          </select>
+        </div>
+
+        <!-- PHOTO TYPE FIELDS -->
+        <div class="hco-form-fields" id="fields-photo">
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">📤</span> 上传图片
+            </label>
+            <div class="hco-upload-area" id="upload-area">
+              <div class="hco-upload-icon">📎</div>
+              <p class="hco-upload-text">点击或拖拽图片到此处</p>
+              <p class="hco-upload-hint">支持 JPG、PNG 格式，最大 10MB</p>
+              <input type="file" name="contact[image]" id="file-input" accept="image/*" multiple hidden>
+            </div>
+            <div class="hco-upload-preview" id="upload-preview"></div>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">📐</span> 成品尺寸
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[size]" value="small" data-price="0">
+                <span class="hco-radio-label">小号 (15x15cm) - 基础价</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[size]" value="medium" data-price="15" checked>
+                <span class="hco-radio-label">中号 (30x30cm) +$15</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[size]" value="large" data-price="35">
+                <span class="hco-radio-label">大号 (50x50cm) +$35</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">🖼️</span> 是否加相框
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[frame]" value="none" data-price="0" checked>
+                <span class="hco-radio-label">不需要</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[frame]" value="wood" data-price="12">
+                <span class="hco-radio-label">木质相框 +$12</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[frame]" value="acrylic" data-price="18">
+                <span class="hco-radio-label">亚克力相框 +$18</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEXT TYPE FIELDS -->
+        <div class="hco-form-fields" id="fields-text">
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">💬</span> 要拼的文字
+            </label>
+            <input type="text" name="contact[text_content]" class="hco-form-input" placeholder="输入名字、祝福语或企业名称...">
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">✍️</span> 字体风格
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[font_style]" value="pixel" checked>
+                <span class="hco-radio-label">像素风</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[font_style]" value="round">
+                <span class="hco-radio-label">圆润体</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[font_style]" value="handwritten">
+                <span class="hco-radio-label">手写风</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[font_style]" value="retro">
+                <span class="hco-radio-label">复古风</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">🌈</span> 配色方案
+            </label>
+            <div class="hco-color-options">
+              <label class="hco-color-item">
+                <input type="radio" name="contact[color_scheme]" value="yellow" checked>
+                <span class="hco-color-label">
+                  <span class="hco-color-dot yellow"></span> 经典黄
+                </span>
+              </label>
+              <label class="hco-color-item">
+                <input type="radio" name="contact[color_scheme]" value="pink">
+                <span class="hco-color-label">
+                  <span class="hco-color-dot pink"></span> 樱花粉
+                </span>
+              </label>
+              <label class="hco-color-item">
+                <input type="radio" name="contact[color_scheme]" value="cyan">
+                <span class="hco-color-label">
+                  <span class="hco-color-dot cyan"></span> 海洋蓝
+                </span>
+              </label>
+              <label class="hco-color-item">
+                <input type="radio" name="contact[color_scheme]" value="rainbow">
+                <span class="hco-color-label">
+                  <span class="hco-color-dot rainbow"></span> 彩虹混
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">📐</span> 成品尺寸
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[text_size]" value="small" data-price="0">
+                <span class="hco-radio-label">小号 (10x10cm) - 基础价</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[text_size]" value="medium" data-price="10" checked>
+                <span class="hco-radio-label">中号 (20x20cm) +$10</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[text_size]" value="large" data-price="25">
+                <span class="hco-radio-label">大号 (30x30cm) +$25</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN TYPE FIELDS -->
+        <div class="hco-form-fields" id="fields-pattern">
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">🎮</span> 图案类型
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[pattern_type]" value="game" checked>
+                <span class="hco-radio-label">游戏角色</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[pattern_type]" value="anime">
+                <span class="hco-radio-label">动漫人物</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[pattern_type]" value="original">
+                <span class="hco-radio-label">原创设计</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">🔗</span> 参考图片链接
+            </label>
+            <input type="url" name="contact[reference_url]" class="hco-form-input" placeholder="https://... (可选)">
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">🎯</span> 用途
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[usage]" value="keychain" data-price="0">
+                <span class="hco-radio-label">钥匙扣 - 基础价</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[usage]" value="ornament" data-price="5" checked>
+                <span class="hco-radio-label">挂件/摆件 +$5</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[usage]" value="decoration" data-price="20">
+                <span class="hco-radio-label">装饰画 +$20</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- CREATIVE TYPE FIELDS -->
+        <div class="hco-form-fields" id="fields-creative">
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">💭</span> 描述你的想法
+            </label>
+            <textarea name="contact[creative_idea]" class="hco-form-textarea" placeholder="请详细描述你想要的拼豆作品，比如主题、风格、配色、用途等，越详细越好..."></textarea>
+          </div>
+
+          <div class="hco-form-group">
+            <label class="hco-form-label">
+              <span class="hco-form-label-icon">💰</span> 预算范围
+            </label>
+            <div class="hco-radio-group">
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[budget]" value="30-50">
+                <span class="hco-radio-label">$30-50</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[budget]" value="50-100" checked>
+                <span class="hco-radio-label">$50-100</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[budget]" value="100-200">
+                <span class="hco-radio-label">$100-200</span>
+              </label>
+              <label class="hco-radio-item">
+                <input type="radio" name="contact[budget]" value="200+">
+                <span class="hco-radio-label">$200+</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMMON FIELDS -->
+        <div class="hco-form-group">
+          <label class="hco-form-label">
+            <span class="hco-form-label-icon">📝</span> 其他要求
+          </label>
+          <textarea name="contact[message]" class="hco-form-textarea" placeholder="还有什么特殊要求或想法？告诉我们..."></textarea>
+        </div>
+
+        <!-- PRICE CALCULATOR -->
+        <div class="hco-price-box">
+          <h3 class="hco-price-title">💰 预估价格</h3>
+          <div class="hco-price-line">
+            <span class="hco-price-label">基础费用</span>
+            <span class="hco-price-value" id="base-price">$35.00</span>
+          </div>
+          <div class="hco-price-line" id="size-line">
+            <span class="hco-price-label">尺寸加成</span>
+            <span class="hco-price-value" id="size-price">+$15.00</span>
+          </div>
+          <div class="hco-price-line" id="addon-line" style="display: none;">
+            <span class="hco-price-label">附加选项</span>
+            <span class="hco-price-value" id="addon-price">+$0.00</span>
+          </div>
+          <div class="hco-price-total">
+            <span class="hco-price-label">预估总价</span>
+            <span class="hco-price-value" id="total-price">$50.00 起</span>
+          </div>
+          <p class="hco-price-note">⚡ 设计师会在 24 小时内联系你，提供准确报价和设计稿</p>
+          <div class="hco-price-action">
+            <button type="submit" class="hco-btn hco-btn-primary">提交需求 获取准确报价 →</button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Success Message -->
+      <div class="hco-success-message" id="success-message">
+        <div class="hco-success-icon">🎉</div>
+        <h3 class="hco-success-title">提交成功！</h3>
+        <p class="hco-success-text">我们已收到你的定制需求，设计师会在 24 小时内联系你。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOWCASE SECTION -->
+  <section class="hco-section" id="showcase">
+    <h2 class="hco-section-title">定制案例</h2>
+    <div class="hco-showcase-grid">
+      <div class="hco-showcase-card">
+        <div class="hco-showcase-image">🐕</div>
+        <div class="hco-showcase-info">
+          <h4 class="hco-showcase-title">柯基宠物肖像</h4>
+          <p class="hco-showcase-price">$65</p>
+          <p class="hco-showcase-rating">★★★★★ 客户超满意</p>
+        </div>
+      </div>
+      <div class="hco-showcase-card">
+        <div class="hco-showcase-image">💕</div>
+        <div class="hco-showcase-info">
+          <h4 class="hco-showcase-title">情侣名字拼豆</h4>
+          <p class="hco-showcase-price">$45</p>
+          <p class="hco-showcase-rating">★★★★★ 纪念日礼物</p>
+        </div>
+      </div>
+      <div class="hco-showcase-card">
+        <div class="hco-showcase-image">🎮</div>
+        <div class="hco-showcase-info">
+          <h4 class="hco-showcase-title">塞尔达林克</h4>
+          <p class="hco-showcase-price">$85</p>
+          <p class="hco-showcase-rating">★★★★★ 游戏迷必备</p>
+        </div>
+      </div>
+      <div class="hco-showcase-card">
+        <div class="hco-showcase-image">🏔️</div>
+        <div class="hco-showcase-info">
+          <h4 class="hco-showcase-title">风景拼豆画</h4>
+          <p class="hco-showcase-price">$120</p>
+          <p class="hco-showcase-rating">★★★★★ 客厅装饰</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ SECTION -->
+  <section class="hco-section">
+    <h2 class="hco-section-title">常见问题</h2>
+    <div class="hco-faq-list">
+      <div class="hco-faq-item">
+        <div class="hco-faq-question">
+          <span>定制周期需要多久？</span>
+          <span class="hco-faq-icon">+</span>
+        </div>
+        <div class="hco-faq-answer">
+          <div class="hco-faq-answer-inner">
+            普通订单 5-7 个工作日，加急订单 2-3 天（加收 50% 费用），超急订单 24 小时（加收 100% 费用）。我们会在收到需求后 24 小时内给你确认具体时间。
+          </div>
+        </div>
+      </div>
+      <div class="hco-faq-item">
+        <div class="hco-faq-question">
+          <span>可以看到设计稿再决定吗？</span>
+          <span class="hco-faq-icon">+</span>
+        </div>
+        <div class="hco-faq-answer">
+          <div class="hco-faq-answer-inner">
+            当然可以！设计师会根据你的需求先出像素效果图，你确认满意后再支付定金开始制作。设计稿阶段可免费修改 3 次。
+          </div>
+        </div>
+      </div>
+      <div class="hco-faq-item">
+        <div class="hco-faq-question">
+          <span>不满意可以退款吗？</span>
+          <span class="hco-faq-icon">+</span>
+        </div>
+        <div class="hco-faq-answer">
+          <div class="hco-faq-answer-inner">
+            设计稿阶段不收取任何费用。确认设计稿并支付定金后，制作过程中不接受退款。如果成品存在质量问题，我们提供免费重做或全额退款。
+          </div>
+        </div>
+      </div>
+      <div class="hco-faq-item">
+        <div class="hco-faq-question">
+          <span>支持邮寄到哪些国家？</span>
+          <span class="hco-faq-icon">+</span>
+        </div>
+        <div class="hco-faq-answer">
+          <div class="hco-faq-answer-inner">
+            我们支持全球邮寄。国内订单包邮，国际订单根据目的地收取 $8-25 运费，通常 7-21 天送达。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="hco-footer">
+    <h3 class="hco-footer-title">有问题？直接联系我们</h3>
+    <div class="hco-footer-contacts">
+      <a href="#" class="hco-contact-link">
+        <span>💬</span> WhatsApp
+      </a>
+      <a href="mailto:hello@holymolybeads.com" class="hco-contact-link">
+        <span>📧</span> Email
+      </a>
+      <a href="#" class="hco-contact-link">
+        <span>📸</span> Instagram
+      </a>
+    </div>
+    <p class="hco-footer-copy">© 2026 Holy Moly Beads. Pixel Perfect.</p>
+  </footer>
+
+</div>
+
+{{ 'custom-order.js' | asset_url | script_tag }}
