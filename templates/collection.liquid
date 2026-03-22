@@ -1,0 +1,475 @@
+{% comment %}
+  Holy Moly Shop Page - 白底柠檬黄绿风格
+{% endcomment %}
+
+<style>
+  :root {
+    --white: #FFFFFF;
+    --black: #1A1A1A;
+    --gray: #666666;
+    --gray-light: #F5F5F5;
+    --lime: #F0FF0A;
+    --pink: #FF007D;
+  }
+
+  .shop-page {
+    padding-top: 100px;
+    min-height: 100vh;
+    background: var(--white);
+  }
+
+  .shop-hero {
+    background: var(--lime);
+    padding: 80px 60px;
+    text-align: center;
+  }
+
+  .shop-hero h1 {
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    color: var(--black);
+    margin-bottom: 15px;
+    font-family: 'Noto Sans SC', sans-serif;
+    letter-spacing: -1px;
+  }
+
+  .shop-hero p {
+    font-size: 18px;
+    color: var(--black);
+    font-weight: 500;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  /* Filters */
+  .shop-filters {
+    padding: 30px 60px;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-light);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .filter-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .filter-select {
+    padding: 10px 20px;
+    border: 2px solid var(--black);
+    border-radius: 30px;
+    font-size: 14px;
+    font-family: 'Noto Sans SC', sans-serif;
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .filter-select:hover {
+    background: var(--lime);
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    padding: 8px 20px;
+    border: 2px solid var(--black);
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Noto Sans SC', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--white);
+  }
+
+  .filter-chip:hover,
+  .filter-chip.active {
+    background: var(--pink);
+    color: var(--white);
+    border-color: var(--pink);
+  }
+
+  /* Products Grid */
+  .products-container {
+    padding: 60px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+  }
+
+  .product-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid var(--gray-light);
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+  }
+
+  .product-image {
+    aspect-ratio: 1;
+    background: var(--gray-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+
+  .product-card:hover .product-image img {
+    transform: scale(1.05);
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--pink);
+    color: var(--white);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .product-actions {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+  }
+
+  .product-card:hover .product-actions {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .action-btn {
+    width: 45px;
+    height: 45px;
+    background: var(--white);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .action-btn:hover {
+    background: var(--lime);
+    transform: scale(1.1);
+  }
+
+  .product-info {
+    padding: 25px;
+  }
+
+  .product-category {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--pink);
+    margin-bottom: 8px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .product-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--black);
+    font-family: 'Noto Sans SC', sans-serif;
+    line-height: 1.4;
+  }
+
+  .product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-price {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--black);
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .product-price .original {
+    font-size: 14px;
+    color: var(--gray);
+    text-decoration: line-through;
+    margin-right: 8px;
+    font-weight: 500;
+  }
+
+  .product-rating {
+    font-size: 13px;
+    color: var(--gray);
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 60px;
+  }
+
+  .page-btn {
+    padding: 12px 20px;
+    border: 2px solid var(--black);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--white);
+  }
+
+  .page-btn:hover,
+  .page-btn.active {
+    background: var(--lime);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .empty-state-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+
+  .empty-state h3 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  .empty-state p {
+    font-size: 16px;
+    color: var(--gray);
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .shop-hero { padding: 60px 20px; }
+    .shop-filters { padding: 20px; flex-direction: column; align-items: stretch; }
+    .products-container { padding: 40px 20px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+    .product-info { padding: 15px; }
+    .product-title { font-size: 15px; }
+    .product-price { font-size: 18px; }
+    .product-actions { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="shop-page">
+  <!-- Hero -->
+  <div class="shop-hero">
+    <h1>探索魔法商店</h1>
+    <p>发现独一无二的拼豆艺术品</p>
+  </div>
+
+  <!-- Filters -->
+  <div class="shop-filters">
+    <div class="filter-group">
+      <span class="filter-label">排序:</span>
+      <select class="filter-select" onchange="window.location.href=this.value">
+        <option value="{{ collection.url }}?sort_by=manual" {% if collection.sort_by == 'manual' %}selected{% endif %}>默认排序</option>
+        <option value="{{ collection.url }}?sort_by=price-ascending" {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>价格从低到高</option>
+        <option value="{{ collection.url }}?sort_by=price-descending" {% if collection.sort_by == 'price-descending' %}selected{% endif %}>价格从高到低</option>
+        <option value="{{ collection.url }}?sort_by=created-descending" {% if collection.sort_by == 'created-descending' %}selected{% endif %}>最新上架</option>
+        <option value="{{ collection.url }}?sort_by=best-selling" {% if collection.sort_by == 'best-selling' %}selected{% endif %}>销量优先</option>
+      </select>
+    </div>
+
+    <div class="filter-chips">
+      <a href="/collections/all" class="filter-chip {% if collection.handle == 'all' or current_tags == blank %}active{% endif %}">全部</a>
+      <a href="/collections/keychains" class="filter-chip {% if collection.handle == 'keychains' %}active{% endif %}">钥匙扣</a>
+      <a href="/collections/magnets" class="filter-chip {% if collection.handle == 'magnets' %}active{% endif %}">冰箱贴</a>
+      <a href="/collections/brooches" class="filter-chip {% if collection.handle == 'brooches' %}active{% endif %}">胸针</a>
+      <a href="/collections/earrings" class="filter-chip {% if collection.handle == 'earrings' %}active{% endif %}">耳环</a>
+      <a href="/collections/custom" class="filter-chip {% if collection.handle == 'custom' %}active{% endif %}">定制款</a>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="products-container">
+    {%- if collection.products.size > 0 -%}
+      <div class="products-grid">
+        {%- for product in collection.products -%}
+          <a href="{{ product.url }}" class="product-card">
+            <div class="product-image">
+              {%- if product.featured_image -%}
+                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}" loading="lazy">
+              {%- else -%}
+                <span style="font-size: 60px;">🌟</span>
+              {%- endif -%}
+              
+              {%- if product.compare_at_price > product.price -%}
+                <span class="product-badge">SALE</span>
+              {%- endif -%}
+
+              <div class="product-actions">
+                <button class="action-btn" onclick="event.preventDefault(); addToCart('{{ product.variants.first.id }}')" title="加入购物车">🛒</button>
+                <button class="action-btn" onclick="event.preventDefault(); toggleWishlist(this)" title="收藏">❤️</button>
+              </div>
+            </div>
+            
+            <div class="product-info">
+              <div class="product-category">{{ product.type | default: "ART" }}</div>
+              <h3 class="product-title">{{ product.title }}</h3>
+              <div class="product-meta">
+                <span class="product-price">
+                  {%- if product.compare_at_price > product.price -%}
+                    <span class="original">{{ product.compare_at_price | money }}</span>
+                  {%- endif -%}
+                  {{ product.price | money }}
+                </span>
+                <span class="product-rating">⭐ {{ product.metafields.reviews.rating | default: "4.8" }}</span>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+
+      <!-- Pagination -->
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination">
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="page-btn">{{ part.title }}</a>
+            {%- else -%}
+              <span class="page-btn active">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- else -%}
+      <div class="empty-state">
+        <div class="empty-state-icon">🔮</div>
+        <h3>暂无商品</h3>
+        <p>魔法商店正在筹备中，敬请期待...</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  function addToCart(variantId) {
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: variantId, quantity: 1 })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert('已加入购物车！');
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('加入购物车失败，请重试');
+    });
+  }
+
+  function toggleWishlist(btn) {
+    btn.classList.toggle('active');
+    if (btn.classList.contains('active')) {
+      btn.textContent = '💖';
+    } else {
+      btn.textContent = '❤️';
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Shop Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page Title",
+      "default": "探索魔法商店"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "发现独一无二的拼豆艺术品"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 12
+    }
+  ]
+}
+{% endschema %}
