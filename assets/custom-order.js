@@ -219,22 +219,37 @@ document.addEventListener('DOMContentLoaded', function() {
   // Form Submission
   if (form) {
     form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
       if (!currentType) {
+        e.preventDefault();
         alert('请先选择定制类型');
         return;
       }
       
+      // Check if files are selected
+      const files = fileInput.files;
+      if (files.length > 0) {
+        e.preventDefault();
+        // Files need to be uploaded separately - for now, show a message
+        alert('⚠️ 注意：参考图片无法通过表单直接上传。请在提交后，将图片发送到我们的邮箱 hello@holymoly.com，并注明你的定制需求。');
+        
+        // Continue with form submission without files
+        form.classList.add('hco-submitting');
+        
+        // Clear file input before submitting
+        fileInput.value = '';
+        
+        // Submit form programmatically
+        setTimeout(() => {
+          form.submit();
+        }, 500);
+        return;
+      }
+      
+      // Normal form submission (no files)
       form.classList.add('hco-submitting');
       
-      setTimeout(() => {
-        form.classList.remove('hco-submitting');
-        form.style.display = 'none';
-        successMessage.classList.add('show');
-        updateSteps(3);
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 1500);
+      // Form will submit naturally to /contact
+      // Success page will be shown by Shopify
     });
   }
   

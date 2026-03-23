@@ -366,12 +366,13 @@ function updateAllCartBadges(count) {
 }
 
 function animateCartIcon() {
-  const cartIcons = document.querySelectorAll('.navbar-cart');
-  cartIcons.forEach(icon => {
-    icon.style.animation = 'none';
-    icon.offsetHeight;
-    icon.style.animation = 'cartShake 0.5s ease';
-  });
+  const cartIcon = document.querySelector('.header-cart-icon');
+  if (cartIcon) {
+    cartIcon.classList.remove('cart-animate');
+    void cartIcon.offsetWidth;
+    cartIcon.classList.add('cart-animate');
+    setTimeout(() => cartIcon.classList.remove('cart-animate'), 500);
+  }
 }
 
 function checkout() {

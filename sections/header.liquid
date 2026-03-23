@@ -24,15 +24,20 @@
   }
 
   .nav-logo {
-    font-weight: 900;
-    font-size: 28px;
-    letter-spacing: 2px;
-    color: var(--black);
+    display: flex;
+    align-items: center;
     text-decoration: none;
-    font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
   }
 
-  .nav-logo span { color: var(--pink); }
+  .nav-logo img {
+    height: 48px;
+    width: auto;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .nav-logo img { height: 40px; }
+  }
 
   .nav-links {
     display: flex;
@@ -102,6 +107,18 @@
     font-family: 'Montserrat', sans-serif;
   }
 
+  @keyframes cartShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+    75% { transform: rotate(-10deg); }
+  }
+
+  .header-cart-icon.cart-animate {
+    animation: cartShake 0.5s ease;
+    display: inline-block;
+  }
+
   @media (max-width: 768px) {
     .nav { padding: 15px 20px; }
     
@@ -138,7 +155,9 @@
 </style>
 
 <nav class="nav">
-  <a href="/" class="nav-logo">HOLY<span>MOLY</span></a>
+  <a href="/" class="nav-logo">
+    <img src="{{ 'holymoly-logo.png' | asset_url }}" alt="Holy Moly">
+  </a>
   
   <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
     <span></span>
@@ -156,9 +175,9 @@
   
   <div class="nav-icons">
     <a href="/account" aria-label="Account">👤</a>
-    <a href="/cart" aria-label="Cart">
+    <a href="/cart" aria-label="Cart" class="header-cart-icon" onclick="if(typeof openCartDrawer === 'function'){openCartDrawer();return false;}">
       🛒
-      <span class="cart-badge">{{ cart.item_count }}</span>
+      <span class="cart-badge" data-cart-badge>{{ cart.item_count }}</span>
     </a>
   </div>
 </nav>
