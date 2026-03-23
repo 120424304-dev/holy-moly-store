@@ -24,20 +24,15 @@
   }
 
   .nav-logo {
-    display: flex;
-    align-items: center;
+    font-weight: 900;
+    font-size: 28px;
+    letter-spacing: 2px;
+    color: var(--black);
     text-decoration: none;
+    font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
   }
 
-  .nav-logo img {
-    height: 48px;
-    width: auto;
-    display: block;
-  }
-
-  @media (max-width: 768px) {
-    .nav-logo img { height: 40px; }
-  }
+  .nav-logo span { color: var(--pink); }
 
   .nav-links {
     display: flex;
@@ -155,9 +150,7 @@
 </style>
 
 <nav class="nav">
-  <a href="/" class="nav-logo">
-    <img src="{{ 'holymoly-logo.png' | asset_url }}" alt="Holy Moly">
-  </a>
+  <a href="/" class="nav-logo">HOLY<span>MOLY</span></a>
   
   <button class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
     <span></span>
