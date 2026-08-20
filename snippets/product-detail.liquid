@@ -8,7 +8,7 @@
   assign product_emoji = '🎮'
   assign product_category = 'keychain'
 
-  case product.type | downcase
+  case product.type
     when 'keychain'
       assign product_emoji = '🔑'
       assign product_category = 'keychain'
@@ -473,3 +473,13 @@
   });
 })();
 </script>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "  case product.type | downcase"
+  to: "  case product.type"
+  position: 298..317
+{% endcomment %}

@@ -1,113 +1,71 @@
-{% comment %}
-  Product Card Snippet - 像素风格产品卡片
-  用法: {% render 'product-card', product: product, show_quick_add: true %}
+Liquid syntax error (snippets/product-card line 13): Expected end_of_string but found comparison in "has_variants = product.variants.size > 1"{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% comment %}\n  Product Card Snippet - 像素风格产品卡片\n  用法: {% render 'product-card',
+    product: product, show_quick_add: true %}\n{% endcomment %}\n\n{%- liquid\n  assign
+    product_url = product.url\n  assign product_title = product.title\n  assign product_price
+    = product.price | money\n  assign product_compare_price = product.compare_at_price
+    | money\n  assign product_image = product.featured_image | default: product.images.first\n
+    \ assign product_type = product.type | default: 'KEYCHAIN'\n  assign has_variants
+    = product.variants.size > 1\n  \n  assign first_variant = product.selected_or_first_available_variant\n
+    \ assign variant_id = first_variant.id\n  assign is_available = first_variant.available\n
+    \ \n  assign product_emoji = '\U0001F3AE'\n  assign product_category = 'keychain'\n
+    \ assign badge_type = ''\n  assign badge_text = ''\n  \n  case product_type |
+    downcase\n    when 'keychain'\n      assign product_emoji = '\U0001F511'\n      assign
+    product_category = 'keychain'\n    when 'magnet'\n      assign product_emoji =
+    '\U0001F9F2'\n      assign product_category = 'magnet'\n    when 'diy kit', 'diy'\n
+    \     assign product_emoji = '\U0001F3A8'\n      assign product_category = 'diy'\n
+    \ endcase\n  \n  if product.compare_at_price > product.price\n    assign badge_type
+    = 'sale'\n    assign discount_percent = product.compare_at_price | minus: product.price
+    | times: 100 | divided_by: product.compare_at_price\n    assign badge_text = '-'
+    | append: discount_percent | append: '%'\n  elsif product.tags contains 'new'
+    or product.created_at > 'now' | date: '%s' | minus: 2592000\n    assign badge_type
+    = 'new'\n    assign badge_text = 'NEW'\n  elsif product.tags contains 'hot' or
+    product.tags contains 'bestseller'\n    assign badge_type = 'hot'\n    assign
+    badge_text = 'HOT'\n  endif\n  \n  assign bg_colors = '#FFE600, #FFB800|#FF6B9D,
+    #C44569|#4ECDC4, #44A3AA|#FFD93D, #FFA502|#9D4EDD, #FF6B6B|#74B9FF, #0984E3|#FF7675,
+    #D63031|#FFFFFF, #FF0000|#00B894, #00CEC9|#A29BFE, #6C5CE7|#FDCB6E, #E17055|#00CEC9,
+    #81ECEC|#E17055, #D63031|#636E72, #2D3436|#FD79A8, #E84393' | split: '|'\n  assign
+    bg_index = product.id | modulo: bg_colors.size\n  assign bg_gradient = bg_colors[bg_index]\n-%}\n\n<div
+    class=\"product-pixel-card\" \n     data-category=\"{{ product_category }}\" \n
+    \    data-price=\"{{ product.price | divided_by: 100 }}\" \n     data-name=\"{{
+    product_title | downcase | escape }}\" \n     data-id=\"{{ product.id }}\"\n     data-variant-id=\"{{
+    variant_id }}\"\n     onclick=\"window.location.href='{{ product_url }}'\">\n
+    \ <div class=\"card-inner\">\n    <button class=\"wishlist-btn\" onclick=\"event.stopPropagation();
+    toggleWishlist(this)\">♡</button>\n    \n    {%- if show_quick_add -%}\n    <div
+    class=\"quick-actions\" onclick=\"event.stopPropagation()\">\n      <button class=\"quick-btn
+    quick-view\" onclick=\"openQuickView('{{ product_title | escape }}', '{{ product_emoji
+    }}', '{{ product_price }}', '{{ product.description | escape | truncate: 100 }}')\">\U0001F441️
+    VIEW</button>\n      {%- if is_available -%}\n        <button class=\"quick-btn
+    add-cart\" onclick=\"addProductToCart({{ variant_id }}, '{{ product_title | escape
+    }}', {{ product.price | divided_by: 100.0 }}, '{{ product_emoji }}')\">\U0001F6D2
+    ADD</button>\n      {%- else -%}\n        <button class=\"quick-btn add-cart\"
+    disabled style=\"background: #666; cursor: not-allowed;\">SOLD OUT</button>\n
+    \     {%- endif -%}\n    </div>\n    {%- endif -%}\n    \n    <div class=\"card-image-wrapper\">\n
+    \     <div class=\"card-image\" style=\"background: linear-gradient(145deg, {{
+    bg_gradient }});\">\n        {%- if product_image -%}\n          <img src=\"{{
+    product_image | img_url: '400x400', crop: 'center' }}\" \n               alt=\"{{
+    product_title | escape }}\" \n               class=\"product-img\"\n               loading=\"lazy\">\n
+    \       {%- else -%}\n          <div class=\"product-img-placeholder\">{{ product_emoji
+    }}</div>\n        {%- endif -%}\n      </div>\n      {%- if badge_type != blank
+    -%}\n        <span class=\"card-badge {{ badge_type }}\">{{ badge_text }}</span>\n
+    \     {%- endif -%}\n    </div>\n    \n    <div class=\"card-info\">\n      <div
+    class=\"card-meta\">\n        <span class=\"card-type\">{{ product_type | upcase
+    }}</span>\n        <span class=\"card-stock {% if is_available %}in{% else %}out{%
+    endif %}\">\n          {% if is_available %}● IN STOCK{% else %}○ SOLD OUT{% endif
+    %}\n        </span>\n      </div>\n      <h3 class=\"card-title\">{{ product_title
+    }}</h3>\n      <div class=\"card-footer\">\n        <span class=\"current-price\">{{
+    product_price }}</span>\n        {%- if product.compare_at_price > product.price
+    -%}\n          <span class=\"old-price\">{{ product_compare_price }}</span>\n
+    \       {%- endif -%}\n        <span class=\"card-rating\">⭐ {{ product.metafields.reviews.rating
+    | default: '4.8' }}</span>\n      </div>\n    </div>\n  </div>\n  <div class=\"pixel-corners\">\n
+    \   <span class=\"corner tl\"></span>\n    <span class=\"corner tr\"></span>\n
+    \   <span class=\"corner bl\"></span>\n    <span class=\"corner br\"></span>\n
+    \ </div>\n</div>\n"
+  to: 'Liquid syntax error (snippets/product-card line 13): Expected end_of_string
+    but found comparison in "has_variants = product.variants.size > 1"'
+  position: 0..142
 {% endcomment %}
-
-{%- liquid
-  assign product_url = product.url
-  assign product_title = product.title
-  assign product_price = product.price | money
-  assign product_compare_price = product.compare_at_price | money
-  assign product_image = product.featured_image | default: product.images.first
-  assign product_type = product.type | default: 'KEYCHAIN'
-  assign has_variants = product.variants.size > 1
-  
-  assign first_variant = product.selected_or_first_available_variant
-  assign variant_id = first_variant.id
-  assign is_available = first_variant.available
-  
-  assign product_emoji = '🎮'
-  assign product_category = 'keychain'
-  assign badge_type = ''
-  assign badge_text = ''
-  
-  case product_type | downcase
-    when 'keychain'
-      assign product_emoji = '🔑'
-      assign product_category = 'keychain'
-    when 'magnet'
-      assign product_emoji = '🧲'
-      assign product_category = 'magnet'
-    when 'diy kit', 'diy'
-      assign product_emoji = '🎨'
-      assign product_category = 'diy'
-  endcase
-  
-  if product.compare_at_price > product.price
-    assign badge_type = 'sale'
-    assign discount_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price
-    assign badge_text = '-' | append: discount_percent | append: '%'
-  elsif product.tags contains 'new' or product.created_at > 'now' | date: '%s' | minus: 2592000
-    assign badge_type = 'new'
-    assign badge_text = 'NEW'
-  elsif product.tags contains 'hot' or product.tags contains 'bestseller'
-    assign badge_type = 'hot'
-    assign badge_text = 'HOT'
-  endif
-  
-  assign bg_colors = '#FFE600, #FFB800|#FF6B9D, #C44569|#4ECDC4, #44A3AA|#FFD93D, #FFA502|#9D4EDD, #FF6B6B|#74B9FF, #0984E3|#FF7675, #D63031|#FFFFFF, #FF0000|#00B894, #00CEC9|#A29BFE, #6C5CE7|#FDCB6E, #E17055|#00CEC9, #81ECEC|#E17055, #D63031|#636E72, #2D3436|#FD79A8, #E84393' | split: '|'
-  assign bg_index = product.id | modulo: bg_colors.size
-  assign bg_gradient = bg_colors[bg_index]
--%}
-
-<div class="product-pixel-card" 
-     data-category="{{ product_category }}" 
-     data-price="{{ product.price | divided_by: 100 }}" 
-     data-name="{{ product_title | downcase | escape }}" 
-     data-id="{{ product.id }}"
-     data-variant-id="{{ variant_id }}"
-     onclick="window.location.href='{{ product_url }}'">
-  <div class="card-inner">
-    <button class="wishlist-btn" onclick="event.stopPropagation(); toggleWishlist(this)">♡</button>
-    
-    {%- if show_quick_add -%}
-    <div class="quick-actions" onclick="event.stopPropagation()">
-      <button class="quick-btn quick-view" onclick="openQuickView('{{ product_title | escape }}', '{{ product_emoji }}', '{{ product_price }}', '{{ product.description | escape | truncate: 100 }}')">👁️ VIEW</button>
-      {%- if is_available -%}
-        <button class="quick-btn add-cart" onclick="addProductToCart({{ variant_id }}, '{{ product_title | escape }}', {{ product.price | divided_by: 100.0 }}, '{{ product_emoji }}')">🛒 ADD</button>
-      {%- else -%}
-        <button class="quick-btn add-cart" disabled style="background: #666; cursor: not-allowed;">SOLD OUT</button>
-      {%- endif -%}
-    </div>
-    {%- endif -%}
-    
-    <div class="card-image-wrapper">
-      <div class="card-image" style="background: linear-gradient(145deg, {{ bg_gradient }});">
-        {%- if product_image -%}
-          <img src="{{ product_image | img_url: '400x400', crop: 'center' }}" 
-               alt="{{ product_title | escape }}" 
-               class="product-img"
-               loading="lazy">
-        {%- else -%}
-          <div class="product-img-placeholder">{{ product_emoji }}</div>
-        {%- endif -%}
-      </div>
-      {%- if badge_type != blank -%}
-        <span class="card-badge {{ badge_type }}">{{ badge_text }}</span>
-      {%- endif -%}
-    </div>
-    
-    <div class="card-info">
-      <div class="card-meta">
-        <span class="card-type">{{ product_type | upcase }}</span>
-        <span class="card-stock {% if is_available %}in{% else %}out{% endif %}">
-          {% if is_available %}● IN STOCK{% else %}○ SOLD OUT{% endif %}
-        </span>
-      </div>
-      <h3 class="card-title">{{ product_title }}</h3>
-      <div class="card-footer">
-        <span class="current-price">{{ product_price }}</span>
-        {%- if product.compare_at_price > product.price -%}
-          <span class="old-price">{{ product_compare_price }}</span>
-        {%- endif -%}
-        <span class="card-rating">⭐ {{ product.metafields.reviews.rating | default: '4.8' }}</span>
-      </div>
-    </div>
-  </div>
-  <div class="pixel-corners">
-    <span class="corner tl"></span>
-    <span class="corner tr"></span>
-    <span class="corner bl"></span>
-    <span class="corner br"></span>
-  </div>
-</div>
